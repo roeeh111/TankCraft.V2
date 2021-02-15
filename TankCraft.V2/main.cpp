@@ -1,20 +1,54 @@
-// TankCraft.V2.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+#include "TankScene.h"
+#include "Serialize.h"
 
-int main()
+void playSingleClient();
+
+// TODO:   Implement generic serialization through a read and write function
+
+// TODO:   Add Networking through state synchronization
+
+// TODO:   For networking: read and write to a binary stream object
+
+// TODO??: keep client to server packet at only controls, and server decides what happens to client, and server responds with the new game state
+        // -> good for udp, cuz it brings down the amount of interactions from client to server. 
+
+
+
+int main(void)
 {
-    std::cout << "Hello World!\n";
+    std::stringstream packed;
+    Tanks::position* pos = new Tanks::position();
+
+    pos->prevx = 1;
+    pos->prevy = 2;
+    pos->curx = 3;
+    pos->cury = 4;
+     Tanks::write<Tanks::position>(packed, *pos);
+    //Serialization::write<std::string>(packed, "sand");
+
+  //  Serialization::donothing(2);
+
+  //  Serialization::donothing(1); // This works normally
+
+
+
+
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+
+void playSingleClient()
+{
+    // instantiate scene object
+    Tanks::TanksScene scene = Tanks::TanksScene();
+
+    // add a single client
+    scene.addTank("Roee");
+
+    scene.printUI();
+
+    // loop and update the game 
+    while (true)
+        scene.update();
+}
