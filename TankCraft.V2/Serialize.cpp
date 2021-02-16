@@ -18,27 +18,4 @@ namespace Tanks {
 		return 0;
 	}
 
-	// LEts see if we aresersads
-	template <typename Type>
-	bool write(std::stringstream& packed, Type component) {
-
-
-		// pack/serialize the stringstream 
-		/*
-		msgpack::pack(packed, component);
-
-		auto const& str = packed.str();
-		auto oh = msgpack::unpack(str.data(), str.size());
-		auto deserialized = oh.get();
-
-		// Convert it back to the og type
-		//deserialized.convert(*pos);
-
-
-		std::cout << deserialized << std::endl;
-		*/
-		return 0;
-	}
-
-
 }

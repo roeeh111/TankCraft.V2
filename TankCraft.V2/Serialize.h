@@ -10,18 +10,28 @@
 namespace Tanks {
 
 
-	// Write the inputted struct to an output buffer
+	// Write the inputted struct to the return paramater stringstream
+	// 
 	template <typename Type>
-	bool write(std::stringstream& packed, Type component);
-
-
-	int donothing(int shit);
-
+	void write(std::stringstream& packed, Type component) {
+		// pack/serialize the stringstream 
+		msgpack::pack(packed, component);
+	}
 
 
 	// Read the inputted Serialized structure to an output buffer
-	bool read(); // TODO: add required fields
+	template <typename Type>
+	void read(std::stringstream& packed, Type &component) {
+		auto const& str = packed.str();
+		auto oh = msgpack::unpack(str.data(), str.size());
+		auto deserialized = oh.get();
 
+		// Convert it back to the og type
+		deserialized.convert(component);
+
+
+		std::cout << deserialized << std::endl;
+	}
 }
 
 

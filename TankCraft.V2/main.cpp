@@ -4,8 +4,6 @@
 
 void playSingleClient();
 
-// TODO:   Implement generic serialization through a read and write function
-
 // TODO:   Add Networking through state synchronization
 
 // TODO:   For networking: read and write to a binary stream object
@@ -17,23 +15,7 @@ void playSingleClient();
 
 int main(void)
 {
-    std::stringstream packed;
-    Tanks::position* pos = new Tanks::position();
-
-    pos->prevx = 1;
-    pos->prevy = 2;
-    pos->curx = 3;
-    pos->cury = 4;
-     Tanks::write<Tanks::position>(packed, *pos);
-    //Serialization::write<std::string>(packed, "sand");
-
-  //  Serialization::donothing(2);
-
-  //  Serialization::donothing(1); // This works normally
-
-
-
-
+    playSingleClient();
 }
 
 
