@@ -28,10 +28,8 @@ namespace Tanks {
 
 		// Convert it back to the og type
 		deserialized.convert(component);
-	}
-	void test() {
-		std::stringstream packed;
-		position pos;
+
+		std::cout << deserialized << std::endl;
 	}
 }
 

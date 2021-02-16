@@ -1,5 +1,6 @@
 #include <iostream>
 #include "TankScene.h"
+#include "TankObjects.h"
 #include "Serialize.h"
 
 void playSingleClient();
@@ -24,6 +25,7 @@ void playSingleClient()
 {
     // instantiate scene object
     Tanks::TanksScene scene = Tanks::TanksScene();
+    std::stringstream packed;
 
     // add a single client
     scene.addTank("Roee");
