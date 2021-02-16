@@ -6,7 +6,7 @@ void playSingleClient();
 
 // TODO:   Add Networking through state synchronization
 
-// TODO:   For networking: read and write to a binary stream object
+// TODO:   For networking: read and write to a binary stream object??
 
 // TODO??: keep client to server packet at only controls, and server decides what happens to client, and server responds with the new game state
         // -> good for udp, cuz it brings down the amount of interactions from client to server. 
