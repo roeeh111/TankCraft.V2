@@ -11,31 +11,27 @@ namespace Tanks {
 		uint32_t cury;
 		position_() { prevx = 0; prevy = 0; curx = 0; cury = 0; }
 		MSGPACK_DEFINE(prevx, prevy, curx, cury);
-		//	bool read();
-		//	bool write();
+
 	} position;
 
 	typedef struct mapObject_ {
 		char mapChar;
 		mapObject_() { mapChar = 'X'; }
 		mapObject_(char newChar) { mapChar = newChar; }
-		//	bool read();
-		//	bool write();
+		MSGPACK_DEFINE(mapChar);
 	} mapObject;
 
 	typedef struct score_ {
 		uint32_t points;
 		score_() { points = 0; }
-		//	bool read();
-		//	bool write();
+		MSGPACK_DEFINE(points);
 	} score;
 
-	typedef struct clientName_ {									// TODO: give each of our clients a username, or some identifier
+	typedef struct clientName_ {
 		std::string name;
 		clientName_() { name = ""; }
 		clientName_(std::string name_) { name = name_; }
-		//	bool read();
-		//	bool write();
+		MSGPACK_DEFINE(name);
 	} clientName;
 
 	// If entity has this as a component, then it is a client
@@ -43,24 +39,21 @@ namespace Tanks {
 	typedef struct dirtyClient_ {
 		bool dirty;
 		dirtyClient_() { dirty = 1; }
-		//	bool read();
-		//	bool write();
+		MSGPACK_DEFINE(dirty);
 	} dirtyClient;
 
 	// Adding health to the character
 	typedef struct health_ {
 		int32_t hp;
 		health_() { hp = 100; }
-		//	bool read();
-		//	bool write();
+		MSGPACK_DEFINE(hp);
 	} health;
 
 	typedef struct damageDone_ {
 		int32_t damage;
 		damageDone_() { damage = 0; }
 		damageDone_(int32_t dm) { damage = dm; }
-		//	bool read();
-		//	bool write();
+		MSGPACK_DEFINE(damage);
 	} damageDone;
 
 	typedef struct networked_ {
