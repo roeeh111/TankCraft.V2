@@ -50,6 +50,8 @@ namespace Tanks {
 	} health;
 
 	typedef struct damageDone_ {
+		bool isNetworked;
+		bool isDirty;
 		int32_t damage;
 		damageDone_() { damage = 0; }
 		damageDone_(int32_t dm) { damage = dm; }
@@ -63,3 +65,12 @@ namespace Tanks {
 		//																before networking.
 	} networked;
 }
+
+
+//		entity (component a, component b, component networked)
+
+//		reg.view<network, dirty> 
+		// do the change for each component
+
+// component(normal fields, networking fields)
+	// when we change, component.network(normal fields)
