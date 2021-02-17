@@ -4,6 +4,9 @@
 #include "Serialize.h"
 
 void playSingleClient();
+void testSerialization();
+
+// TODO: fix bitstream/stringstream issues
 
 // TODO:   Add Networking through state synchronization
 
@@ -16,7 +19,8 @@ void playSingleClient();
 
 int main(void)
 {
-    playSingleClient();
+    return 0;
+    //  playSingleClient();
 }
 
 
@@ -25,7 +29,6 @@ void playSingleClient()
 {
     // instantiate scene object
     Tanks::TanksScene scene = Tanks::TanksScene();
-    std::stringstream packed;
 
     // add a single client
     scene.addTank("Roee");
@@ -35,4 +38,14 @@ void playSingleClient()
     // loop and update the game 
     while (true)
         scene.update();
+}
+
+void testSerialization() {
+    Tanks::position* p = new Tanks::position();
+    Tanks::position res;
+    p->prevx = 3;
+
+    std::stringstream stream = std::stringstream();
+    Tanks::write<Tanks::position>(stream, *p);
+    Tanks::read<Tanks::position>(stream, res);
 }

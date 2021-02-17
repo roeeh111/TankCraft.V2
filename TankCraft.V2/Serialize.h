@@ -3,17 +3,18 @@
 #include "TankObjects.h"
 #include <sstream>
 #include <msgpack.hpp>
+#include "RakNetTypes.h"
+#include "BitStream.h"
 
 
 
-
-namespace Tanks {
+namespace Serialization {
 
 
 	// Write the inputted struct to the return paramater stringstream
 	// 
 	template <typename Type>
-	void write(std::stringstream& packed, Type component) {
+	void write(RakNet::BitStream& packed, Type &component) {
 		// pack/serialize the stringstream 
 		msgpack::pack(packed, component);
 	}
@@ -23,6 +24,9 @@ namespace Tanks {
 	template <typename Type>
 	void read(std::stringstream& packed, Type &component) {
 		auto const& str = packed.str();
+	//	std::string str(reinterpret_cast<char*>(packed.GetData()));
+	//	auto const& str = std::string(packed.GetData());
+
 		auto oh = msgpack::unpack(str.data(), str.size());
 		auto deserialized = oh.get();
 

@@ -489,6 +489,9 @@
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\XBox360Includes.h">
       <Filter>RakNet</Filter>
     </ClInclude>
+    <ClInclude Include="NetworkHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -826,6 +829,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\RakNet\Source\WSAStartupSingleton.cpp">
       <Filter>RakNet</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkHandler.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
