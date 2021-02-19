@@ -104,11 +104,15 @@ namespace Tanks {
 			std::cout << std::endl;
 		}
 		printUI();
+
+		// Instantiate the network instance for our peer interface
+		rpi = RakNet::RakPeerInterface::GetInstance();
 	}
 
 	TanksScene::~TanksScene()
 	{
 		m_reg.clear();
+		RakNet::RakPeerInterface::DestroyInstance(rpi);
 	}
 
 

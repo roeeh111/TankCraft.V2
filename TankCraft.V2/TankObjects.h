@@ -63,11 +63,24 @@ namespace Tanks {
 	} damageDone;
 
 	typedef struct networked_ {
-		bool isNetwoked; // If the entity should be networked
-		std::list<component> components; // List of components that are networked		// TODO: may need to pair the component with a type
+		RakNet::RakPeerInterface* peer; // refrence to the client/server racknet interface
+		std::list<component&> components; // List of components that are networked		// TODO: may need to pair the component with a type
+		// TODO: Should we have a queue of components to change????
 
 		//														TODO::: Add a Handler/Socket to be used in the case that its networked
 		//																Handler should use the serialization technique picked to serialize
 		//																before networking.
+		bool isNetwoked; // If the entity should be networked
 	} networked;
+
+	enum Component {
+		Position,
+		MapObject,
+		Score,
+		ClientName,
+		DirtyClient,
+		Health,
+		DamageDone
+	};
+
 }

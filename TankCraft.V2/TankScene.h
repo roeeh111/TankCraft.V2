@@ -1,6 +1,7 @@
 #pragma once
-#include <list>
+//#include <list>
 #include <entt/entt.hpp>
+#include <RakPeerInterface.h>
 #include "TankObjects.h"
 
 #define WIDTH 20
@@ -18,7 +19,7 @@ namespace Tanks {
 
 		void addTank(std::string clientName_);
 
-		void addSpikes(position pos);
+		void addSpikes(struct position pos);
 
 		void getUserInput(entt::entity& clientEntity);
 
@@ -27,10 +28,17 @@ namespace Tanks {
 
 	private:
 
-		char map[HEIGHT][WIDTH]; // do we make this component based? is this in the server component?
+		// The main UI
+		char map[HEIGHT][WIDTH];
 
 		// main registry
 		entt::registry m_reg;
+
+		// The interface with raknet 
+		RakNet::RakPeerInterface* rpi;
+
+		// Whether this scene is the server or a client 
+		bool isServer; 
 	};
 }
 

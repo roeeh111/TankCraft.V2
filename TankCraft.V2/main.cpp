@@ -8,9 +8,10 @@ void testSerialization();
 
 // TODO: fix bitstream/stringstream issues
 
+// TODO: refactor original movement code to control component based
+
 // TODO:   Add Networking through state synchronization
 
-// TODO:   For networking: read and write to a binary stream object??
 
 // TODO??: keep client to server packet at only controls, and server decides what happens to client, and server responds with the new game state
         // -> good for udp, cuz it brings down the amount of interactions from client to server. 
