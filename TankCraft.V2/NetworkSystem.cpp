@@ -156,7 +156,7 @@ namespace NetworkSystem {
 	}
 
 	// TODO:
-	void NetworkHandler::addEntity(bool isServer)
+	void NetworkHandler::addEntity(entt::registry& m_reg, bool isServer)
 	{
 		// If is Server:
 		// add the entity with entity id given to the m_reg

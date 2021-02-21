@@ -21,8 +21,9 @@ void testSerialization();
 
 int main(void)
 {
+      playSingleClient();
+
     return 0;
-    //  playSingleClient();
 }
 
 
@@ -30,7 +31,7 @@ int main(void)
 void playSingleClient()
 {
     // instantiate scene object
-    Tanks::TanksScene scene = Tanks::TanksScene(1);
+    Tanks::TanksScene scene = Tanks::TanksScene(false, 1);
 
     // add a single client
     scene.addTank("Roee");
@@ -43,11 +44,11 @@ void playSingleClient()
 }
 
 void testSerialization() {
-    Tanks::position* p = new Tanks::position();
-    Tanks::position res;
-    p->prevx = 3;
+  //  Tanks::position* p = new Tanks::position();
+   // Tanks::position res;
+   // p->prevx = 3;
 
-    std::stringstream stream = std::stringstream();
+ //   std::stringstream stream = std::stringstream();
   //  Tanks::write<Tanks::position>(stream, *p);
    // Tanks::read<Tanks::position>(stream, res);
 }

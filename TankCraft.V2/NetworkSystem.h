@@ -35,7 +35,7 @@ namespace NetworkSystem {
 		void makeServerUpdate(entt::registry &m_reg, RakNet::Packet* pack);
 
 		// add an entity to the server or client
-		void addEntity(bool isServer);
+		void addEntity(entt::registry& m_reg, bool isServer);
 
 		// remove an entity from the server or client
 		void removeEntity(bool isServer);

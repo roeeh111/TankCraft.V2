@@ -20,7 +20,7 @@ namespace Tanks {
 
 		void addTank(std::string clientName_);
 
-		void addSpikes(struct position pos);
+		void addSpikes(position pos);
 
 		void getUserInput(entt::entity& clientEntity);
 

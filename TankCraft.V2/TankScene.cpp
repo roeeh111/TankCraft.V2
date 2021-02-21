@@ -42,10 +42,7 @@ namespace Tanks {
 			auto& scr = view.get<score>(entity);
 			auto& disp = view.get<mapObject>(entity);
 
-			// if the current entity is a client and needs to be updated				TODO:: add has checking rather than getting everything
-			if (m_reg.has<dirtyClient>(entity)) {
 
-			}
 			if (d.dirty) { //												TODO: change this to only when a client packet with an object came in (if entity has position)
 				std::cout << "dirty bit is set, reprinting" << std::endl;
 
@@ -75,19 +72,19 @@ namespace Tanks {
 		auto clientEntity = m_reg.create();
 
 		// Add the components to the the registry
-		m_reg.emplace<position>(clientEntity);
 		m_reg.emplace<mapObject>(clientEntity);
+		m_reg.emplace<position>(clientEntity);
 		m_reg.emplace<score>(clientEntity);
 		m_reg.emplace<dirtyClient>(clientEntity);
 		m_reg.emplace<clientName>(clientEntity, clientName_);
 	}
-
+	/*
 	void TanksScene::addSpikes(position pos) {
 		auto clientEntity = m_reg.create();
 		//	m_reg.emplace<position>(clientEntity, pos);
 		m_reg.emplace<mapObject>(clientEntity, 'b');
 	}
-
+	*/
 
 
 
