@@ -2,40 +2,36 @@
 #include <MessageIdentifiers.h>
 
 namespace NetworkSystem {
-	void updateServer(entt::registry* m_reg, RakNet::RakPeerInterface* peer)
+	void NetworkHandler::updateServer(entt::registry &m_reg, RakNet::RakPeerInterface* peer)
 	{
 		RakNet::Packet* pack;
 
 		// Loop through the network instantiation's packet queue, and get some packet of data
-// check the data value and 
+		// do whatever you need to do depending on what was passed to us
 		for (pack = peer->Receive(); pack; peer->DeallocatePacket(pack), pack = peer->Receive()) {
 			switch (pack->data[0])
 			{
 			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
 				printf("Another client has disconnected.\n");
 
-				// TODO: implement disconnect function
-				handleDisconnect();
+				handleDisconnect(true);
 
 				break;
 			case ID_REMOTE_CONNECTION_LOST:
 				printf("Another client has lost the connection.\n");
 
-				// TODO: implement disconnect function
-				handleDisconnect();
+				handleDisconnect(true);
 
 				break;
 			case ID_REMOTE_NEW_INCOMING_CONNECTION:
 				printf("Another client has connected.\n");
 
-				// TODO: implement connect function
 				handleConnection();
 
 				break;
 			case ID_NEW_INCOMING_CONNECTION:
 				printf("A connection is incoming.\n");
 
-				// TODO: implement connect function
 				handleConnection();
 
 				break;
@@ -45,22 +41,20 @@ namespace NetworkSystem {
 			case ID_DISCONNECTION_NOTIFICATION:
 				printf("A client has disconnected.\n");
 
-				// TODO: implement disconnect function
-				handleDisconnect();
+				handleDisconnect(true);
 
 				break;
 			case ID_CONNECTION_LOST:
 				printf("A client lost the connection.\n");
 
-				// TODO: implement disconnect function
-				handleDisconnect();
+				handleDisconnect(true);
 
 				break;
 			default:
-			//	printf("Message with identifier %i has arrived.\n", pack->data[0]);
+				//	printf("Message with identifier %i has arrived.\n", pack->data[0]);
 
 				// Call makeServerUpdate with a new thread (NOTE DONT DEALLOCATE THE PACKET HERE!!!!!!!)
-
+				makeServerUpdate(m_reg, pack);
 
 				break;
 			}
@@ -72,7 +66,7 @@ namespace NetworkSystem {
 
 
 
-	void updateClient(entt::registry* m_reg, RakNet::RakPeerInterface* peer)
+	void NetworkHandler::updateClient(entt::registry &m_reg, RakNet::RakPeerInterface* peer)
 	{
 		// Pointer to some network packet
 		RakNet::Packet* pack;
@@ -88,26 +82,26 @@ namespace NetworkSystem {
 
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
 				printf("The server is full.\n");
-													// TODO: add exit function
-				break;
+				return;
+
 			case ID_DISCONNECTION_NOTIFICATION:
 				printf("We have been disconnected.\n");
-													// TODO: add exit function
-				break;
+				return;
+
 			case ID_CONNECTION_LOST:
 				printf("Connection lost.\n");
-													// TODO: add exit function
-				break;
+				return;
+
 			default: 				// Message with identifier pack->data[0]
 													// TODO: add identifiers to the list of possibilities, And check for those
 													// (identifiers being packet type)
 
 
 				// Call makeClientUpdate with a new thread (NOTE DONT DEALLOCATE THE PACKET HERE!!!!!!!)
-
+				makeClientUpdate(m_reg, pack);
+				break;
 
 			//	printf("Message with identifier %i has arrived.\n", pack->data[0]);
-		//		break;
 			}
 		}
 
@@ -120,7 +114,7 @@ namespace NetworkSystem {
 
 
 	// TODO:
-	void makeClientUpdate(entt::registry* m_reg, RakNet::Packet* pack)
+	void NetworkHandler::makeClientUpdate(entt::registry &m_reg, RakNet::Packet* pack)
 	{
 		// Deserialize packet
 		// get the entity
@@ -131,16 +125,17 @@ namespace NetworkSystem {
 	}
 
 	// TODO:
-	void makeServerUpdate(entt::registry* m_reg, RakNet::Packet* pack)
+	void NetworkHandler::makeServerUpdate(entt::registry &m_reg, RakNet::Packet* pack)
 	{
 		// Validate packet??
+		// Deserealize the packet
 		// Execute what the controls would do to the server (probably a function from another system)
 		// Append all changes to the changedComponentQueue
 	}
 
 
 	// TODO:
-	void handleConnection()
+	void NetworkHandler::handleConnection()
 	{
 		// Add this connection to the list of connections?? maybe raknet already has it
 		// Broadcast to all users that a new user has spawned in, and where
@@ -150,7 +145,7 @@ namespace NetworkSystem {
 	}
 
 	// TODO:
-	void addEntity(bool isServer)
+	void NetworkHandler::addEntity(bool isServer)
 	{
 		// If is Server:
 		// add the entity with entity id given to the m_reg
@@ -164,7 +159,7 @@ namespace NetworkSystem {
 	}
 
 	// TODO:
-	void removeEntity(bool isServer)
+	void NetworkHandler::removeEntity(bool isServer)
 	{
 		// If is Server:
 		// Remove the given entity from the m_reg
@@ -177,7 +172,7 @@ namespace NetworkSystem {
 	}
 
 	// TODO:
-	void handleDisconnect(bool isServer)
+	void NetworkHandler::handleDisconnect(bool isServer)
 	{
 		// If is Server:
 		// TODO: how do we keep track of whose client is what entity?
@@ -189,5 +184,6 @@ namespace NetworkSystem {
 		// TODO: define if we should do anything as a client
 
 	}
+
 }
 

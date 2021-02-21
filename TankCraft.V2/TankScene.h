@@ -3,6 +3,7 @@
 #include <entt/entt.hpp>
 #include <RakPeerInterface.h>
 #include "TankObjects.h"
+#include "NetworkSystem.h"
 
 #define WIDTH 20
 #define HEIGHT 20
@@ -39,6 +40,10 @@ namespace Tanks {
 
 		// Whether this scene is the server or a client 
 		bool isServer; 
+
+		// SYSTEMS:				TODO (may want to set them as friend functions. So that data transfer will be smoother)
+		NetworkSystem::NetworkHandler NetSystem;
+
 	};
 }
 

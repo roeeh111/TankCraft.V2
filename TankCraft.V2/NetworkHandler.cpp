@@ -1,5 +1,17 @@
 #include "NetworkHandler.h"
 
+/**
+* 
+* WE WILL DELETE THIS FILE ONCE ALL NECCESARRY CODE IS TRANSFRED TO NETWORKSYSTEM.CPP
+* 
+* THIS IS SHIT, DELETE IT!!!!!
+* 
+*/
+
+
+
+
+
 namespace Networking {
 	// Constructor for local client/server instantiation
 	NetworkHandler::NetworkHandler(bool isServer_)
