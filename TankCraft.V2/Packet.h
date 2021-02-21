@@ -1,6 +1,7 @@
 #pragma once
-#include "TankObjects.h"
 #include <entt/entt.hpp>
+#include "TankObjects.h"
+#include "Serialize.h"
 
 namespace NetworkSystem {
 	

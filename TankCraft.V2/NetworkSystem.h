@@ -23,14 +23,18 @@ namespace NetworkSystem {
 	// Execution of those controls will append new components to the changeQueue
 	void makeServerUpdate(entt::registry* m_reg, RakNet::Packet* pack);
 
-	// add an entity to the server, and maybe broadcast???
-	void addEntityClient();
+	// add an entity to the server or client
+	void addEntity(bool isServer);
+
+	// remove an entity from the server or client
+	void removeEntity(bool isServer);
 
 	// Server handling a disconnecting client
 	// Delete entity from the registry and clean up metadata
-	void handleDisconnect();
+	void handleDisconnect(bool isServer);
 
 	// Server handling an incomming connecting client
 	// add a new connection
 	void handleConnection();
+
 }

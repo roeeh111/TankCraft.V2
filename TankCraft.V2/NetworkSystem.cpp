@@ -137,5 +137,57 @@ namespace NetworkSystem {
 		// Execute what the controls would do to the server (probably a function from another system)
 		// Append all changes to the changedComponentQueue
 	}
+
+
+	// TODO:
+	void handleConnection()
+	{
+		// Add this connection to the list of connections?? maybe raknet already has it
+		// Broadcast to all users that a new user has spawned in, and where
+		// Call addEntity
+		// Send the current game state to the user
+		//		meaning: Send all entities, and all components to the user so they may add it
+	}
+
+	// TODO:
+	void addEntity(bool isServer)
+	{
+		// If is Server:
+		// add the entity with entity id given to the m_reg
+		// add all components of the entity with the given values to the new entity
+		// broadcast to all clients to add a new entity with entity ID, and all components
+
+		// If is client:
+		// add the entity with the entity id given to the m_reg
+		// add all components of the entitty with the given valies to the new entity
+
+	}
+
+	// TODO:
+	void removeEntity(bool isServer)
+	{
+		// If is Server:
+		// Remove the given entity from the m_reg
+		// broadcast to all users to remove the given entity
+
+		// If is client:
+		// Remove the given entity from the m_reg
+
+		// Note: i think register.remove/delete will remove the entity and destroy all its data for us
+	}
+
+	// TODO:
+	void handleDisconnect(bool isServer)
+	{
+		// If is Server:
+		// TODO: how do we keep track of whose client is what entity?
+		// Find all entities that are tagged with the given client's id
+		// call removeEntity on all those entities
+		// TODO: do we run some sort of raknet disconnect function?
+
+		// If is client:
+		// TODO: define if we should do anything as a client
+
+	}
 }
 
