@@ -135,6 +135,7 @@ namespace NetworkSystem {
 	{
 		// Validate packet??
 		// Execute what the controls would do to the server (probably a function from another system)
+		// Append all changes to the changedComponentQueue
 	}
 }
 

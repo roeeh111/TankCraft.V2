@@ -12,6 +12,7 @@ void testSerialization();
 
 // TODO:   Add Networking through state synchronization
 
+// TODO: add user input system
 
 // TODO??: keep client to server packet at only controls, and server decides what happens to client, and server responds with the new game state
         // -> good for udp, cuz it brings down the amount of interactions from client to server. 
@@ -47,6 +48,6 @@ void testSerialization() {
     p->prevx = 3;
 
     std::stringstream stream = std::stringstream();
-    Tanks::write<Tanks::position>(stream, *p);
-    Tanks::read<Tanks::position>(stream, res);
+  //  Tanks::write<Tanks::position>(stream, *p);
+   // Tanks::read<Tanks::position>(stream, res);
 }

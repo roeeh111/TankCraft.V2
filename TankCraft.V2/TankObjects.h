@@ -73,7 +73,7 @@ namespace Tanks {
 		bool isNetwoked; // If the entity should be networked
 	} networked;
 
-	enum Component {
+	enum ComponentID {
 		Position,
 		MapObject,
 		Score,
