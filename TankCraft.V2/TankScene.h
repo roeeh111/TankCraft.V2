@@ -24,7 +24,12 @@ namespace Tanks {
 
 		void getUserInput(entt::entity& clientEntity);
 
-		TanksScene();
+		// Standard constructor for client, starts-up racknet with 1 max client
+	    // TanksScene();
+
+		// Constructor, starts up rackNet with inputted max clients
+		TanksScene(bool isServer_, uint32_t maxClients);
+
 		~TanksScene();
 
 	private:
@@ -37,6 +42,7 @@ namespace Tanks {
 
 		// The interface with raknet 
 		RakNet::RakPeerInterface* rpi;
+
 
 		// Whether this scene is the server or a client 
 		bool isServer; 

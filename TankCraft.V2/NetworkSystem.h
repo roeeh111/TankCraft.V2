@@ -1,11 +1,15 @@
 #pragma once
 #include <entt/entt.hpp>
 #include <RakPeerInterface.h>
+#include <iostream>
 #include "Packet.h"
 // TODO: add multithreading library
 
+#define SERVER_PORT 60000
+
 namespace NetworkSystem {
 	class NetworkHandler {
+	public:
 
 		// TODO: may need a refrence to the m_reg if its not global
 		// Go through all incoming packets to the server, and dispatch game changes accordingly
@@ -15,6 +19,11 @@ namespace NetworkSystem {
 		// Go through all incomming game updates, and update the client's game accordingly
 		// In addition, go through all controls inputted, and send them up to the server
 		void updateClient(entt::registry &m_reg, RakNet::RakPeerInterface* peer);
+
+		// Connect to the given server address as a client
+		bool clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress);
+
+	private:
 
 		// Deserealizes the packet, checks that it is a game update packet.
 		// If packet is a game update, aquires the lock to the component, and updates the data of that component

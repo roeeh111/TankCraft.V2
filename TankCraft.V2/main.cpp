@@ -30,7 +30,7 @@ int main(void)
 void playSingleClient()
 {
     // instantiate scene object
-    Tanks::TanksScene scene = Tanks::TanksScene();
+    Tanks::TanksScene scene = Tanks::TanksScene(1);
 
     // add a single client
     scene.addTank("Roee");

@@ -112,6 +112,17 @@ namespace NetworkSystem {
 			// Delete local copy of packet
 	}
 
+	bool NetworkHandler::clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress)
+	{
+		std::cout << "Starting up a client" << std::endl;
+
+		if (!(peer->Connect(hostAddress, port, 0, 0) == RakNet::CONNECTION_ATTEMPT_STARTED)) {
+			std::cerr << "Connection attempt failed" << std::endl;
+			return false;
+		}
+		return true;
+	}
+
 
 	// TODO:
 	void NetworkHandler::makeClientUpdate(entt::registry &m_reg, RakNet::Packet* pack)

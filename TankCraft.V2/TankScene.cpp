@@ -89,8 +89,11 @@ namespace Tanks {
 	}
 
 
-	TanksScene::TanksScene()
+
+
+	Tanks::TanksScene::TanksScene(bool isServer_, uint32_t maxClients)
 	{
+		isServer = isServer_;
 		// start by filling the matrix with blank dots
 		for (int i = 0; i < HEIGHT; i++) {
 			for (int j = 0; j < WIDTH; j++) {
@@ -107,6 +110,23 @@ namespace Tanks {
 
 		// Instantiate the network instance for our peer interface
 		rpi = RakNet::RakPeerInterface::GetInstance();
+		if (isServer) {
+			// Local socket to use for communication
+			RakNet::SocketDescriptor sd(SERVER_PORT, 0);
+
+			// Startup the peer instance with our binded socket
+			if (!(rpi->Startup(maxClients, &sd, 1) == RakNet::RAKNET_STARTED)) {
+				std::cerr << "Failed to startup on socket!" << std::endl;
+			}
+			rpi->SetMaximumIncomingConnections(maxClients);
+
+		}
+		else {
+			RakNet::SocketDescriptor sd;
+			if (!(rpi->Startup(1, &sd, 1) == RakNet::RAKNET_STARTED)) {
+				std::cerr << "Failed to startup on socket!" << std::endl;
+			}
+		}
 	}
 
 	TanksScene::~TanksScene()
@@ -169,5 +189,31 @@ namespace Tanks {
 			dirty.dirty = 0;
 		}
 	}
+
+	/*
+	TanksScene::TanksScene()
+	{
+		// start by filling the matrix with blank dots
+		for (int i = 0; i < HEIGHT; i++) {
+			for (int j = 0; j < WIDTH; j++) {
+				if ((i + j) % 8 == 4) {
+					map[i][j] = 'c';
+				}
+				else {
+					map[i][j] = '.';
+				}
+			}
+			std::cout << std::endl;
+		}
+		printUI();
+
+		// Instantiate the network instance for our peer interface
+		rpi = RakNet::RakPeerInterface::GetInstance();
+
+		if (!(rpi->Startup(1, &sd, 1) == RakNet::RAKNET_STARTED)) {
+			std::cerr << "Failed to startup on socket!" << std::endl;
+		}
+	}
+	*/
 
 }
