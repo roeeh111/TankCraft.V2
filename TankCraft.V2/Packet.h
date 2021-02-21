@@ -4,6 +4,12 @@
 
 namespace NetworkSystem {
 	
+
+	/*
+		TODO: add the rest of the packet types
+	*/
+
+
 	enum Packet_Type {
 		gameUpdate,
 		addEntity,
