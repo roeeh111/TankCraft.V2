@@ -1,4 +1,4 @@
-#include "TankScene.h"
+#include "TanksScene.h"
 #include <vector>
 #include <iostream>
 
@@ -105,28 +105,9 @@ namespace GameView {
 		}
 		printUI();
 
-		// Instantiate the network instance for our peer interface
-		rpi = RakNet::RakPeerInterface::GetInstance();
-		if (isServer) {
-			// Local socket to use for communication
-			RakNet::SocketDescriptor sd(SERVER_PORT, 0);
+		initNetworkSystem(isServer_, maxClients);
+		initIDTranslationSystem();
 
-			// Startup the peer instance with our binded socket
-			if (!(rpi->Startup(maxClients, &sd, 1) == RakNet::RAKNET_STARTED)) {
-				std::cerr << "Failed to startup on socket!" << std::endl;
-			}
-			rpi->SetMaximumIncomingConnections(maxClients);
-
-		}
-		else {
-			RakNet::SocketDescriptor sd;
-			if (!(rpi->Startup(1, &sd, 1) == RakNet::RAKNET_STARTED)) {
-				std::cerr << "Failed to startup on socket!" << std::endl;
-			}
-		}
-
-		// Initialize our translation system
-		netToEnttid = std::map<networkID, entt::entity>();
 
 	}
 
@@ -189,6 +170,39 @@ namespace GameView {
 			std::cout << "setting dirty = 0" << std::endl;
 			dirty.dirty = 0;
 		}
+	}
+
+	void GameView::TanksScene::initNetworkSystem(bool isServer_, uint32_t maxClients)
+	{
+		// Instantiate the network instance for our peer interface
+		rpi = RakNet::RakPeerInterface::GetInstance();
+		if (isServer) {
+			// Local socket to use for communication
+			RakNet::SocketDescriptor sd(SERVER_PORT, 0);
+
+			// Startup the peer instance with our binded socket
+			if (!(rpi->Startup(maxClients, &sd, 1) == RakNet::RAKNET_STARTED)) {
+				std::cerr << "Failed to startup on socket!" << std::endl;
+			}
+			rpi->SetMaximumIncomingConnections(maxClients);
+
+		}
+		else {
+			RakNet::SocketDescriptor sd;
+			if (!(rpi->Startup(1, &sd, 1) == RakNet::RAKNET_STARTED)) {
+				std::cerr << "Failed to startup on socket!" << std::endl;
+			}
+		}
+	}
+
+	void GameView::TanksScene::initIDTranslationSystem()
+	{
+		// Initialize our translation system
+		netToEnttid = std::map<networkID, entt::entity>();
+		auto freeListEntity = m_reg.create();
+
+		// Add the components to the the registry
+		m_reg.emplace < freelist > (freeListEntity);
 	}
 
 	/*

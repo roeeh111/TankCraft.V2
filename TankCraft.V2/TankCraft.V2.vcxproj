@@ -310,7 +310,7 @@
     <ClInclude Include="Packet.h" />
     <ClInclude Include="Serialize.h" />
     <ClInclude Include="Components.h" />
-    <ClInclude Include="TankScene.h" />
+    <ClInclude Include="TanksScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\RakNet\Source\Base64Encoder.cpp" />

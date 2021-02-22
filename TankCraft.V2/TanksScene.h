@@ -35,6 +35,9 @@ namespace GameView {
 
 	private:
 
+		void initNetworkSystem(bool isServer_, uint32_t maxClients);
+		void initIDTranslationSystem();
+
 		// The main UI
 		char map[HEIGHT][WIDTH];
 
@@ -54,6 +57,7 @@ namespace GameView {
 
 		// SYSTEMS:				TODO (may want to set them as friend functions. So that data transfer will be smoother)
 		NetworkSystem::NetworkHandler NetSystem;
+		TranslationSystem::IDTranslation translationSystem;
 
 	};
 }
