@@ -18,8 +18,9 @@ namespace GameView {
 
 		uint32_t curx;
 		uint32_t cury;
-		position_() { prevx = 0; prevy = 0; curx = 0; cury = 0; }
+		position_() { prevx = 0; prevy = 0; curx = 0; cury = 0; dirty = 0; }
 		MSGPACK_DEFINE(prevx, prevy, curx, cury);
+		bool dirty;
 	} position;
 
 
@@ -33,6 +34,17 @@ namespace GameView {
 	typedef struct score_ {
 		uint32_t points;
 		score_() { points = 0; }
+
+		// move constructor 
+		score_(struct score_&& other) : points{ other.points } { other.points = 0; };
+		
+		// move assignment
+		struct score_& operator=(struct score_&& other)  {
+			if (this != &other) {
+				points = other.points;
+			}
+			return *this;
+		}
 		MSGPACK_DEFINE(points);
 	} score;
 
@@ -43,14 +55,6 @@ namespace GameView {
 		MSGPACK_DEFINE(name);
 	} clientName;
 
-	// If entity has this as a component, then it is a client
-	// If the dirty bit is set, for now we update the entire entity...
-	//														Note: this will not be used in the networked version
-	typedef struct dirtyClient_ {
-		bool dirty;
-		dirtyClient_() { dirty = 1; }
-		MSGPACK_DEFINE(dirty);
-	} dirtyClient;
 
 	// Adding health to the character
 	typedef struct health_ {

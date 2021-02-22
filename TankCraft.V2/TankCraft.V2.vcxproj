@@ -305,6 +305,7 @@
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\WSAStartupSingleton.h" />
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\XBox360Includes.h" />
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h" />
+    <ClInclude Include="UISystem.h" />
     <ClInclude Include="IDTranslationSystem.h" />
     <ClInclude Include="NetworkSystem.h" />
     <ClInclude Include="Packet.h" />
@@ -427,6 +428,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NetworkSystem.cpp" />
     <ClCompile Include="TankScene.cpp" />
+    <ClCompile Include="UISystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\..\..\..\RakNet\Source\CMakeLists.txt" />

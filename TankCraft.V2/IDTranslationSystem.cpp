@@ -40,6 +40,7 @@ namespace TranslationSystem {
 
             // Set the location as used
             flist.map[itr] = 1;
+            flist.lastMapping = itr;
             return itr;
         }
     }

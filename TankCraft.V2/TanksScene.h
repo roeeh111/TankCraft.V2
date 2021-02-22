@@ -5,25 +5,23 @@
 #include "Components.h"
 #include "NetworkSystem.h"
 #include "IDTranslationSystem.h"
-
-#define WIDTH 20
-#define HEIGHT 20
+#include "UISystem.h"
 
 namespace GameView {
 
 	class TanksScene {
 	public:
 		// print out the current game map to console
-		void printUI();
+//		void printUI();										/* Integrated into ui system*/
 
 		// Scan through each client, check if its dirty bit is set and change data if it is
 		void update();
 
 		void addClient(std::string clientName_);
 
-		void addSpikes(position pos);
+	//	void addSpikes(position pos);
 
-		void getUserInput(entt::entity& clientEntity);
+//		void getUserInput(entt::entity& clientEntity);  /* Integrated into ui system*/
 
 		// Standard constructor for client, starts-up racknet with 1 max client
 	    // TanksScene();
@@ -37,9 +35,12 @@ namespace GameView {
 
 		void initNetworkSystem(bool isServer_, uint32_t maxClients);
 		void initIDTranslationSystem();
+		void initUISystem();
 
 		// The main UI
-		char map[HEIGHT][WIDTH];
+	//	char map[HEIGHT][WIDTH];
+	//	char** map;
+		std::vector<std::vector<char>> map;
 
 		// main registry
 		entt::registry m_reg;
@@ -56,8 +57,9 @@ namespace GameView {
 		bool isServer; 
 
 		// SYSTEMS:				TODO (may want to set them as friend functions. So that data transfer will be smoother)
-		NetworkSystem::NetworkHandler NetSystem;
+		NetworkSystem::NetworkHandler netSystem;
 		TranslationSystem::IDTranslation translationSystem;
+		UI::UISystem uiSystem;
 
 	};
 }

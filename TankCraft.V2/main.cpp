@@ -36,7 +36,7 @@ void playSingleClient()
     // add a single client
     scene.addClient("Roee");
 
-    scene.printUI();
+   // scene.printUI();
 
     // loop and update the game 
     while (true)
