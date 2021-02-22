@@ -501,6 +501,9 @@
     <ClInclude Include="UISystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MovementSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -846,6 +849,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UISystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

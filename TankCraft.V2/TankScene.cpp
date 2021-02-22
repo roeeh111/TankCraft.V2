@@ -10,7 +10,10 @@ namespace GameView {
 	{
 
 		uiSystem.updateUI(m_reg, map);
+		movSystem.updateMovement(m_reg, map);
 
+		// Lastly, always print out the game states
+		uiSystem.printUI(m_reg, map);
 	}
 
 
@@ -36,6 +39,7 @@ namespace GameView {
 		initUISystem();
 		initNetworkSystem(isServer_, maxClients);
 		initIDTranslationSystem();
+		initMovementSystem();
 
 	}
 
@@ -105,5 +109,10 @@ namespace GameView {
 
 		// Add the components to the the registry
 		m_reg.emplace<freelist> (freeListEntity);
+	}
+
+	void GameView::TanksScene::initMovementSystem()
+	{
+		// Empty function, nothing to do yet
 	}
 }

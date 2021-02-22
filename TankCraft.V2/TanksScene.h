@@ -6,25 +6,16 @@
 #include "NetworkSystem.h"
 #include "IDTranslationSystem.h"
 #include "UISystem.h"
+#include "MovementSystem.h"
 
 namespace GameView {
 
 	class TanksScene {
 	public:
-		// print out the current game map to console
-//		void printUI();										/* Integrated into ui system*/
-
 		// Scan through each client, check if its dirty bit is set and change data if it is
 		void update();
 
 		void addClient(std::string clientName_);
-
-	//	void addSpikes(position pos);
-
-//		void getUserInput(entt::entity& clientEntity);  /* Integrated into ui system*/
-
-		// Standard constructor for client, starts-up racknet with 1 max client
-	    // TanksScene();
 
 		// Constructor, starts up rackNet with inputted max clients
 		TanksScene(bool isServer_, uint32_t maxClients);
@@ -36,10 +27,9 @@ namespace GameView {
 		void initNetworkSystem(bool isServer_, uint32_t maxClients);
 		void initIDTranslationSystem();
 		void initUISystem();
+		void initMovementSystem();
 
 		// The main UI
-	//	char map[HEIGHT][WIDTH];
-	//	char** map;
 		std::vector<std::vector<char>> map;
 
 		// main registry
@@ -48,10 +38,8 @@ namespace GameView {
 		// The interface with raknet 
 		RakNet::RakPeerInterface* rpi;
 
-
-		// TODO: implement a map of NetworkID->
+		// The translation of net to entity structure
 		std::map<networkID, entt::entity> netToEnttid;
-
 
 		// Whether this scene is the server or a client 
 		bool isServer; 
@@ -60,7 +48,7 @@ namespace GameView {
 		NetworkSystem::NetworkHandler netSystem;
 		TranslationSystem::IDTranslation translationSystem;
 		UI::UISystem uiSystem;
-
+		MovementSystem::MovementSystem movSystem;
 	};
 }
 
