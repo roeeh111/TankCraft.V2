@@ -2,7 +2,7 @@
 #include <msgpack.hpp>
 #include <list>
 
-namespace Tanks {
+namespace GameView {
 
 	// Base struct for a component. Can be dirty or not dirty, that is all
 //	typedef struct component_ {

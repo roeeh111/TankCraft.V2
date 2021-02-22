@@ -2,7 +2,7 @@
 #include <vector>
 #include <iostream>
 
-namespace Tanks {
+namespace GameView {
 	void TanksScene::printUI()
 	{
 		system("CLS");
@@ -67,7 +67,7 @@ namespace Tanks {
 	}
 
 
-	void TanksScene::addTank(std::string clientName_)
+	void TanksScene::addClient(std::string clientName_)
 	{
 		auto clientEntity = m_reg.create();
 
@@ -88,7 +88,7 @@ namespace Tanks {
 
 
 
-	Tanks::TanksScene::TanksScene(bool isServer_, uint32_t maxClients)
+	TanksScene::TanksScene(bool isServer_, uint32_t maxClients)
 	{
 		isServer = isServer_;
 		// start by filling the matrix with blank dots

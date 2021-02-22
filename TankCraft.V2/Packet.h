@@ -5,12 +5,7 @@
 
 namespace NetworkSystem {
 	
-
-	/*
-		TODO: add the rest of the packet types
-	*/
-
-
+	// TODO: Add more potential packet types
 	enum Packet_Type {
 		updateEntity,
 		addEntity,
@@ -18,14 +13,12 @@ namespace NetworkSystem {
 		controlInput
 	};
 
-
 	// Packet base type, all packets have a packet_type
 	class Packet {
 	public:
 		Packet() { type = updateEntity; }
 	protected:
 		enum Packet_Type type;
-
 	};
 
 	// Base class for a game update packet. all game updates have an entityID and ComponentID.
@@ -92,9 +85,4 @@ namespace NetworkSystem {
 	private:
 		Tanks::health data;
 	};
-
-
-
-
-
 }
