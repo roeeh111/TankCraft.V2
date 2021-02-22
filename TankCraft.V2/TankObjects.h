@@ -66,6 +66,9 @@ namespace Tanks {
 	typedef struct networked_ {
 		RakNet::RakPeerInterface* peer; // refrence to the client/server racknet interface
 		//std::list<component&> components; // List of components that are networked		// TODO: may need to pair the component with a type
+
+
+
 		// TODO: Should we have a queue of components to change????
 
 		bool isNetwoked; // If the entity should be networked

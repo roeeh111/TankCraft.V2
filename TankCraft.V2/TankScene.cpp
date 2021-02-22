@@ -124,6 +124,10 @@ namespace Tanks {
 				std::cerr << "Failed to startup on socket!" << std::endl;
 			}
 		}
+
+		// Initialize our translation system
+		netToEnttid = std::map<networkID, entt::entity>();
+
 	}
 
 	TanksScene::~TanksScene()

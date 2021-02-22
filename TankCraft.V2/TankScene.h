@@ -4,6 +4,7 @@
 #include <RakPeerInterface.h>
 #include "TankObjects.h"
 #include "NetworkSystem.h"
+#include "IDTranslationSystem.h"
 
 #define WIDTH 20
 #define HEIGHT 20
@@ -42,6 +43,10 @@ namespace Tanks {
 
 		// The interface with raknet 
 		RakNet::RakPeerInterface* rpi;
+
+
+		// TODO: implement a map of NetworkID->
+		std::map<networkID, entt::entity> netToEnttid;
 
 
 		// Whether this scene is the server or a client 
