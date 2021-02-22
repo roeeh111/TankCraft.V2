@@ -1,6 +1,6 @@
 #pragma once
 #include <entt/entt.hpp>
-#include "TankObjects.h"
+#include "Components.h"
 #include "Serialize.h"
 
 namespace NetworkSystem {
@@ -26,14 +26,14 @@ namespace NetworkSystem {
 	class updateEntityPacket : public Packet {
 	public:
 		updateEntityPacket() { type = updateEntity; }
-		updateEntityPacket(entt::entity entityID_, enum Tanks::ComponentID compID_) { type = updateEntity; entityID = entityID_; compID = compID; }
+		updateEntityPacket(entt::entity entityID_, enum GameView::ComponentID compID_) { type = updateEntity; entityID = entityID_; compID = compID; }
 
 		// Serialization functions
 		void read();
 		void write();
 	protected:
 		entt::entity entityID;
-		enum Tanks::ComponentID compID;
+		enum GameView::ComponentID compID;
 		// No data field yet, base class of updateEntity
 	};
 
@@ -53,21 +53,21 @@ namespace NetworkSystem {
 	class addEntityPacket : public Packet {
 	public:
 		addEntityPacket() { type = addEntity; }
-		addEntityPacket(entt::entity entityID_, enum Tanks::ComponentID compID_) { type = addEntity; entityID = entityID_; compID = compID; }
+		addEntityPacket(entt::entity entityID_, enum GameView::ComponentID compID_) { type = addEntity; entityID = entityID_; compID = compID; }
 
 		// Serialization functions
 		void read();
 		void write();
 	protected:
 		entt::entity entityID;
-		enum Tanks::ComponentID compID;
+		enum GameView::ComponentID compID;
 		// No data field yet, base class of addEntity
 	};
 
 	class controlInputPacket : public Packet {
 	public:
 		controlInputPacket() { type = controlInput; }
-		controlInputPacket() { type = controlInput; }
+		//TODO: make templates for input packet
 
 		// Serialization functions
 		void read();
@@ -80,9 +80,9 @@ namespace NetworkSystem {
 	// Health Component update packet
 	class HealthUpdatePacket : public updateEntityPacket {
 	public: 
-		HealthUpdatePacket() { type = updateEntity; Tanks::health(); }
-		HealthUpdatePacket(entt::entity entityID_, Tanks::health data_) { entityID = entityID_; compID = Tanks::Health; data = data_; }
+		HealthUpdatePacket() { type = updateEntity; GameView::health(); }
+		HealthUpdatePacket(entt::entity entityID_, GameView::health data_) { entityID = entityID_; compID = GameView::Health; data = data_; }
 	private:
-		Tanks::health data;
+		GameView::health data;
 	};
 }
