@@ -18,9 +18,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TankObjects.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TankScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -495,7 +492,7 @@
     <ClInclude Include="Packet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IDTranslationSystem.h">
+    <ClInclude Include="Components.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,14 +2,14 @@
 //#include <list>
 #include <entt/entt.hpp>
 #include <RakPeerInterface.h>
-#include "TankObjects.h"
+#include "Components.h"
 #include "NetworkSystem.h"
 #include "IDTranslationSystem.h"
 
 #define WIDTH 20
 #define HEIGHT 20
 
-namespace Tanks {
+namespace GameView {
 
 	class TanksScene {
 	public:
@@ -19,7 +19,7 @@ namespace Tanks {
 		// Scan through each client, check if its dirty bit is set and change data if it is
 		void update();
 
-		void addTank(std::string clientName_);
+		void addClient(std::string clientName_);
 
 		void addSpikes(position pos);
 

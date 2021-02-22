@@ -309,7 +309,7 @@
     <ClInclude Include="NetworkSystem.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="Serialize.h" />
-    <ClInclude Include="TankObjects.h" />
+    <ClInclude Include="Components.h" />
     <ClInclude Include="TankScene.h" />
   </ItemGroup>
   <ItemGroup>
