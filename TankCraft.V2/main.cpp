@@ -21,7 +21,7 @@ void testSerialization();
 
 int main(void)
 {
-      playSingleClient();
+    playSingleClient();
 
     return 0;
 }
