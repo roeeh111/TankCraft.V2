@@ -12,7 +12,7 @@ namespace NetworkSystem {
 
 
 	enum Packet_Type {
-		gameUpdate,
+		updateEntity,
 		addEntity,
 		removeEntity,
 		controlInput
@@ -22,7 +22,7 @@ namespace NetworkSystem {
 	// Packet base type, all packets have a packet_type
 	class Packet {
 	public:
-		Packet() { type = gameUpdate; }
+		Packet() { type = updateEntity; }
 	protected:
 		enum Packet_Type type;
 
@@ -30,10 +30,10 @@ namespace NetworkSystem {
 
 	// Base class for a game update packet. all game updates have an entityID and ComponentID.
 	// Inheriting classes will have an additional data and read/write fields
-	class GameUpdatePacket : public Packet {
+	class updateEntityPacket : public Packet {
 	public:
-		GameUpdatePacket() { type = gameUpdate; }
-		GameUpdatePacket(entt::entity entityID_, enum Tanks::ComponentID compID_) { type = gameUpdate, entityID = entityID_, compID = compID; }
+		updateEntityPacket() { type = updateEntity; }
+		updateEntityPacket(entt::entity entityID_, enum Tanks::ComponentID compID_) { type = updateEntity; entityID = entityID_; compID = compID; }
 
 		// Serialization functions
 		void read();
@@ -41,15 +41,54 @@ namespace NetworkSystem {
 	protected:
 		entt::entity entityID;
 		enum Tanks::ComponentID compID;
-		// No data field yet, base class of gameupdatepacket
+		// No data field yet, base class of updateEntity
 	};
 
+	class removeEntityPacket : public Packet {
+	public:
+		removeEntityPacket() { type = removeEntity; }
+		removeEntityPacket(entt::entity entityID_) { type = removeEntity; entityID = entityID_; }
+
+		// Serialization functions
+		void read();
+		void write();
+	protected:
+		entt::entity entityID;
+		// No data field yet, base class of removeEntity
+	};
+
+	class addEntityPacket : public Packet {
+	public:
+		addEntityPacket() { type = addEntity; }
+		addEntityPacket(entt::entity entityID_, enum Tanks::ComponentID compID_) { type = addEntity; entityID = entityID_; compID = compID; }
+
+		// Serialization functions
+		void read();
+		void write();
+	protected:
+		entt::entity entityID;
+		enum Tanks::ComponentID compID;
+		// No data field yet, base class of addEntity
+	};
+
+	class controlInputPacket : public Packet {
+	public:
+		controlInputPacket() { type = controlInput; }
+		controlInputPacket() { type = controlInput; }
+
+		// Serialization functions
+		void read();
+		void write();
+	protected:
+		entt::entity entityID;
+		// No data field yet, base class of controlInput
+	};
 
 	// Health Component update packet
-	class HealthUpdatePacket : public GameUpdatePacket {
+	class HealthUpdatePacket : public updateEntityPacket {
 	public: 
-		HealthUpdatePacket() { type = gameUpdate; Tanks::health(); }
-		HealthUpdatePacket(entt::entity entityID_, Tanks::health data_) { entityID = entityID_, compID = Tanks::Health, data = data_; }
+		HealthUpdatePacket() { type = updateEntity; Tanks::health(); }
+		HealthUpdatePacket(entt::entity entityID_, Tanks::health data_) { entityID = entityID_; compID = Tanks::Health; data = data_; }
 	private:
 		Tanks::health data;
 	};
