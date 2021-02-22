@@ -1,6 +1,6 @@
 #include <iostream>
 #include "TankScene.h"
-#include "TankObjects.h"
+#include "Components.h"
 #include "Serialize.h"
 
 void playSingleClient();
@@ -31,10 +31,10 @@ int main(void)
 void playSingleClient()
 {
     // instantiate scene object
-    Tanks::TanksScene scene = Tanks::TanksScene(false, 1);
+    GameView::TanksScene scene = GameView::TanksScene(false, 1);
 
     // add a single client
-    scene.addTank("Roee");
+    scene.addClient("Roee");
 
     scene.printUI();
 
