@@ -2,8 +2,9 @@
 #include <entt/entt.hpp>
 #include "Components.h"
 #include "Serialize.h"
+#include "IDTranslationSystem.h"
 
-namespace NetworkSystem {
+namespace Packets {
 	
 	// TODO: Add more potential packet types
 	enum Packet_Type {
@@ -26,41 +27,41 @@ namespace NetworkSystem {
 	class updateEntityPacket : public Packet {
 	public:
 		updateEntityPacket() { type = updateEntity; }
-		updateEntityPacket(entt::entity entityID_, enum GameView::ComponentID compID_) { type = updateEntity; entityID = entityID_; compID = compID; }
+		updateEntityPacket(entt::entity entityID_, enum ComponentView::ComponentID compID_) { type = updateEntity; entityID = entityID_; compID = compID; }
 
 		// Serialization functions
 		void read();
 		void write();
 	protected:
 		entt::entity entityID;
-		enum GameView::ComponentID compID;
+		enum ComponentView::ComponentID compID;
 		// No data field yet, base class of updateEntity
 	};
 
 	class removeEntityPacket : public Packet {
 	public:
 		removeEntityPacket() { type = removeEntity; }
-		removeEntityPacket(entt::entity entityID_) { type = removeEntity; entityID = entityID_; }
+		removeEntityPacket(TranslationSystem::networkID netID_) { type = removeEntity; netID = netID_; }
 
 		// Serialization functions
 		void read();
 		void write();
 	protected:
-		entt::entity entityID;
+		TranslationSystem::networkID netID;
 		// No data field yet, base class of removeEntity
 	};
 
 	class addEntityPacket : public Packet {
 	public:
 		addEntityPacket() { type = addEntity; }
-		addEntityPacket(entt::entity entityID_, enum GameView::ComponentID compID_) { type = addEntity; entityID = entityID_; compID = compID; }
+		addEntityPacket(entt::entity entityID_, enum ComponentView::ComponentID compID_) { type = addEntity; entityID = entityID_; compID = compID; }
 
 		// Serialization functions
 		void read();
 		void write();
 	protected:
 		entt::entity entityID;
-		enum GameView::ComponentID compID;
+		enum ComponentView::ComponentID compID;
 		// No data field yet, base class of addEntity
 	};
 
@@ -80,9 +81,9 @@ namespace NetworkSystem {
 	// Health Component update packet
 	class HealthUpdatePacket : public updateEntityPacket {
 	public: 
-		HealthUpdatePacket() { type = updateEntity; GameView::health(); }
-		HealthUpdatePacket(entt::entity entityID_, GameView::health data_) { entityID = entityID_; compID = GameView::Health; data = data_; }
+		HealthUpdatePacket() { type = updateEntity; ComponentView::health(); }
+		HealthUpdatePacket(entt::entity entityID_, ComponentView::health data_) { entityID = entityID_; compID = ComponentView::Health; data = data_; }
 	private:
-		GameView::health data;
+		ComponentView::health data;
 	};
 }

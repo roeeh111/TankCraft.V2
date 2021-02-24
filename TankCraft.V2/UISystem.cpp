@@ -2,21 +2,21 @@
 #include "Components.h"
 
 namespace UI {
-	void UISystem::updateUI(entt::registry& m_reg, std::vector<std::vector<char>> &map)
+	void UISystem::updateUI(SceneData::SceneData& data)
 	{
 
 		// get all elements that have a mapObject and position, and then do the updates
-		auto view = m_reg.view<GameView::mapObject, GameView::position>();
+		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
 
 
 		for (auto entity : view) {
 			// Get the user input for our object
-			getUserInput(m_reg, entity);
+			getUserInput(data.m_reg, entity);
 		}
 	}
 
 
-	void UISystem::printUI(entt::registry& m_reg, std::vector<std::vector<char>> &map)
+	void UISystem::printUI(SceneData::SceneData& data)
 	{
 		// Clear the current screen
 		system("CLS");
@@ -25,15 +25,15 @@ namespace UI {
 		std::cout << std::endl;
 		for (int i = 0; i < HEIGHT; i++) {
 			for (int j = 0; j < WIDTH; j++) {
-				std::cout << map[i][j] << " ";
+				std::cout << data.map[i][j] << " ";
 			}
 			std::cout << std::endl;
 		}
 
 		// Print out points and client names of any entities that have those
-		auto view = m_reg.view<GameView::score, GameView::clientName>();
+		auto view = data.m_reg.view<ComponentView::score, ComponentView::clientName>();
 		for (auto entity : view) {
-			std::cout << "Points for client " << view.get<GameView::clientName>(entity).name << ": " << view.get<GameView::score>(entity).points << std::endl;
+			std::cout << "Points for client " << view.get<ComponentView::clientName>(entity).name << ": " << view.get<ComponentView::score>(entity).points << std::endl;
 		}
 	}
 
@@ -41,7 +41,7 @@ namespace UI {
 	{
 
 		char input;
-		auto& points = m_reg.get<GameView::position>(clientEntity);
+		auto& points = m_reg.get<ComponentView::position>(clientEntity);
 
 
 		std::cin >> input;

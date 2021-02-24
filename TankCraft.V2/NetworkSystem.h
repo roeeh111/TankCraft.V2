@@ -2,10 +2,18 @@
 #include <entt/entt.hpp>
 #include <RakPeerInterface.h>
 #include <iostream>
-#include "Packet.h"
+#include "SceneData.h"
+#include "IDTranslationSystem.h"
+#include "NetworkFields.h"
+
+//#include "Packet.h"
 // TODO: add multithreading library
 
+// Problem = we have a cyclic header decleration
+
+#define RELIABILITY RELIABLE_ORDERED
 #define SERVER_PORT 60000
+
 
 namespace NetworkSystem {
 	class NetworkHandler {
@@ -14,11 +22,11 @@ namespace NetworkSystem {
 		// TODO: may need a refrence to the m_reg if its not global
 		// Go through all incoming packets to the server, and dispatch game changes accordingly
 		// Broadcast the results to all clients
-		void updateServer(entt::registry &m_reg, RakNet::RakPeerInterface* peer);
+		void updateServer(SceneData::SceneData& data);
 
 		// Go through all incomming game updates, and update the client's game accordingly
 		// In addition, go through all controls inputted, and send them up to the server
-		void updateClient(entt::registry &m_reg, RakNet::RakPeerInterface* peer);
+		void updateClient(SceneData::SceneData& data);
 
 		// Connect to the given server address as a client
 		bool clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress);
@@ -37,8 +45,7 @@ namespace NetworkSystem {
 		// add an entity to the server or client
 		void addEntity(entt::registry& m_reg, bool isServer);
 
-		// remove an entity from the server or client
-		void removeEntity(bool isServer);
+		void removeEntity(SceneData::SceneData& data, TranslationSystem::IDTranslation& system, networkID netId, bool isServer);
 
 		// Server handling a disconnecting client
 		// Delete entity from the registry and clean up metadata

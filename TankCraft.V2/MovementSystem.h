@@ -1,9 +1,10 @@
 #pragma once
 #include <entt/entt.hpp>
+#include "SceneData.h"
 
 namespace MovementSystem {
 	class MovementSystem {
 	public:
-		void updateMovement(entt::registry& m_reg, std::vector<std::vector<char>>& map);
+		void updateMovement(SceneData::SceneData& data);
 	};
 }

@@ -1,6 +1,8 @@
-#include "TanksScene.h"
 #include <vector>
 #include <iostream>
+#include "TanksScene.h"
+#include "NetworkFields.h"
+#include "FreeListComponent.h"
 
 namespace GameView {
 
@@ -9,24 +11,24 @@ namespace GameView {
 	void TanksScene::update()
 	{
 
-		uiSystem.updateUI(m_reg, map);
-		movSystem.updateMovement(m_reg, map);
+		systems.uiSystem.updateUI(data);
+		systems.movSystem.updateMovement(data);
 
 		// Lastly, always print out the game states
-		uiSystem.printUI(m_reg, map);
+		systems.uiSystem.printUI(data);
 	}
 
 
 	void TanksScene::addClient(std::string clientName_)
 	{
-		auto clientEntity = m_reg.create();
+		auto clientEntity = data.m_reg.create();
 
 		// Add the components to the the registry
-		m_reg.emplace<mapObject>(clientEntity);
-		m_reg.emplace<position>(clientEntity);
-		m_reg.emplace<score>(clientEntity);
-		m_reg.emplace<clientName>(clientEntity, clientName_);
-		uiSystem.printUI(m_reg, map);
+		data.m_reg.emplace<ComponentView::mapObject>(clientEntity);
+		data.m_reg.emplace<ComponentView::position>(clientEntity);
+		data.m_reg.emplace<ComponentView::score>(clientEntity);
+		data.m_reg.emplace<ComponentView::clientName>(clientEntity, clientName_);
+		systems.uiSystem.printUI(data);
 
 	}
 
@@ -35,7 +37,14 @@ namespace GameView {
 
 	TanksScene::TanksScene(bool isServer_, uint32_t maxClients)
 	{
-		isServer = isServer_;
+		// Data
+		data = SceneData::SceneData();
+
+		// Systems
+		systems = SceneSystems::SceneSystems();
+
+		data.isServer = isServer_;
+		//isServer = isServer_;
 		initUISystem();
 		initNetworkSystem(isServer_, maxClients);
 		initIDTranslationSystem();
@@ -45,57 +54,57 @@ namespace GameView {
 
 	TanksScene::~TanksScene()
 	{
-		m_reg.clear();
-		RakNet::RakPeerInterface::DestroyInstance(rpi);
+		data.m_reg.clear();
+		RakNet::RakPeerInterface::DestroyInstance(data.rpi);
 	}
 
 
 	void TanksScene::initUISystem() {
 		// start by filling the matrix with blank dots
-		map = std::vector<std::vector<char>>();
+		data.map = std::vector<std::vector<char>>();
 
 		//Grow rows by m
-		map.resize(HEIGHT);
+		data.map.resize(HEIGHT);
 		for (int i = 0; i < HEIGHT; ++i)
 		{
 			//Grow Columns by n
-			map[i].resize(WIDTH);
+			data.map[i].resize(WIDTH);
 		}
 
 		for (int i = 0; i < HEIGHT; i++) {
 			for (int j = 0; j < WIDTH; j++) {
 				if ((i + j) % 8 == 4) {
-					map[i][j] = 'c';
+					data.map[i][j] = 'c';
 				}
 				else {
-					map[i][j] = '.';
+					data.map[i][j] = '.';
 				}
 			}
 			std::cout << std::endl;
 		}
 
-		uiSystem.printUI(m_reg, map);
+		systems.uiSystem.printUI(data);
 	}
 
 
 	void TanksScene::initNetworkSystem(bool isServer_, uint32_t maxClients)
 	{
 		// Instantiate the network instance for our peer interface
-		rpi = RakNet::RakPeerInterface::GetInstance();
-		if (isServer) {
+		data.rpi = RakNet::RakPeerInterface::GetInstance();
+		if (data.isServer) {
 			// Local socket to use for communication
 			RakNet::SocketDescriptor sd(SERVER_PORT, 0);
 
 			// Startup the peer instance with our binded socket
-			if (!(rpi->Startup(maxClients, &sd, 1) == RakNet::RAKNET_STARTED)) {
+			if (!(data.rpi->Startup(maxClients, &sd, 1) == RakNet::RAKNET_STARTED)) {
 				std::cerr << "Failed to startup on socket!" << std::endl;
 			}
-			rpi->SetMaximumIncomingConnections(maxClients);
+			data.rpi->SetMaximumIncomingConnections(maxClients);
 
 		}
 		else {
 			RakNet::SocketDescriptor sd;
-			if (!(rpi->Startup(1, &sd, 1) == RakNet::RAKNET_STARTED)) {
+			if (!(data.rpi->Startup(1, &sd, 1) == RakNet::RAKNET_STARTED)) {
 				std::cerr << "Failed to startup on socket!" << std::endl;
 			}
 		}
@@ -104,11 +113,11 @@ namespace GameView {
 	void TanksScene::initIDTranslationSystem()
 	{
 		// Initialize our translation system
-		netToEnttid = std::map<networkID, entt::entity>();
-		auto freeListEntity = m_reg.create();
+		data.netToEnttid = std::map<networkID, entt::entity>();
+		auto freeListEntity = data.m_reg.create();
 
 		// Add the components to the the registry
-		m_reg.emplace<freelist> (freeListEntity);
+		data.m_reg.emplace<FreeListComponent::freelist> (freeListEntity);
 	}
 
 	void GameView::TanksScene::initMovementSystem()

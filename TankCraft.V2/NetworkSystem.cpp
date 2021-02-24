@@ -1,14 +1,15 @@
-#include "NetworkSystem.h"
 #include <MessageIdentifiers.h>
+#include "NetworkSystem.h"
+//#include "IDTranslationSystem.h"
 
 namespace NetworkSystem {
-	void NetworkHandler::updateServer(entt::registry &m_reg, RakNet::RakPeerInterface* peer)
+	void NetworkHandler::updateServer(SceneData::SceneData& data)
 	{
 		RakNet::Packet* pack;
 
 		// Loop through the network instantiation's packet queue, and get some packet of data
 		// do whatever you need to do depending on what was passed to us
-		for (pack = peer->Receive(); pack; peer->DeallocatePacket(pack), pack = peer->Receive()) {
+		for (pack = data.rpi->Receive(); pack; data.rpi->DeallocatePacket(pack), pack = data.rpi->Receive()) {
 			switch (pack->data[0])
 			{
 			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
@@ -54,7 +55,7 @@ namespace NetworkSystem {
 				//	printf("Message with identifier %i has arrived.\n", pack->data[0]);
 
 				// Call makeServerUpdate with a new thread (NOTE DONT DEALLOCATE THE PACKET HERE!!!!!!!)
-				makeServerUpdate(m_reg, pack);
+				makeServerUpdate(data.m_reg, pack);
 
 				break;
 			}
@@ -66,13 +67,13 @@ namespace NetworkSystem {
 
 
 
-	void NetworkHandler::updateClient(entt::registry &m_reg, RakNet::RakPeerInterface* peer)
+	void NetworkHandler::updateClient(SceneData::SceneData& data)
 	{
 		// Pointer to some network packet
 		RakNet::Packet* pack;
 
 		// Loop through all of the packets in the incoming packet queue
-		for (pack = peer->Receive(); pack; peer->DeallocatePacket(pack), pack = peer->Receive()) {
+		for (pack = data.rpi->Receive(); pack; data.rpi->DeallocatePacket(pack), pack = data.rpi->Receive()) {
 			switch (pack->data[0])
 			{
 
@@ -98,7 +99,7 @@ namespace NetworkSystem {
 
 
 				// Call makeClientUpdate with a new thread (NOTE DONT DEALLOCATE THE PACKET HERE!!!!!!!)
-				makeClientUpdate(m_reg, pack);
+				makeClientUpdate(data.m_reg, pack);
 				break;
 
 			//	printf("Message with identifier %i has arrived.\n", pack->data[0]);
@@ -159,29 +160,53 @@ namespace NetworkSystem {
 	void NetworkHandler::addEntity(entt::registry& m_reg, bool isServer)
 	{
 		// If is Server:
-		// add the entity with entity id given to the m_reg
-		// add all components of the entity with the given values to the new entity
-		// broadcast to all clients to add a new entity with entity ID, and all components
-
-		// If is client:
-		// add the entity with the entity id given to the m_reg
-		// add all components of the entitty with the given valies to the new entity
-
+		if (isServer) {
+			// add the entity with entity id given to the m_reg
+			// Allocate a new netId for this entity
+			// add all components of the entity with the given values to the new entity
+			// broadcast to all clients to add a new entity with entity ID, and all components
+		}
+		else {
+			// If is client:
+			// add the entity with the entity id given to the m_reg
+			// Create a new mapping of netID and entity
+			// add all components of the entitty with the given valies to the new entity
+		}
 	}
 
+	
 	// TODO:
-	void NetworkHandler::removeEntity(bool isServer)
+	void NetworkHandler::removeEntity(SceneData::SceneData& data, TranslationSystem::IDTranslation& system, networkID netId, bool isServer)
 	{
 		// If is Server:
-		// Remove the given entity from the m_reg
-		// broadcast to all users to remove the given entity
+		if (isServer) {
+			// Remove the given entity from the m_reg
+			system.freeID(data, netId);
 
-		// If is client:
-		// Remove the given entity from the m_reg
+			// Create new remove identity packet
+		//	Packets::removeEntityPacket remPack(netId);
 
-		// Note: i think register.remove/delete will remove the entity and destroy all its data for us
+			// bitstream to send to
+		//	RakNet::BitStream bsOut;
+
+
+			// write the packet to the bitstream
+			// TODO: fill the bitstream, serialize
+
+
+
+			// broadcast to all users to remove the given entity using the made packet
+		//	scene.rpi->Send(&bsOut, HIGH_PRIORITY, RELIABILITY, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+
+		}
+		else {
+			// If is client:
+			// Remove the given entity from the m_reg
+			data.m_reg.destroy(system.getEntity(data, netId));
+
+		}
 	}
-
+	
 	// TODO:
 	void NetworkHandler::handleDisconnect(bool isServer)
 	{

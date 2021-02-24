@@ -2,15 +2,15 @@
 #include "MovementSystem.h"
 
 namespace MovementSystem {
-	void MovementSystem::updateMovement(entt::registry& m_reg, std::vector<std::vector<char>>& map)
+	void MovementSystem::updateMovement(SceneData::SceneData& data)
 	{
 		// get all elements that have a mapObject and position, and then do the updates
-		auto view = m_reg.view<GameView::mapObject, GameView::position>();
+		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
 		for (auto entity : view) {
 
-			auto& pos = view.get<GameView::position>(entity);
+			auto& pos = view.get<ComponentView::position>(entity);
 			//auto& scr = view.get<score>(entity);
-			auto& disp = view.get<GameView::mapObject>(entity);
+			auto& disp = view.get<ComponentView::mapObject>(entity);
 
 			if (pos.dirty) {
 
@@ -18,16 +18,16 @@ namespace MovementSystem {
 				// set new location to what it needs to be. also set dirty bit to 0
 
 				// If weve met a cookie, eat it, add it to points, and remove it from the map
-				if (map[pos.cury][pos.curx] == 'c') {
+				if (data.map[pos.cury][pos.curx] == 'c') {
 					// if we have a points component, increment it
-					if (m_reg.has<GameView::score>(entity)) {
+					if (data.m_reg.has<ComponentView::score>(entity)) {
 						// Get the entities score
-						auto& scr = m_reg.get<GameView::score>(entity);
+						auto& scr = data.m_reg.get<ComponentView::score>(entity);
 						scr.points++;
 					}
 				}
-				map[pos.prevy][pos.prevx] = '.';
-				map[pos.cury][pos.curx] = disp.mapChar;
+				data.map[pos.prevy][pos.prevx] = '.';
+				data.map[pos.cury][pos.curx] = disp.mapChar;
 
 				pos.dirty = 0;
 

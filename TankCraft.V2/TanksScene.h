@@ -3,13 +3,21 @@
 #include <entt/entt.hpp>
 #include <RakPeerInterface.h>
 #include "Components.h"
-#include "NetworkSystem.h"
-#include "IDTranslationSystem.h"
-#include "UISystem.h"
-#include "MovementSystem.h"
+#include "SceneData.h"
+#include "SceneSystems.h"
 
 namespace GameView {
 
+	// Try and break this down into two classes, one for tankssystems, one for tanksData
+
+	// If a system wants to do something, pass it an instance of tanksData
+	// This class contains both those classes
+
+	// if scene wants to update, it calls scene.update (gets data from scene data, and the system functions from scene systems)
+	
+	// if a system wants to do something by its own, pass in scenedata
+
+	// if data wants to be data, let it be data
 	class TanksScene {
 	public:
 		// Scan through each client, check if its dirty bit is set and change data if it is
@@ -22,6 +30,13 @@ namespace GameView {
 
 		~TanksScene();
 
+		// Data
+		SceneData::SceneData data;
+
+		// Systems
+		SceneSystems::SceneSystems systems;
+
+
 	private:
 
 		void initNetworkSystem(bool isServer_, uint32_t maxClients);
@@ -29,26 +44,7 @@ namespace GameView {
 		void initUISystem();
 		void initMovementSystem();
 
-		// The main UI
-		std::vector<std::vector<char>> map;
 
-		// main registry
-		entt::registry m_reg;
-
-		// The interface with raknet 
-		RakNet::RakPeerInterface* rpi;
-
-		// The translation of net to entity structure
-		std::map<networkID, entt::entity> netToEnttid;
-
-		// Whether this scene is the server or a client 
-		bool isServer; 
-
-		// SYSTEMS:				TODO (may want to set them as friend functions. So that data transfer will be smoother)
-		NetworkSystem::NetworkHandler netSystem;
-		TranslationSystem::IDTranslation translationSystem;
-		UI::UISystem uiSystem;
-		MovementSystem::MovementSystem movSystem;
 	};
 }
 

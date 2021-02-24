@@ -1,6 +1,5 @@
 #include <iostream>
 #include "TanksScene.h"
-#include "Components.h"
 #include "Serialize.h"
 
 void playSingleClient();
