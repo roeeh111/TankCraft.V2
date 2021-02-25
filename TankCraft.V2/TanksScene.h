@@ -13,7 +13,6 @@
  -> first figure out whats buging with the controls
  -> multithread! let the movement system be its own thread, and the ui system be its own thread. that way, theres no blocking between them
 	- will need to lock the controls component and position component?
-
 */
 
 
