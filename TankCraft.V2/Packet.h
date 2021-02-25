@@ -12,7 +12,9 @@ namespace Packets {
 		updateEntity,
 		addEntity,
 		removeEntity,
-		controlInput
+		controlInput,
+		login,
+		logout
 	};
 
 	// Packet base type, all packets have a packet_type
@@ -87,6 +89,29 @@ namespace Packets {
 	private:
 		ComponentView::health data;
 	};
+
+	class loginPacket : public Packet {
+	public:
+		loginPacket() { type = login; }
+
+		/* Serialization functions
+		void read();
+		void write();*/
+	protected:
+		// No data field yet, base class of login
+	};
+
+	class logoutPacket : public Packet {
+	public:
+		logoutPacket() { type = logout; }
+
+		/* Serialization functions
+		void read();
+		void write(); */
+	protected:
+		// No data field yet, base class of logout
+	};
+
 }
 
 
@@ -97,7 +122,7 @@ namespace Packets {
 	- Control packet (sends some controls from client to server)		// easy 
 	- add entitity (sends to add an entitiy with X data) // harder, because of data field X (block of data)
 	- remove entity (sends to remove some entity)  // easy, just remove this entitiy
-	- game update (sends to change a list of components X)     // hard, need to define how we want to send components
+	- update entity (sends to change a list of components X)     // hard, need to define how we want to send components
 	- login (add new user)	// easy 
 	- logout (remove user) // easy 
 
