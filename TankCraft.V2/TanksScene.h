@@ -6,6 +6,19 @@
 #include "SceneData.h"
 #include "SceneSystems.h"
 
+
+
+/*
+ To fix our lagging and waiting issue:
+ -> first figure out whats buging with the controls
+ -> multithread! let the movement system be its own thread, and the ui system be its own thread. that way, theres no blocking between them
+	- will need to lock the controls component and position component?
+
+*/
+
+
+
+
 namespace GameView {
 
 	// Try and break this down into two classes, one for tankssystems, one for tanksData
@@ -22,8 +35,6 @@ namespace GameView {
 	public:
 		// Scan through each client, check if its dirty bit is set and change data if it is
 		void update();
-
-		void addClient(std::string clientName_);
 
 		// Constructor, starts up rackNet with inputted max clients
 		TanksScene(bool isServer_, uint32_t maxClients);

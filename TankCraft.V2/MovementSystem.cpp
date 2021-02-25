@@ -1,37 +1,66 @@
 #include "Components.h"
 #include "MovementSystem.h"
+#include "UISystem.h"
 
+#include "UISystem.h"
 namespace MovementSystem {
 	void MovementSystem::updateMovement(SceneData::SceneData& data)
 	{
-		// get all elements that have a mapObject and position, and then do the updates
-		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
+		// For now, loop over all entities with position and user input
+		// and call moveEntity
+		auto view = data.m_reg.view<ComponentView::userInput, ComponentView::position>();
 		for (auto entity : view) {
+			moveEntity(data.m_reg, entity, data.m_reg.get<ComponentView::userInput>(entity));
+		}
 
-			auto& pos = view.get<ComponentView::position>(entity);
-			//auto& scr = view.get<score>(entity);
-			auto& disp = view.get<ComponentView::mapObject>(entity);
+		
 
-			if (pos.dirty) {
+		// TODO:
+		// Networking version: if user input is dirty, signal networking system to send control packet
+		// The acutal update will happen from the network calling moveEntity
+	}
 
-				// If the dirty bit is set, set old location to '.', and 
-				// set new location to what it needs to be. also set dirty bit to 0
+	void MovementSystem::moveEntity(entt::registry &m_reg, entt::entity &entity, ComponentView::userInput &input) {
+		auto& points = m_reg.get<ComponentView::position>(entity);
 
-				// If weve met a cookie, eat it, add it to points, and remove it from the map
-				if (data.map[pos.cury][pos.curx] == 'c') {
-					// if we have a points component, increment it
-					if (data.m_reg.has<ComponentView::score>(entity)) {
-						// Get the entities score
-						auto& scr = data.m_reg.get<ComponentView::score>(entity);
-						scr.points++;
-					}
-				}
-				data.map[pos.prevy][pos.prevx] = '.';
-				data.map[pos.cury][pos.curx] = disp.mapChar;
 
-				pos.dirty = 0;
+		points.prevx = points.curx;
+		points.prevy = points.cury;
 
+		if (input.left) {
+			if (points.curx == 0) {
+				points.curx = WIDTH - 1;
+			}
+			else {
+				points.curx--;
 			}
 		}
+		else if (input.down) {
+			if (points.cury == HEIGHT - 1) {
+				points.cury = 0;
+			}
+			else {
+				points.cury++;
+			}
+		}
+		else if (input.right) {
+			if (points.curx == WIDTH - 1) {
+				points.curx = 0;
+			}
+			else {
+				points.curx++;
+			}
+		}
+		else if (input.up) {
+			if (points.cury == 0) {
+				points.cury = HEIGHT - 1;
+			}
+			else {
+				points.cury--;
+			}
+		}
+
+		// Clear the input 
+		input.dirty = 0; input.left = 0; input.right = 0; input.up = 0; input.right = 0;
 	}
 }

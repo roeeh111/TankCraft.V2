@@ -1,6 +1,6 @@
 #include <MessageIdentifiers.h>
 #include "NetworkSystem.h"
-//#include "IDTranslationSystem.h"
+#include "Packet.h"
 
 namespace NetworkSystem {
 	void NetworkHandler::updateServer(SceneData::SceneData& data)
@@ -107,10 +107,12 @@ namespace NetworkSystem {
 		}
 
 		// TODO:
-		// Iterate through userInputQueue
-			// build new control packet from control input
-			// send control packet up to server
-			// Delete local copy of packet
+		// Handle User Input:
+
+		// Assume that were tick based, so get the user input component (most rescent control to the tick),
+		// if that component is dirty, build a new control packet and send it to the server
+		// else do nothing
+
 	}
 
 	bool NetworkHandler::clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress)
@@ -146,31 +148,42 @@ namespace NetworkSystem {
 	}
 
 
-	// TODO:
+	// TODO:	(do we need to keep track of the list of current connections???)
 	void NetworkHandler::handleConnection()
 	{
-		// Add this connection to the list of connections?? maybe raknet already has it
-		// Broadcast to all users that a new user has spawned in, and where
-		// Call addEntity
+		// Broadcast to all users that a new user has spawned in, and where ?????
 		// Send the current game state to the user
 		//		meaning: Send all entities, and all components to the user so they may add it
 	}
 
 	// TODO:
-	void NetworkHandler::addEntity(entt::registry& m_reg, bool isServer)
+	void NetworkHandler::addEntity(SceneData::SceneData& data, TranslationSystem::IDTranslation& transSystem, bool isServer)
 	{
 		// If is Server:
 		if (isServer) {
 			// add the entity with entity id given to the m_reg
+			auto newEntity = data.m_reg.create();
+
 			// Allocate a new netId for this entity
+			networkID netind = transSystem.createMapping(data, newEntity);
+
+
+			// TODO:			(also figure out how we want to packetize all of the components)
 			// add all components of the entity with the given values to the new entity
 			// broadcast to all clients to add a new entity with entity ID, and all components
 		}
 		else {
 			// If is client:
-			// add the entity with the entity id given to the m_reg
-			// Create a new mapping of netID and entity
-			// add all components of the entitty with the given valies to the new entity
+				// if client doesnt have an entity with this netid 
+				// add the entity with the entity id given to the m_reg
+				auto newEntity = data.m_reg.create();
+
+
+				// TODO: when unpacking input packet, get the netID passed to us
+				// Create a new mapping of netID and entity
+
+				// TODO: 
+				// add all components of the entitty with the given valies to the new entity
 		}
 	}
 
@@ -183,20 +196,21 @@ namespace NetworkSystem {
 			// Remove the given entity from the m_reg
 			system.freeID(data, netId);
 
-			// Create new remove identity packet
-		//	Packets::removeEntityPacket remPack(netId);
+			// Create new remove entity packet
+			Packets::removeEntityPacket remPack(netId);
 
 			// bitstream to send to
-		//	RakNet::BitStream bsOut;
+			RakNet::BitStream bsOut;
 
 
-			// write the packet to the bitstream
+			// write the packet to the bitstream (figure out how we want to organize packets)
 			// TODO: fill the bitstream, serialize
 
 
 
 			// broadcast to all users to remove the given entity using the made packet
-		//	scene.rpi->Send(&bsOut, HIGH_PRIORITY, RELIABILITY, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+			// all users except the owner of this entity
+		//	data.rpi->Send(&bsOut, HIGH_PRIORITY, RELIABILITY, 0, (Incomming packet address), true);
 
 		}
 		else {
@@ -204,6 +218,18 @@ namespace NetworkSystem {
 			// Remove the given entity from the m_reg
 			data.m_reg.destroy(system.getEntity(data, netId));
 
+			// Send to the server that we are removing this entity
+
+			// Create new remove identity packet
+			Packets::removeEntityPacket remPack(netId);
+
+			// bitstream to send to
+			RakNet::BitStream bsOut;
+
+			// write the packet to the bitstream
+
+			// send the packet to the server
+		//	data.rpi->Send(&bsOut, HIGH_PRIORITY, RELIABILITY, 0, (Server address), true);
 		}
 	}
 	

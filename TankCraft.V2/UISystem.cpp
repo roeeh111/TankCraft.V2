@@ -2,18 +2,75 @@
 #include "Components.h"
 
 namespace UI {
+
+	void UISystem::addTank(SceneData::SceneData& data, std::string clientName_)
+	{
+		auto clientEntity = data.m_reg.create();
+
+		// Add the components to the the registry
+		data.m_reg.emplace<ComponentView::mapObject>(clientEntity);
+		data.m_reg.emplace<ComponentView::position>(clientEntity);
+		data.m_reg.emplace<ComponentView::score>(clientEntity);
+		data.m_reg.emplace<ComponentView::clientName>(clientEntity, clientName_);
+		data.m_reg.emplace<ComponentView::userInput>(clientEntity);
+		printUI(data);
+
+		// TODO: call add entity for the network system of this entity!!!!
+
+	}
+
+
 	void UISystem::updateUI(SceneData::SceneData& data)
 	{
 
-		// get all elements that have a mapObject and position, and then do the updates
-		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
+		// get all elements that take user input
+		auto view = data.m_reg.view<ComponentView::userInput>();
 
 
 		for (auto entity : view) {
 			// Get the user input for our object
-			getUserInput(data.m_reg, entity);
+			getKeyBoardInput(data.m_reg, entity);
+
+			//getUserInput(data.m_reg, entity);
+		}
+
+		// update the map
+		updateMapPositions(data);
+	}
+
+	void UISystem::updateMapPositions(SceneData::SceneData& data) {
+		// get all elements that have a mapObject and position, and then do the updates
+		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
+		for (auto entity : view) {
+
+			auto& pos = view.get<ComponentView::position>(entity);
+			//auto& scr = view.get<score>(entity);
+			auto& disp = view.get<ComponentView::mapObject>(entity);
+
+		//	if (pos.dirty) {
+
+				// If the dirty bit is set, set old location to '.', and 
+				// set new location to what it needs to be. also set dirty bit to 0
+
+				// If weve met a cookie, eat it, add it to points, and remove it from the map
+				if (data.map[pos.cury][pos.curx] == 'c') {
+					// if we have a points component, increment it
+					if (data.m_reg.has<ComponentView::score>(entity)) {
+						// Get the entities score
+						auto& scr = data.m_reg.get<ComponentView::score>(entity);
+						scr.points++;
+					}
+				}
+				data.map[pos.prevy][pos.prevx] = '.';
+				data.map[pos.cury][pos.curx] = disp.mapChar;
+
+			//	pos.dirty = 0;
+
+		//	}
 		}
 	}
+
+
 
 
 	void UISystem::printUI(SceneData::SceneData& data)
@@ -37,57 +94,106 @@ namespace UI {
 		}
 	}
 
-	void UISystem::getUserInput(entt::registry& m_reg, entt::entity& clientEntity)
+
+	/*
+	
+	// On creation, add the userinput component to the client entity
+
+	user input pipeline:
+	user makes keyboard input
+	sets userinput component, and dirty bit
+
+	on network system loop, checks if user input is dirty
+	if it is dirty, creates new control packet, and sends it to the server
+	
+	Server responds with a position component for the entity, client sets the new position value on game update
+	
+	*/
+
+	
+	void UISystem::getKeyBoardInput(entt::registry& m_reg, entt::entity& clientEntity)
 	{
-
 		char input;
-		auto& points = m_reg.get<ComponentView::position>(clientEntity);
-
-
 		std::cin >> input;
 
-		points.dirty = 1;
-		points.prevx = points.curx;
-		points.prevy = points.cury;
+		// Get the userInput component for this entity
+		ComponentView::userInput& usrInput = m_reg.get<ComponentView::userInput>(clientEntity);
 
+		usrInput.dirty = 1;
+		// set the user input values depending on what we got
 		if (input == 'a') {
-			if (points.curx == 0) {
-				points.curx = WIDTH - 1;
-			}
-			else {
-				points.curx--;
-			}
+			usrInput.left = 1;
 		}
 		else if (input == 's') {
-			if (points.cury == HEIGHT - 1) {
-				points.cury = 0;
-			}
-			else {
-				points.cury++;
-			}
+			usrInput.down = 1;
 		}
 		else if (input == 'd') {
-			if (points.curx == WIDTH - 1) {
-				points.curx = 0;
-			}
-			else {
-				points.curx++;
-			}
+			usrInput.right = 1;
 		}
 		else if (input == 'w') {
-			if (points.cury == 0) {
-				points.cury = HEIGHT - 1;
-			}
-			else {
-				points.cury--;
-			}
+			usrInput.up = 1;
 		}
 		else {
-			points.dirty = 0;
+			usrInput.dirty = 0;
+		}
+	}
+	
+
+}
+
+
+
+
+
+
+
+/*
+void UISystem::getUserInput(entt::registry& m_reg, entt::entity& clientEntity)
+{
+
+	char input;
+	auto& points = m_reg.get<ComponentView::position>(clientEntity);
+
+
+	std::cin >> input;
+
+	points.prevx = points.curx;
+	points.prevy = points.cury;
+
+	if (input == 'a') {
+		if (points.curx == 0) {
+			points.curx = WIDTH - 1;
+		}
+		else {
+			points.curx--;
+		}
+	}
+	else if (input == 's') {
+		if (points.cury == HEIGHT - 1) {
+			points.cury = 0;
+		}
+		else {
+			points.cury++;
+		}
+	}
+	else if (input == 'd') {
+		if (points.curx == WIDTH - 1) {
+			points.curx = 0;
+		}
+		else {
+			points.curx++;
+		}
+	}
+	else if (input == 'w') {
+		if (points.cury == 0) {
+			points.cury = HEIGHT - 1;
+		}
+		else {
+			points.cury--;
 		}
 	}
 
-
-
-
 }
+*/
+
+

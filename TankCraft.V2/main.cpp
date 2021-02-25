@@ -33,7 +33,7 @@ void playSingleClient()
     GameView::TanksScene scene = GameView::TanksScene(false, 1);
 
     // add a single client
-    scene.addClient("Roee");
+    scene.systems.uiSystem.addTank(scene.data, "Roee");
 
    // scene.printUI();
 

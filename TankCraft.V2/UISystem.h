@@ -16,7 +16,17 @@ namespace UI {
 
 		// Get input from the user, and set its position component
 		// Also, set the dirty bit = 1								TODO:: can improve this by not having to loop over all components with position, 
-		void getUserInput(entt::registry& m_reg, entt::entity& clientEntity);				//		But all components that have position and are dirty (or some signaling)
+//		void getUserInput(entt::registry& m_reg, entt::entity& clientEntity);				//		But all components that have position and are dirty (or some signaling)
+
+		// Add a tank entity to the game
+		void addTank(SceneData::SceneData& data, std::string clientName_);
+
+		// Getting keyboard input
+		void getKeyBoardInput(entt::registry& m_reg, entt::entity& clientEntity);
+
+
+		// Update each ui entity's position in the map
+		void updateMapPositions(SceneData::SceneData& data);
 
 	};
 }

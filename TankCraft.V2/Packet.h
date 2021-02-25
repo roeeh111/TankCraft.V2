@@ -3,6 +3,7 @@
 #include "Components.h"
 #include "Serialize.h"
 #include "IDTranslationSystem.h"
+#include "NetworkFields.h"
 
 namespace Packets {
 	
@@ -41,13 +42,13 @@ namespace Packets {
 	class removeEntityPacket : public Packet {
 	public:
 		removeEntityPacket() { type = removeEntity; }
-		removeEntityPacket(TranslationSystem::networkID netID_) { type = removeEntity; netID = netID_; }
+		removeEntityPacket(networkID netID_) { type = removeEntity; netID = netID_; }
 
 		// Serialization functions
 		void read();
 		void write();
 	protected:
-		TranslationSystem::networkID netID;
+		networkID netID;
 		// No data field yet, base class of removeEntity
 	};
 

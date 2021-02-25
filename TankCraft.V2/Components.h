@@ -4,15 +4,26 @@
 
 namespace ComponentView {
 
+	typedef struct userInput_ {
+		bool up;
+		bool down;
+		bool left;
+		bool right;
+		bool dirty;
+		userInput_() { up = 0; down = 0; left = 0; right = 0; dirty = 0; }
+		MSGPACK_DEFINE(up, down, left, right);
+	} userInput;
+
+
 	typedef struct position_ {
 		uint32_t prevx;
 		uint32_t prevy;
 
 		uint32_t curx;
 		uint32_t cury;
-		position_() { prevx = 0; prevy = 0; curx = 0; cury = 0; dirty = 0; }
+		position_() { prevx = 0; prevy = 0; curx = 0; cury = 0; }
 		MSGPACK_DEFINE(prevx, prevy, curx, cury);
-		bool dirty;
+	//	bool dirty;
 	} position;
 
 
@@ -65,7 +76,7 @@ namespace ComponentView {
 	typedef struct networked_ {
 		//RakNet::RakPeerInterface* peer; // refrence to the client/server racknet interface
 		//std::list<component&> components; // List of components that are networked		// TODO: may need to pair the component with a type
-
+		long clientID;
 
 
 		// TODO: Should we have a queue of components to change????

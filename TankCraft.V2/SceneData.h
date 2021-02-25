@@ -22,5 +22,7 @@ namespace SceneData {
 		// Whether this scene is the server or a client 
 		bool isServer;
 
+		// TODO: keep track of the server's address
+
 	};
 }

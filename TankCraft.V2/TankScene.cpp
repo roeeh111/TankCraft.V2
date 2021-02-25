@@ -19,22 +19,6 @@ namespace GameView {
 	}
 
 
-	void TanksScene::addClient(std::string clientName_)
-	{
-		auto clientEntity = data.m_reg.create();
-
-		// Add the components to the the registry
-		data.m_reg.emplace<ComponentView::mapObject>(clientEntity);
-		data.m_reg.emplace<ComponentView::position>(clientEntity);
-		data.m_reg.emplace<ComponentView::score>(clientEntity);
-		data.m_reg.emplace<ComponentView::clientName>(clientEntity, clientName_);
-		systems.uiSystem.printUI(data);
-
-	}
-
-
-
-
 	TanksScene::TanksScene(bool isServer_, uint32_t maxClients)
 	{
 		// Data
