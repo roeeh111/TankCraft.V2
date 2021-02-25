@@ -12,7 +12,9 @@ namespace Packets {
 		updateEntity,
 		addEntity,
 		removeEntity,
-		controlInput
+		control,
+		login,
+		logout
 	};
 
 	// Packet base type, all packets have a packet_type
@@ -23,25 +25,9 @@ namespace Packets {
 		enum Packet_Type type;
 	};
 
-	// Base class for a game update packet. all game updates have an entityID and ComponentID.
-	// Inheriting classes will have an additional data and read/write fields
-	class updateEntityPacket : public Packet {
-	public:
-		updateEntityPacket() { type = updateEntity; }
-		updateEntityPacket(entt::entity entityID_, enum ComponentView::ComponentID compID_) { type = updateEntity; entityID = entityID_; compID = compID; }
-
-		// Serialization functions
-		void read();
-		void write();
-	protected:
-		entt::entity entityID;
-		enum ComponentView::ComponentID compID;
-		// No data field yet, base class of updateEntity
-	};
-
+	// Packet saying to remove an entity with the given netid
 	class removeEntityPacket : public Packet {
 	public:
-		removeEntityPacket() { type = removeEntity; }
 		removeEntityPacket(networkID netID_) { type = removeEntity; netID = netID_; }
 
 		// Serialization functions
@@ -52,41 +38,52 @@ namespace Packets {
 		// No data field yet, base class of removeEntity
 	};
 
+	// Packet saying to add an entity with the given netid
 	class addEntityPacket : public Packet {
 	public:
-		addEntityPacket() { type = addEntity; }
-		addEntityPacket(entt::entity entityID_, enum ComponentView::ComponentID compID_) { type = addEntity; entityID = entityID_; compID = compID; }
+		addEntityPacket(networkID netId_) { type = addEntity; netId = netId_; }
 
 		// Serialization functions
 		void read();
 		void write();
 	protected:
-		entt::entity entityID;
-		enum ComponentView::ComponentID compID;
-		// No data field yet, base class of addEntity
+		networkID netId;
+		// TODO: 
 	};
 
-	class controlInputPacket : public Packet {
+
+	// Packet saying that user with entity netid inputed control controls
+	class controlPacket : public Packet {
 	public:
-		controlInputPacket() { type = controlInput; }
-		//TODO: make templates for input packet
+		controlPacket(networkID netId_, ComponentView::userInput& controls_) { type = control; controls = controls_; }
 
 		// Serialization functions
 		void read();
 		void write();
 	protected:
-		entt::entity entityID;
-		// No data field yet, base class of controlInput
+		networkID netId;
+		ComponentView::userInput controls;
 	};
 
-	// Health Component update packet
-	class HealthUpdatePacket : public updateEntityPacket {
-	public: 
-		HealthUpdatePacket() { type = updateEntity; ComponentView::health(); }
-		HealthUpdatePacket(entt::entity entityID_, ComponentView::health data_) { entityID = entityID_; compID = ComponentView::Health; data = data_; }
-	private:
-		ComponentView::health data;
+
+
+	// Base class for a game update packet. all game updates have an entityID and ComponentID.
+	// Inheriting classes will have an additional data and read/write fields
+	class updateEntityPacket : public Packet {
+	public:
+		updateEntityPacket() { type = updateEntity; }
+		updateEntityPacket(networkID netId_, enum ComponentView::ComponentID compID_) { type = updateEntity; netId = netId_; compID = compID; }
+
+		// Serialization functions
+		void read();
+		void write();
+	protected:
+		networkID netId;
+		enum ComponentView::ComponentID compID;
+		// No data field yet, base class of updateEntity
 	};
+
+
 }
 
 
@@ -95,11 +92,11 @@ namespace Packets {
 
 3 packet types:
 	- Control packet (sends some controls from client to server)		// easy 
-	- add entitity (sends to add an entitiy with X data) // harder, because of data field X (block of data)
 	- remove entity (sends to remove some entity)  // easy, just remove this entitiy
-	- game update (sends to change a list of components X)     // hard, need to define how we want to send components
 	- login (add new user)	// easy 
 	- logout (remove user) // easy 
+	- update entity (sends to change a list of components X)     // hard, need to define how we want to send components
+	- add entitity (sends to add an entitiy with X data) // harder, because of data field X (block of data)
 
 
 	add entity, and game update carry actual data to do something with
