@@ -83,6 +83,36 @@ namespace Packets {
 		// No data field yet, base class of updateEntity
 	};
 
+	// Health Component update packet
+	class HealthUpdatePacket : public updateEntityPacket {
+	public: 
+		HealthUpdatePacket() { type = updateEntity; ComponentView::health(); }
+		HealthUpdatePacket(entt::entity entityID_, ComponentView::health data_) { entityID = entityID_; compID = ComponentView::Health; data = data_; }
+	private:
+		ComponentView::health data;
+	};
+
+	class loginPacket : public Packet {
+	public:
+		loginPacket() { type = login; }
+
+		/* Serialization functions
+		void read();
+		void write();*/
+	protected:
+		// No data field yet, base class of login
+	};
+
+	class logoutPacket : public Packet {
+	public:
+		logoutPacket() { type = logout; }
+
+		/* Serialization functions
+		void read();
+		void write(); */
+	protected:
+		// No data field yet, base class of logout
+	};
 
 }
 
@@ -93,6 +123,7 @@ namespace Packets {
 3 packet types:
 	- Control packet (sends some controls from client to server)		// easy 
 	- remove entity (sends to remove some entity)  // easy, just remove this entitiy
+	- game update (sends to change a list of components X)     // hard, need to define how we want to send components
 	- login (add new user)	// easy 
 	- logout (remove user) // easy 
 	- update entity (sends to change a list of components X)     // hard, need to define how we want to send components
