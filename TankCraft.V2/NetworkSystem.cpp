@@ -65,8 +65,6 @@ namespace NetworkSystem {
 	}
 
 
-
-
 	void NetworkHandler::updateClient(SceneData::SceneData& data)
 	{
 		// Pointer to some network packet
@@ -165,7 +163,7 @@ namespace NetworkSystem {
 			auto newEntity = data.m_reg.create();
 
 			// Allocate a new netId for this entity
-			networkID netind = transSystem.createMapping(data, newEntity);
+			networkID netid = transSystem.createMapping(data, newEntity);
 
 
 			// TODO:			(also figure out how we want to packetize all of the components)
@@ -174,9 +172,9 @@ namespace NetworkSystem {
 		}
 		else {
 			// If is client:
-				// if client doesnt have an entity with this netid 
-				// add the entity with the entity id given to the m_reg
-				auto newEntity = data.m_reg.create();
+			// if client doesnt have an entity with this netid 
+			// add the entity with the entity id given to the m_reg
+			auto newEntity = data.m_reg.create();
 
 
 				// TODO: when unpacking input packet, get the netID passed to us

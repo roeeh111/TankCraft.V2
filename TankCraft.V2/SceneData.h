@@ -15,7 +15,6 @@ namespace SceneData {
 		// The interface with raknet 
 		RakNet::RakPeerInterface* rpi;
 
-
 		// The translation of net to entity structure
 		std::map<networkID, entt::entity> netToEnttid;
 
@@ -23,6 +22,5 @@ namespace SceneData {
 		bool isServer;
 
 		// TODO: keep track of the server's address
-
 	};
 }
