@@ -3,8 +3,8 @@
 #include <RakPeerInterface.h>
 #include "NetworkFields.h"
 
-namespace SceneData {
-	class SceneData {
+namespace SceneComponent {
+	class SceneComponent {
 	public:
 		// The main UI
 		std::vector<std::vector<char>> map;

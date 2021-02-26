@@ -3,10 +3,7 @@
 #include <entt/entt.hpp>
 #include <RakPeerInterface.h>
 #include "Components.h"
-#include "SceneData.h"
-#include "SceneSystems.h"
-
-
+#include "SceneComponent.h"
 
 /*
  To fix our lagging and waiting issue:
@@ -41,10 +38,10 @@ namespace GameView {
 		~TanksScene();
 
 		// Data
-		SceneData::SceneData data;
+		SceneComponent::SceneComponent data;
 
 		// Systems
-		SceneSystems::SceneSystems systems;
+		// SceneSystems::SceneSystems systems;
 
 
 	private:

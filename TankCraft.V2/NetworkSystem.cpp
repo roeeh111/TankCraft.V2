@@ -3,7 +3,7 @@
 #include "Packet.h"
 
 namespace NetworkSystem {
-	void NetworkHandler::updateServer(SceneData::SceneData& data)
+	void NetworkHandler::updateServer(SceneComponent::SceneComponent& data)
 	{
 		RakNet::Packet* pack;
 
@@ -65,7 +65,7 @@ namespace NetworkSystem {
 	}
 
 
-	void NetworkHandler::updateClient(SceneData::SceneData& data)
+	void NetworkHandler::updateClient(SceneComponent::SceneComponent& data)
 	{
 		// Pointer to some network packet
 		RakNet::Packet* pack;
@@ -155,7 +155,7 @@ namespace NetworkSystem {
 	}
 
 	// TODO:
-	void NetworkHandler::addEntity(SceneData::SceneData& data, TranslationSystem::IDTranslation& transSystem, bool isServer)
+	void NetworkHandler::addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, bool isServer)
 	{
 		// If is Server:
 		if (isServer) {
@@ -187,7 +187,7 @@ namespace NetworkSystem {
 
 	
 	// TODO:
-	void NetworkHandler::removeEntity(SceneData::SceneData& data, TranslationSystem::IDTranslation& system, networkID netId, bool isServer)
+	void NetworkHandler::removeEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& system, networkID netId, bool isServer)
 	{
 		// If is Server:
 		if (isServer) {

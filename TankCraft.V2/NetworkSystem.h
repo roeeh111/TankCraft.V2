@@ -2,7 +2,7 @@
 #include <entt/entt.hpp>
 #include <RakPeerInterface.h>
 #include <iostream>
-#include "SceneData.h"
+#include "SceneComponent.h"
 #include "IDTranslationSystem.h"
 #include "NetworkFields.h"
 
@@ -22,11 +22,11 @@ namespace NetworkSystem {
 		// TODO: may need a refrence to the m_reg if its not global
 		// Go through all incoming packets to the server, and dispatch game changes accordingly
 		// Broadcast the results to all clients
-		void updateServer(SceneData::SceneData& data);
+		void updateServer(SceneComponent::SceneComponent& data);
 
 		// Go through all incomming game updates, and update the client's game accordingly
 		// In addition, go through all controls inputted, and send them up to the server
-		void updateClient(SceneData::SceneData& data);
+		void updateClient(SceneComponent::SceneComponent& data);
 
 		// Connect to the given server address as a client
 		bool clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress);
@@ -43,9 +43,9 @@ namespace NetworkSystem {
 		void makeServerUpdate(entt::registry &m_reg, RakNet::Packet* pack);
 
 		// add an entity to the server or client
-		void addEntity(SceneData::SceneData& data, TranslationSystem::IDTranslation& transSystem, bool isServer);
+		void addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, bool isServer);
 
-		void removeEntity(SceneData::SceneData& data, TranslationSystem::IDTranslation& system, networkID netId, bool isServer);
+		void removeEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& system, networkID netId, bool isServer);
 
 		// Server handling a disconnecting client
 		// Delete entity from the registry and clean up metadata
