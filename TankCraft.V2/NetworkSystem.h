@@ -4,7 +4,7 @@
 #include <iostream>
 #include "SceneComponent.h"
 #include "IDTranslationSystem.h"
-#include "NetworkFields.h"
+#include "NetworkComponent.h"
 
 //#include "Packet.h"
 // TODO: add multithreading library

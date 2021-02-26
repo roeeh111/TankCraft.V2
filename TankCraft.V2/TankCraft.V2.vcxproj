@@ -307,7 +307,7 @@
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h" />
     <ClInclude Include="FreeListComponent.h" />
     <ClInclude Include="MovementSystem.h" />
-    <ClInclude Include="NetworkFields.h" />
+    <ClInclude Include="NetworkComponent.h" />
     <ClInclude Include="SceneComponent.h" />
     <ClInclude Include="SceneSystem.h" />
     <ClInclude Include="UISystem.h" />

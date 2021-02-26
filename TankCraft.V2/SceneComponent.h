@@ -1,7 +1,7 @@
 #pragma once
 #include <entt/entt.hpp>
 #include <RakPeerInterface.h>
-#include "NetworkFields.h"
+#include "NetworkComponent.h"
 
 namespace SceneComponent {
 	class SceneComponent {

@@ -3,7 +3,7 @@
 #include "Components.h"
 #include "Serialize.h"
 #include "IDTranslationSystem.h"
-#include "NetworkFields.h"
+#include "NetworkComponent.h"
 
 namespace Packets {
 	
