@@ -2,25 +2,22 @@
 #include "TanksScene.h"
 #include "Serialize.h"
 
+
 void playSingleClient();
 void testSerialization();
 
 // TODO: fix bitstream/stringstream issues
 
-// TODO: refactor original movement code to control component based
+// TODO: refactor original movement code to control component based (fix the bugs)
 
-// TODO:   Add Networking through state synchronization
+// TODO: Add Networking through state synchronization
 
-// TODO: add user input system
-
-// TODO??: keep client to server packet at only controls, and server decides what happens to client, and server responds with the new game state
-        // -> good for udp, cuz it brings down the amount of interactions from client to server. 
-
+// TODO: add user input system (fix the bugs) 
 
 
 int main(void)
 {
-    playSingleClient();
+    testSerialization();
 
     return 0;
 }
@@ -43,11 +40,22 @@ void playSingleClient()
 }
 
 void testSerialization() {
-  //  Tanks::position* p = new Tanks::position();
-   // Tanks::position res;
-   // p->prevx = 3;
+    ComponentView::position* p = new ComponentView::position();
+    ComponentView::position res;
+    ComponentView::position res2;
+    p->prevx = 3;
+    p->cury = 6;
 
- //   std::stringstream stream = std::stringstream();
-  //  Tanks::write<Tanks::position>(stream, *p);
-   // Tanks::read<Tanks::position>(stream, res);
+    std::stringstream ss = std::stringstream();
+    Serialization::write<ComponentView::position>(ss, *p);      // Writing has no problems....
+    Serialization::read<ComponentView::position>(ss, res2);
+
+ //   std::strin stream = std::stringstream();
+    RakNet::BitStream stream = RakNet::BitStream();
+    Serialization::write<ComponentView::position>(stream, *p);      // Writing has no problems....
+    Serialization::read<ComponentView::position>(stream, res);
+
+    assert(p->cury == res.cury);
+    assert(p->prevx == res.prevx);
+    std::cout << "finito" << std::endl;
 }

@@ -83,14 +83,6 @@ namespace Packets {
 		// No data field yet, base class of updateEntity
 	};
 
-	// Health Component update packet
-	class HealthUpdatePacket : public updateEntityPacket {
-	public: 
-		HealthUpdatePacket() { type = updateEntity; ComponentView::health(); }
-		HealthUpdatePacket(entt::entity entityID_, ComponentView::health data_) { entityID = entityID_; compID = ComponentView::Health; data = data_; }
-	private:
-		ComponentView::health data;
-	};
 
 	class loginPacket : public Packet {
 	public:
@@ -151,7 +143,7 @@ namespace Packets {
 		fault:
 			- buttload of metadata (can have more or less depending on how you make it)
 
-			
+**/
 
 
 
