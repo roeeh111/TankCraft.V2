@@ -2,7 +2,7 @@
 #include <entt/entt.hpp>
 #include "SceneComponent.h"
 #include "FreeListComponent.h"
-#include "NetworkComponent.h"
+#include "IDTranslationComponent.h"
 
 
 namespace TranslationSystem {

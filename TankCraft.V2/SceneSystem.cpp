@@ -1,7 +1,7 @@
 #include <vector>
 #include <iostream>
 #include "SceneSystem.h"
-#include "NetworkComponent.h"
+#include "IDTranslationComponent.h"
 #include "FreeListComponent.h"
 
 namespace SceneSystem {

@@ -510,7 +510,7 @@
     <ClInclude Include="SceneComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NetworkComponent.h">
+    <ClInclude Include="IDTranslationComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
