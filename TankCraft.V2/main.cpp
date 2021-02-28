@@ -1,8 +1,12 @@
 #include <iostream>
-#include "SceneSystem.h"
 #include "Serialize.h"
+#include "EntityAdmin.h"
+
+
+#define MAX_CLIENTS 10
 
 void playSingleClient();
+void playMultiplyerClient();
 void testSerialization();
 
 // TODO: fix bitstream/stringstream issues
@@ -20,8 +24,8 @@ void testSerialization();
 
 int main(void)
 {
-    playSingleClient();
-
+    //playSingleClient();
+    playMultiplyerClient();
     return 0;
 }
 
@@ -30,7 +34,7 @@ int main(void)
 void playSingleClient()
 {
     // instantiate scene object
-    SceneSystem::TanksScene scene = SceneSystem::TanksScene(false, 1);
+    EntityAdmin::TanksScene scene = EntityAdmin::TanksScene(false, 1);
 
     // add a single client
     scene.uiSystem.addTank(scene.data, "Roee");
@@ -38,9 +42,27 @@ void playSingleClient()
    // scene.printUI();
 
     // loop and update the game 
-    while (true)
+    while (true) {
         scene.update();
+    }
 }
+
+void playMultiplyerClient()
+{
+    char str[512];
+    printf("(C) or (S)erver?\n");
+    std::cin >> str;
+    bool isServer = (str[0] == 's') || (str[0] == 'S');
+    EntityAdmin::TanksScene scene = EntityAdmin::TanksScene(isServer, 1);
+    if (!isServer) scene.uiSystem.addTank(scene.data, "Player 1");
+
+    while (true) {
+        scene.update();
+        Sleep(100);
+    }
+
+}
+
 
 void testSerialization() {
   //  Tanks::position* p = new Tanks::position();

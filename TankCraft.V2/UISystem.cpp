@@ -30,7 +30,6 @@ namespace UI {
 		for (auto entity : view) {
 			// Get the user input for our object
 			getKeyBoardInput(data.m_reg, entity);
-
 			//getUserInput(data.m_reg, entity);
 		}
 
@@ -92,6 +91,7 @@ namespace UI {
 		for (auto entity : view) {
 			std::cout << "Points for client " << view.get<ComponentView::clientName>(entity).name << ": " << view.get<ComponentView::score>(entity).points << std::endl;
 		}
+		std::cout << data.message << std::endl;
 	}
 
 

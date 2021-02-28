@@ -309,7 +309,7 @@
     <ClInclude Include="MovementSystem.h" />
     <ClInclude Include="IDTranslationComponent.h" />
     <ClInclude Include="SceneComponent.h" />
-    <ClInclude Include="SceneSystem.h" />
+    <ClInclude Include="EntityAdmin.h" />
     <ClInclude Include="UISystem.h" />
     <ClInclude Include="IDTranslationSystem.h" />
     <ClInclude Include="NetworkSystem.h" />
@@ -432,7 +432,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MovementSystem.cpp" />
     <ClCompile Include="NetworkSystem.cpp" />
-    <ClCompile Include="SceneSystem.cpp" />
+    <ClCompile Include="EntityAdmin.cpp" />
     <ClCompile Include="UISystem.cpp" />
   </ItemGroup>
   <ItemGroup>

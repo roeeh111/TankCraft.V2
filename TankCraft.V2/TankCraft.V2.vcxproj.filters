@@ -516,10 +516,10 @@
     <ClInclude Include="NetworkSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="SceneSystem.h">
+    <ClInclude Include="UISystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="UISystem.h">
+    <ClInclude Include="EntityAdmin.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>
@@ -866,10 +866,10 @@
     <ClCompile Include="NetworkSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="SceneSystem.cpp">
+    <ClCompile Include="UISystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="UISystem.cpp">
+    <ClCompile Include="EntityAdmin.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
   </ItemGroup>

@@ -25,7 +25,7 @@ namespace NetworkSystem {
 
 				break;
 			case ID_REMOTE_NEW_INCOMING_CONNECTION:
-				printf("Another client has connected.\n");
+				printf("Another client has connected.");
 
 				handleConnection();
 
@@ -38,6 +38,7 @@ namespace NetworkSystem {
 				break;
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
 				printf("The server is full.\n");
+
 				break;
 			case ID_DISCONNECTION_NOTIFICATION:
 				printf("A client has disconnected.\n");
@@ -76,7 +77,7 @@ namespace NetworkSystem {
 			{
 
 			case ID_CONNECTION_REQUEST_ACCEPTED:
-				printf("Our connection request has been accepted.\n");
+				data.message = "Our connection request has been accepted.\n";
 				break;
 
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
@@ -115,8 +116,6 @@ namespace NetworkSystem {
 
 	bool NetworkHandler::clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress)
 	{
-		std::cout << "Starting up a client" << std::endl;
-
 		if (!(peer->Connect(hostAddress, port, 0, 0) == RakNet::CONNECTION_ATTEMPT_STARTED)) {
 			std::cerr << "Connection attempt failed" << std::endl;
 			return false;
@@ -152,6 +151,7 @@ namespace NetworkSystem {
 		// Broadcast to all users that a new user has spawned in, and where ?????
 		// Send the current game state to the user
 		//		meaning: Send all entities, and all components to the user so they may add it
+		printf("Someone has logged in");
 	}
 
 	// TODO:

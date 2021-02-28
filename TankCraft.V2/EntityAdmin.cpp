@@ -1,18 +1,22 @@
 #include <vector>
 #include <iostream>
-#include "SceneSystem.h"
+#include "EntityAdmin.h"
 #include "IDTranslationComponent.h"
 #include "FreeListComponent.h"
 
-namespace SceneSystem {
+namespace EntityAdmin {
 
 	void TanksScene::update()
 	{
-		uiSystem.updateUI(data);
-		movSystem.updateMovement(data);
-
-		// Lastly, always print out the game states
-		uiSystem.printUI(data);
+		if (data.isServer) {
+			netSystem.updateServer(data);
+		}
+		else {
+			netSystem.updateClient(data);
+			uiSystem.updateUI(data);
+			movSystem.updateMovement(data);
+			uiSystem.printUI(data);
+		}
 	}
 
 
@@ -22,8 +26,9 @@ namespace SceneSystem {
 		data = SceneComponent::SceneComponent();
 
 		data.isServer = isServer_;
-		//isServer = isServer_;
-		initUISystem();
+		if (!isServer_) {
+			initUISystem();
+		}
 		initNetworkSystem(isServer_, maxClients);
 		initIDTranslationSystem();
 		initMovementSystem();
@@ -77,12 +82,16 @@ namespace SceneSystem {
 				std::cerr << "Failed to startup on socket!" << std::endl;
 			}
 			data.rpi->SetMaximumIncomingConnections(maxClients);
-
+			data.message = "Server started";
 		}
 		else {
 			RakNet::SocketDescriptor sd;
 			if (!(data.rpi->Startup(1, &sd, 1) == RakNet::RAKNET_STARTED)) {
 				std::cerr << "Failed to startup on socket!" << std::endl;
+			}
+			else {
+				data.message = "Client started";
+				netSystem.clientConnect(data.rpi, SERVER_PORT, "127.0.0.1");
 			}
 		}
 	}
