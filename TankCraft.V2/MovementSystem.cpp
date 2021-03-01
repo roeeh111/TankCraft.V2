@@ -4,7 +4,7 @@
 
 #include "UISystem.h"
 namespace MovementSystem {
-	void MovementSystem::updateMovement(SceneData::SceneData& data)
+	void MovementSystem::updateMovement(SceneComponent::SceneComponent& data)
 	{
 		// For now, loop over all entities with position and user input
 		// and call moveEntity

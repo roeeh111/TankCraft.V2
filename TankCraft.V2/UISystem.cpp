@@ -3,7 +3,7 @@
 
 namespace UI {
 
-	void UISystem::addTank(SceneData::SceneData& data, std::string clientName_)
+	void UISystem::addTank(SceneComponent::SceneComponent& data, std::string clientName_)
 	{
 		auto clientEntity = data.m_reg.create();
 
@@ -20,7 +20,7 @@ namespace UI {
 	}
 
 
-	void UISystem::updateUI(SceneData::SceneData& data)
+	void UISystem::updateUI(SceneComponent::SceneComponent& data)
 	{
 
 		// get all elements that take user input
@@ -38,7 +38,7 @@ namespace UI {
 		updateMapPositions(data);
 	}
 
-	void UISystem::updateMapPositions(SceneData::SceneData& data) {
+	void UISystem::updateMapPositions(SceneComponent::SceneComponent& data) {
 		// get all elements that have a mapObject and position, and then do the updates
 		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
 		for (auto entity : view) {
@@ -73,7 +73,7 @@ namespace UI {
 
 
 
-	void UISystem::printUI(SceneData::SceneData& data)
+	void UISystem::printUI(SceneComponent::SceneComponent& data)
 	{
 		// Clear the current screen
 		system("CLS");

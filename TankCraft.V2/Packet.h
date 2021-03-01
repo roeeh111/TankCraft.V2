@@ -3,7 +3,7 @@
 #include "Components.h"
 #include "Serialize.h"
 #include "IDTranslationSystem.h"
-#include "NetworkFields.h"
+#include "IDTranslationComponent.h"
 
 namespace Packets {
 	
@@ -41,13 +41,13 @@ namespace Packets {
 	// Packet saying to add an entity with the given netid
 	class addEntityPacket : public Packet {
 	public:
-		addEntityPacket(networkID netId_) { type = addEntity; netId = netId_; }
+		addEntityPacket(networkID netID_) { type = addEntity; netID = netID_; }
 
 		// Serialization functions
 		void read();
 		void write();
 	protected:
-		networkID netId;
+		networkID netID;
 		// TODO: 
 	};
 
@@ -55,13 +55,13 @@ namespace Packets {
 	// Packet saying that user with entity netid inputed control controls
 	class controlPacket : public Packet {
 	public:
-		controlPacket(networkID netId_, ComponentView::userInput& controls_) { type = control; controls = controls_; }
+		controlPacket(networkID netID_, ComponentView::userInput& controls_) { type = control; controls = controls_; }
 
 		// Serialization functions
 		void read();
 		void write();
 	protected:
-		networkID netId;
+		networkID netID;
 		ComponentView::userInput controls;
 	};
 
@@ -72,13 +72,13 @@ namespace Packets {
 	class updateEntityPacket : public Packet {
 	public:
 		updateEntityPacket() { type = updateEntity; }
-		updateEntityPacket(networkID netId_, enum ComponentView::ComponentID compID_) { type = updateEntity; netId = netId_; compID = compID; }
+		updateEntityPacket(networkID netID_, enum ComponentView::ComponentID compID_) { type = updateEntity; netID = netID_; compID = compID; }
 
 		// Serialization functions
 		void read();
 		void write();
 	protected:
-		networkID netId;
+		networkID netID;
 		enum ComponentView::ComponentID compID;
 		// No data field yet, base class of updateEntity
 	};
@@ -92,6 +92,7 @@ namespace Packets {
 		void read();
 		void write();*/
 	protected:
+		networkID netID;
 		// No data field yet, base class of login
 	};
 

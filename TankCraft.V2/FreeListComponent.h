@@ -1,5 +1,4 @@
 #pragma once
-#include <cstdint>
 #define MAX_ENTITIES 0xFF
 
 namespace FreeListComponent {

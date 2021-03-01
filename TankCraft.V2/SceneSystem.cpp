@@ -1,31 +1,25 @@
 #include <vector>
 #include <iostream>
-#include "TanksScene.h"
-#include "NetworkFields.h"
+#include "SceneSystem.h"
+#include "IDTranslationComponent.h"
 #include "FreeListComponent.h"
 
-namespace GameView {
-
-
+namespace SceneSystem {
 
 	void TanksScene::update()
 	{
-
-		systems.uiSystem.updateUI(data);
-		systems.movSystem.updateMovement(data);
+		uiSystem.updateUI(data);
+		movSystem.updateMovement(data);
 
 		// Lastly, always print out the game states
-		systems.uiSystem.printUI(data);
+		uiSystem.printUI(data);
 	}
 
 
 	TanksScene::TanksScene(bool isServer_, uint32_t maxClients)
 	{
 		// Data
-		data = SceneData::SceneData();
-
-		// Systems
-		systems = SceneSystems::SceneSystems();
+		data = SceneComponent::SceneComponent();
 
 		data.isServer = isServer_;
 		//isServer = isServer_;
@@ -33,7 +27,6 @@ namespace GameView {
 		initNetworkSystem(isServer_, maxClients);
 		initIDTranslationSystem();
 		initMovementSystem();
-
 	}
 
 	TanksScene::~TanksScene()
@@ -67,7 +60,7 @@ namespace GameView {
 			std::cout << std::endl;
 		}
 
-		systems.uiSystem.printUI(data);
+		uiSystem.printUI(data);
 	}
 
 
@@ -104,7 +97,7 @@ namespace GameView {
 		data.m_reg.emplace<FreeListComponent::freelist> (freeListEntity);
 	}
 
-	void GameView::TanksScene::initMovementSystem()
+	void TanksScene::initMovementSystem()
 	{
 		// Empty function, nothing to do yet
 	}

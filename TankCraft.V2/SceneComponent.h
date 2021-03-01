@@ -1,10 +1,10 @@
 #pragma once
 #include <entt/entt.hpp>
 #include <RakPeerInterface.h>
-#include "NetworkFields.h"
+#include "IDTranslationComponent.h"
 
-namespace SceneData {
-	class SceneData {
+namespace SceneComponent {
+	class SceneComponent {
 	public:
 		// The main UI
 		std::vector<std::vector<char>> map;
@@ -15,7 +15,6 @@ namespace SceneData {
 		// The interface with raknet 
 		RakNet::RakPeerInterface* rpi;
 
-
 		// The translation of net to entity structure
 		std::map<networkID, entt::entity> netToEnttid;
 
@@ -23,6 +22,5 @@ namespace SceneData {
 		bool isServer;
 
 		// TODO: keep track of the server's address
-
 	};
 }

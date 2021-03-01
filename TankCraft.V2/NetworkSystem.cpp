@@ -3,7 +3,7 @@
 #include "Packet.h"
 
 namespace NetworkSystem {
-	void NetworkHandler::updateServer(SceneData::SceneData& data)
+	void NetworkHandler::updateServer(SceneComponent::SceneComponent& data)
 	{
 		RakNet::Packet* pack;
 
@@ -65,9 +65,7 @@ namespace NetworkSystem {
 	}
 
 
-
-
-	void NetworkHandler::updateClient(SceneData::SceneData& data)
+	void NetworkHandler::updateClient(SceneComponent::SceneComponent& data)
 	{
 		// Pointer to some network packet
 		RakNet::Packet* pack;
@@ -157,7 +155,7 @@ namespace NetworkSystem {
 	}
 
 	// TODO:
-	void NetworkHandler::addEntity(SceneData::SceneData& data, TranslationSystem::IDTranslation& transSystem, bool isServer)
+	void NetworkHandler::addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, bool isServer)
 	{
 		// If is Server:
 		if (isServer) {
@@ -165,7 +163,7 @@ namespace NetworkSystem {
 			auto newEntity = data.m_reg.create();
 
 			// Allocate a new netId for this entity
-			networkID netind = transSystem.createMapping(data, newEntity);
+			networkID netid = transSystem.createMapping(data, newEntity);
 
 
 			// TODO:			(also figure out how we want to packetize all of the components)
@@ -174,9 +172,9 @@ namespace NetworkSystem {
 		}
 		else {
 			// If is client:
-				// if client doesnt have an entity with this netid 
-				// add the entity with the entity id given to the m_reg
-				auto newEntity = data.m_reg.create();
+			// if client doesnt have an entity with this netid 
+			// add the entity with the entity id given to the m_reg
+			auto newEntity = data.m_reg.create();
 
 
 				// TODO: when unpacking input packet, get the netID passed to us
@@ -189,7 +187,7 @@ namespace NetworkSystem {
 
 	
 	// TODO:
-	void NetworkHandler::removeEntity(SceneData::SceneData& data, TranslationSystem::IDTranslation& system, networkID netId, bool isServer)
+	void NetworkHandler::removeEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& system, networkID netId, bool isServer)
 	{
 		// If is Server:
 		if (isServer) {

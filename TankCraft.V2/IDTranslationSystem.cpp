@@ -2,7 +2,7 @@
 #include "Components.h"
 
 namespace TranslationSystem {
-    networkID IDTranslation::createMapping(SceneData::SceneData& data, entt::entity entityId)
+    networkID IDTranslation::createMapping(SceneComponent::SceneComponent& data, entt::entity entityId)
     {
         // Allocate a new id for our entity
         networkID id = allocateID(data.m_reg);
@@ -14,14 +14,14 @@ namespace TranslationSystem {
         return id;
     }
 
-    networkID IDTranslation::setMapping(SceneData::SceneData& data, networkID netId, entt::entity entityId)
+    networkID IDTranslation::setMapping(SceneComponent::SceneComponent& data, networkID netId, entt::entity entityId)
     {
         auto flist = getFreelist(data.m_reg);
         data.netToEnttid[netId] = entityId;
         return netId;
     }
 
-    entt::entity IDTranslation::getEntity(SceneData::SceneData& data, networkID netId)
+    entt::entity IDTranslation::getEntity(SceneComponent::SceneComponent& data, networkID netId)
     {
         return data.netToEnttid[netId];
     }
@@ -61,7 +61,7 @@ namespace TranslationSystem {
     }
 
 
-    void IDTranslation::freeID(SceneData::SceneData& data, networkID id)
+    void IDTranslation::freeID(SceneComponent::SceneComponent& data, networkID id)
     {
         // Get the freelist
         auto flist = getFreelist(data.m_reg);

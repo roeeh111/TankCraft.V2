@@ -307,16 +307,15 @@
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h" />
     <ClInclude Include="FreeListComponent.h" />
     <ClInclude Include="MovementSystem.h" />
-    <ClInclude Include="NetworkFields.h" />
-    <ClInclude Include="SceneData.h" />
-    <ClInclude Include="SceneSystems.h" />
+    <ClInclude Include="IDTranslationComponent.h" />
+    <ClInclude Include="SceneComponent.h" />
+    <ClInclude Include="SceneSystem.h" />
     <ClInclude Include="UISystem.h" />
     <ClInclude Include="IDTranslationSystem.h" />
     <ClInclude Include="NetworkSystem.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="Serialize.h" />
     <ClInclude Include="Components.h" />
-    <ClInclude Include="TanksScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\RakNet\Source\Base64Encoder.cpp" />
@@ -433,7 +432,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MovementSystem.cpp" />
     <ClCompile Include="NetworkSystem.cpp" />
-    <ClCompile Include="TankScene.cpp" />
+    <ClCompile Include="SceneSystem.cpp" />
     <ClCompile Include="UISystem.cpp" />
   </ItemGroup>
   <ItemGroup>

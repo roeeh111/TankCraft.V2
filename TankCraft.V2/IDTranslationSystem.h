@@ -1,24 +1,24 @@
 #pragma once
 #include <entt/entt.hpp>
-#include "SceneData.h"
+#include "SceneComponent.h"
 #include "FreeListComponent.h"
-#include "NetworkFields.h"
+#include "IDTranslationComponent.h"
 
 
 namespace TranslationSystem {
 	class IDTranslation {
 	public:
 		// Set this specific id as free
-		void freeID(SceneData::SceneData &data, networkID id);
+		void freeID(SceneComponent::SceneComponent&data, networkID id);
 		
 		// Create a mapping of new netid->entityid
-		networkID createMapping(SceneData::SceneData& data, entt::entity entityId);
+		networkID createMapping(SceneComponent::SceneComponent& data, entt::entity entityId);
 
-		networkID setMapping(SceneData::SceneData& data, networkID netId, entt::entity entityId);
+		networkID setMapping(SceneComponent::SceneComponent& data, networkID netId, entt::entity entityId);
 
 
 		// Get the entity associated with the netid
-		entt::entity getEntity(SceneData::SceneData& data, networkID netId);
+		entt::entity getEntity(SceneComponent::SceneComponent& data, networkID netId);
 
 	private:
 		networkID allocateID(entt::registry& m_reg);
