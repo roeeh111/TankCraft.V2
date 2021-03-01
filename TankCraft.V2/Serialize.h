@@ -33,7 +33,7 @@ namespace Serialization {
 		// Convert it back to the og type
 		deserialized.convert(component);
 
-		std::cout << deserialized << std::endl;
+		//std::cout << deserialized << std::endl;
 	}
 }
 

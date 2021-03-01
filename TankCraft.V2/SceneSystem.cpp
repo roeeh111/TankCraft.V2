@@ -1,10 +1,10 @@
 #include <vector>
 #include <iostream>
-#include "EntityAdmin.h"
+#include "SceneSystem.h"
 #include "IDTranslationComponent.h"
 #include "FreeListComponent.h"
 
-namespace EntityAdmin {
+namespace SceneSystem {
 
 	void TanksScene::update()
 	{

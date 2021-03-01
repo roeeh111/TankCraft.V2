@@ -15,7 +15,7 @@
 	- will need to lock the controls component and position component?
 */
 
-namespace EntityAdmin {
+namespace SceneSystem {
 
 	// Tank scene is the scene for the tank game.
 	// All scenes are managed within the scene system

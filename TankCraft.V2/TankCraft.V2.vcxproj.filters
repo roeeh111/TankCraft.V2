@@ -519,7 +519,7 @@
     <ClInclude Include="UISystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="EntityAdmin.h">
+    <ClInclude Include="SceneSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>
@@ -869,7 +869,7 @@
     <ClCompile Include="UISystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="EntityAdmin.cpp">
+    <ClCompile Include="SceneSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Serialize.h"
-#include "EntityAdmin.h"
+#include "SceneSystem.h"
 
 
 #define MAX_CLIENTS 10
@@ -34,7 +34,7 @@ int main(void)
 void playSingleClient()
 {
     // instantiate scene object
-    EntityAdmin::TanksScene scene = EntityAdmin::TanksScene(false, 1);
+    SceneSystem::TanksScene scene = SceneSystem::TanksScene(false, 1);
 
     // add a single client
     scene.uiSystem.addTank(scene.data, "Roee");
@@ -53,7 +53,7 @@ void playMultiplyerClient()
     printf("(C) or (S)erver?\n");
     std::cin >> str;
     bool isServer = (str[0] == 's') || (str[0] == 'S');
-    EntityAdmin::TanksScene scene = EntityAdmin::TanksScene(isServer, 1);
+    SceneSystem::TanksScene scene = SceneSystem::TanksScene(isServer, 5);
     if (!isServer) scene.uiSystem.addTank(scene.data, "Player 1");
 
     while (true) {

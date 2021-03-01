@@ -1,6 +1,7 @@
 #pragma once
 #include <entt/entt.hpp>
 #include <RakPeerInterface.h>
+#include "Packet.h"
 #include <iostream>
 #include "SceneComponent.h"
 #include "IDTranslationSystem.h"
@@ -53,6 +54,6 @@ namespace NetworkSystem {
 
 		// Server handling an incomming connecting client
 		// add a new connection
-		void handleConnection();
+		void handleConnection(std::map<RakNet::SystemAddress, std::list<entt::entity>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress);
 	};
 }

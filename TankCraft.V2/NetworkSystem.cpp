@@ -10,6 +10,7 @@ namespace NetworkSystem {
 		// Loop through the network instantiation's packet queue, and get some packet of data
 		// do whatever you need to do depending on what was passed to us
 		for (pack = data.rpi->Receive(); pack; data.rpi->DeallocatePacket(pack), pack = data.rpi->Receive()) {
+
 			switch (pack->data[0])
 			{
 			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
@@ -27,13 +28,13 @@ namespace NetworkSystem {
 			case ID_REMOTE_NEW_INCOMING_CONNECTION:
 				printf("Another client has connected.");
 
-				handleConnection();
+				handleConnection(data.clientAddressToEntities, pack->systemAddress);
 
 				break;
 			case ID_NEW_INCOMING_CONNECTION:
 				printf("A connection is incoming.\n");
 
-				handleConnection();
+				handleConnection(data.clientAddressToEntities, pack->systemAddress);
 
 				break;
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
@@ -64,7 +65,6 @@ namespace NetworkSystem {
 
 
 	}
-
 
 	void NetworkHandler::updateClient(SceneComponent::SceneComponent& data)
 	{
@@ -123,7 +123,6 @@ namespace NetworkSystem {
 		return true;
 	}
 
-
 	// TODO:
 	void NetworkHandler::makeClientUpdate(entt::registry &m_reg, RakNet::Packet* pack)
 	{
@@ -146,12 +145,14 @@ namespace NetworkSystem {
 
 
 	// TODO:	(do we need to keep track of the list of current connections???)
-	void NetworkHandler::handleConnection()
+	void NetworkHandler::handleConnection(std::map<RakNet::SystemAddress, std::list<entt::entity>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress)
 	{
 		// Broadcast to all users that a new user has spawned in, and where ?????
 		// Send the current game state to the user
 		//		meaning: Send all entities, and all components to the user so they may add it
-		printf("Someone has logged in");
+		printf("A client has logged in. Address: %s \n", systemAddress.ToString());
+
+		clientAddressToEntities[systemAddress] = std::list<entt::entity>();
 	}
 
 	// TODO:
