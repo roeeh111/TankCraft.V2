@@ -82,7 +82,7 @@ namespace SceneSystem {
 				std::cerr << "Failed to startup on socket!" << std::endl;
 			}
 			data.rpi->SetMaximumIncomingConnections(maxClients);
-			data.message = "Server started";
+			printf("server started\n");
 		}
 		else {
 			RakNet::SocketDescriptor sd;
@@ -90,7 +90,7 @@ namespace SceneSystem {
 				std::cerr << "Failed to startup on socket!" << std::endl;
 			}
 			else {
-				data.message = "Client started";
+				data.message = "Client started\n";
 				netSystem.clientConnect(data.rpi, SERVER_PORT, "127.0.0.1");
 			}
 		}

@@ -58,7 +58,6 @@ void playMultiplyerClient()
 
     while (true) {
         scene.update();
-        Sleep(100);
     }
 
 }

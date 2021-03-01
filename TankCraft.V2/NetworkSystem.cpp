@@ -13,46 +13,37 @@ namespace NetworkSystem {
 
 			switch (pack->data[0])
 			{
-			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
-				printf("Another client has disconnected.\n");
-
-				handleDisconnect(true);
-
-				break;
-			case ID_REMOTE_CONNECTION_LOST:
-				printf("Another client has lost the connection.\n");
-
-				handleDisconnect(true);
-
-				break;
-			case ID_REMOTE_NEW_INCOMING_CONNECTION:
-				printf("Another client has connected.");
-
-				handleConnection(data.clientAddressToEntities, pack->systemAddress);
-
-				break;
 			case ID_NEW_INCOMING_CONNECTION:
-				printf("A connection is incoming.\n");
-
 				handleConnection(data.clientAddressToEntities, pack->systemAddress);
-
 				break;
+
+			case ID_DISCONNECTION_NOTIFICATION:
+				handleDisconnect(data.clientAddressToEntities, pack->systemAddress, data.m_reg);
+				break;
+
+			case ID_CONNECTION_LOST:
+				handleLost(data.clientAddressToEntities, pack->systemAddress);
+				break;
+
+			case ID_REMOTE_NEW_INCOMING_CONNECTION:
+				printf("Remote client has connected.\n");
+				handleConnection(data.clientAddressToEntities, pack->systemAddress);
+				break;
+
+			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
+				printf("Remote client has disconnected.\n");
+				handleDisconnect(data.clientAddressToEntities, pack->systemAddress, data.m_reg);
+				break;
+
+			case ID_REMOTE_CONNECTION_LOST:
+				printf("Remote client has lost the connection.\n");
+				handleLost(data.clientAddressToEntities, pack->systemAddress);
+				break;
+
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
 				printf("The server is full.\n");
-
 				break;
-			case ID_DISCONNECTION_NOTIFICATION:
-				printf("A client has disconnected.\n");
 
-				handleDisconnect(true);
-
-				break;
-			case ID_CONNECTION_LOST:
-				printf("A client lost the connection.\n");
-
-				handleDisconnect(true);
-
-				break;
 			default:
 				//	printf("Message with identifier %i has arrived.\n", pack->data[0]);
 
@@ -144,15 +135,32 @@ namespace NetworkSystem {
 	}
 
 
-	// TODO:	(do we need to keep track of the list of current connections???)
+	// The server recognizes the connection from a client and creates an entity map for that client
 	void NetworkHandler::handleConnection(std::map<RakNet::SystemAddress, std::list<entt::entity>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress)
 	{
-		// Broadcast to all users that a new user has spawned in, and where ?????
-		// Send the current game state to the user
-		//		meaning: Send all entities, and all components to the user so they may add it
 		printf("A client has logged in. Address: %s \n", systemAddress.ToString());
 
 		clientAddressToEntities[systemAddress] = std::list<entt::entity>();
+	}
+
+	// The server recognizes the disconnection from a client and clears all entities related to that client
+	void NetworkHandler::handleDisconnect(std::map<RakNet::SystemAddress, std::list<entt::entity>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress, entt::registry& m_reg)
+	{
+		// TODO: how do we keep track of whose client is what entity?
+		// Find all entities that are tagged with the given client's id
+		// call removeEntity on all those entities
+		// TODO: do we run some sort of raknet disconnect function?
+		printf("A client has disconnected. Address: %s \n", systemAddress.ToString());
+		for (auto const& entity : clientAddressToEntities[systemAddress]) {
+			m_reg.remove_if_exists(entity);
+		}
+
+	}
+
+	void NetworkHandler::handleLost(std::map<RakNet::SystemAddress, std::list<entt::entity>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress) {
+		// Do nothing yet
+		printf("A client lost the connection. Address: %s \n", systemAddress.ToString());
+		printf("This client has %d entities.\n", clientAddressToEntities[systemAddress].size());
 	}
 
 	// TODO:
@@ -178,15 +186,14 @@ namespace NetworkSystem {
 			auto newEntity = data.m_reg.create();
 
 
-				// TODO: when unpacking input packet, get the netID passed to us
-				// Create a new mapping of netID and entity
+			// TODO: when unpacking input packet, get the netID passed to us
+			// Create a new mapping of netID and entity
 
-				// TODO: 
-				// add all components of the entitty with the given valies to the new entity
+			// TODO: 
+			// add all components of the entitty with the given valies to the new entity
 		}
 	}
 
-	
 	// TODO:
 	void NetworkHandler::removeEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& system, networkID netId, bool isServer)
 	{
@@ -230,20 +237,6 @@ namespace NetworkSystem {
 			// send the packet to the server
 		//	data.rpi->Send(&bsOut, HIGH_PRIORITY, RELIABILITY, 0, (Server address), true);
 		}
-	}
-	
-	// TODO:
-	void NetworkHandler::handleDisconnect(bool isServer)
-	{
-		// If is Server:
-		// TODO: how do we keep track of whose client is what entity?
-		// Find all entities that are tagged with the given client's id
-		// call removeEntity on all those entities
-		// TODO: do we run some sort of raknet disconnect function?
-
-		// If is client:
-		// TODO: define if we should do anything as a client
-
 	}
 
 }
