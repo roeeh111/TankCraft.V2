@@ -2,9 +2,12 @@
 #include "SceneSystem.h"
 #include "Serialize.h"
 
+#include "Packet.h"
+
 
 void playSingleClient();
 void testSerialization();
+void testPacket();
 
 // TODO: fix bitstream/stringstream issues
 
@@ -17,11 +20,29 @@ void testSerialization();
 
 int main(void)
 {
-    testSerialization();
-
+    //testSerialization();
+   // playSingleClient();
+    testPacket();
     return 0;
 }
 
+// updates field is correct
+void testPacket() {
+    networkID s = 5;
+    auto stream = std::stringstream();
+    Packets::UpdatePacket pack = Packets::UpdatePacket(s);
+    ComponentView::userInput in = ComponentView::userInput();
+    in.up = 1;
+    in.down = 1;
+    in.left = 0;
+    in.right = 0;
+
+    pack.write(stream);
+
+    auto res = std::stringstream();
+    pack.read(res);
+
+}
 
 
 void playSingleClient()
@@ -40,6 +61,7 @@ void playSingleClient()
 }
 
 void testSerialization() {
+  /*
     ComponentView::position* p = new ComponentView::position();
     ComponentView::position res;
     ComponentView::position res2;
@@ -58,4 +80,5 @@ void testSerialization() {
     assert(p->cury == res.cury);
     assert(p->prevx == res.prevx);
     std::cout << "finito" << std::endl;
+    */
 }
