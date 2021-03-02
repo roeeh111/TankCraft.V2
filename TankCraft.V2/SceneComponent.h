@@ -26,6 +26,9 @@ namespace SceneComponent {
 		// This data should be SERVER ONLY
 		std::map<RakNet::SystemAddress, std::list<entt::entity>> clientAddressToEntities;
 
+		// the address were connected to
+	//	const char* address;
+		RakNet::SystemAddress rakAddress;
 		// The message to be displayed at the bottom of the board
 		// For debug purposes and notifications
 		std::string message;

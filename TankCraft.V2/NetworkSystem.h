@@ -23,16 +23,19 @@ namespace NetworkSystem {
 		// TODO: may need a refrence to the m_reg if its not global
 		// Go through all incoming packets to the server, and dispatch game changes accordingly
 		// Broadcast the results to all clients
-		void updateServer(SceneComponent::SceneComponent& data);
+		void updateServer(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem);
 
 		// Go through all incomming game updates, and update the client's game accordingly
 		// In addition, go through all controls inputted, and send them up to the server
-		void updateClient(SceneComponent::SceneComponent& data);
+		void updateClient(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem);
 
 		// Connect to the given server address as a client
 		bool clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress);
 
-	private:
+		// Disconnect from the given server address as a client
+		void clientDisconnect(RakNet::RakPeerInterface* peer, const char* hostAddress);
+
+
 
 		// Deserealizes the packet, checks that it is a game update packet.
 		// If packet is a game update, aquires the lock to the component, and updates the data of that component
@@ -44,7 +47,7 @@ namespace NetworkSystem {
 		void makeServerUpdate(entt::registry &m_reg, RakNet::Packet* pack);
 
 		// add an entity to the server or client
-		void addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::SystemAddress& systemAddress, bool isServer);
+		void addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, bool isServer);
 
 		void removeEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& system, RakNet::SystemAddress& systemAddress, networkID netId, bool isServer);
 

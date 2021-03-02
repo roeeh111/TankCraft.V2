@@ -1,9 +1,10 @@
 #include <MessageIdentifiers.h>
 #include "NetworkSystem.h"
 #include "Packet.h"
+#include "IDTranslationSystem.h"
 
 namespace NetworkSystem {
-	void NetworkHandler::updateServer(SceneComponent::SceneComponent& data)
+	void NetworkHandler::updateServer(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem)
 	{
 		RakNet::Packet* pack;
 
@@ -44,11 +45,14 @@ namespace NetworkSystem {
 				printf("The server is full.\n");
 				break;
 
-			default:
-				//	printf("Message with identifier %i has arrived.\n", pack->data[0]);
+			case ADD_ENTITY:
+				addEntity(data, transSystem, pack, data.isServer);
+			case REMOVE_ENTITY:
+			case UPDATE_ENTITY:
+			case CONTROL:
 
-				// Call makeServerUpdate with a new thread (NOTE DONT DEALLOCATE THE PACKET HERE!!!!!!!)
-				makeServerUpdate(data.m_reg, pack);
+			default:
+				// Some unknown packet type, go to the next packet
 
 				break;
 			}
@@ -57,7 +61,7 @@ namespace NetworkSystem {
 
 	}
 
-	void NetworkHandler::updateClient(SceneComponent::SceneComponent& data)
+	void NetworkHandler::updateClient(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem)
 	{
 		// Pointer to some network packet
 		RakNet::Packet* pack;
@@ -83,26 +87,20 @@ namespace NetworkSystem {
 				data.message = "Connection lost.\n";
 				return;
 
-			default: 				// Message with identifier pack->data[0]
-													// TODO: add identifiers to the list of possibilities, And check for those
-													// (identifiers being packet type)
-
-
-				// Call makeClientUpdate with a new thread (NOTE DONT DEALLOCATE THE PACKET HERE!!!!!!!)
-				makeClientUpdate(data.m_reg, pack);
+			case ADD_ENTITY:
+				addEntity(data, transSystem, pack, data.isServer);
+			case REMOVE_ENTITY:
+				break;
+			case UPDATE_ENTITY:
+				break;
+			case CONTROL:
 				break;
 
-			//	printf("Message with identifier %i has arrived.\n", pack->data[0]);
+			default:
+				// Some unknown packet type, go to the next packet
+				break;
 			}
 		}
-
-		// TODO:
-		// Handle User Input:
-
-		// Assume that were tick based, so get the user input component (most rescent control to the tick),
-		// if that component is dirty, build a new control packet and send it to the server
-		// else do nothing
-
 	}
 
 	bool NetworkHandler::clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress)
@@ -112,6 +110,13 @@ namespace NetworkSystem {
 			return false;
 		}
 		return true;
+	}
+
+	void NetworkSystem::NetworkHandler::clientDisconnect(RakNet::RakPeerInterface* peer, const char* hostAddress)
+	{
+		peer->CloseConnection(RakNet::SystemAddress(hostAddress) , 1);
+		std::cout << "Closing connection to " << RakNet::SystemAddress(hostAddress).ToString() << std::endl;
+		//RakNet::AddressOrGUID(RakNet::SystemAddress(hostAddress));
 	}
 
 	// TODO:
@@ -152,7 +157,7 @@ namespace NetworkSystem {
 		// TODO: do we run some sort of raknet disconnect function?
 		printf("A client has disconnected. Address: %s \n", systemAddress.ToString());
 		for (auto const& entity : clientAddressToEntities[systemAddress]) {
-			m_reg.remove_if_exists(entity);
+			m_reg.remove_if_exists(entity);									// TODO: will want to change this as the types of entities grows
 		}
 
 	}
@@ -164,7 +169,7 @@ namespace NetworkSystem {
 	}
 
 	// TODO:
-	void NetworkHandler::addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::SystemAddress& systemAddress, bool isServer)
+	void NetworkHandler::addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, bool isServer)
 	{
 		// If is Server:
 		if (isServer) {
@@ -173,11 +178,22 @@ namespace NetworkSystem {
 
 			// Allocate a new netId for this entity
 			networkID netid = transSystem.createMapping(data, newEntity);
-			data.clientAddressToEntities[systemAddress].push_back(newEntity);
+
+			// create a new add entity packet
+			Packets::addEntityPacket addpack = Packets::addEntityPacket(netid);
+
+
+			// broadcast to all clients to add a new entity with entity ID, and all components
+			data.rpi->Send(reinterpret_cast<char*>(&addpack), 
+				sizeof(addpack), 
+				HIGH_PRIORITY, 
+				RELIABLE_ORDERED, 
+				0, 
+				pack->systemAddress, 
+				true);
 
 			// TODO:			(also figure out how we want to packetize all of the components)
 			// add all components of the entity with the given values to the new entity
-			// broadcast to all clients to add a new entity with entity ID, and all components
 		}
 		else {
 			// If is client:
@@ -185,9 +201,13 @@ namespace NetworkSystem {
 			// add the entity with the entity id given to the m_reg
 			auto newEntity = data.m_reg.create();
 
+			// cast the input packet to an add entity packet
+			Packets::addEntityPacket *addpack = (Packets::addEntityPacket*) pack->data;
 
-			// TODO: when unpacking input packet, get the netID passed to us
+			// when unpacking input packet, get the netID passed to us
 			// Create a new mapping of netID and entity
+			transSystem.setMapping(data, addpack->netID, newEntity);
+
 
 			// TODO: 
 			// add all components of the entitty with the given valies to the new entity
@@ -206,7 +226,7 @@ namespace NetworkSystem {
 			Packets::removeEntityPacket remPack(netId);
 
 			// bitstream to send to
-			RakNet::BitStream bsOut;
+			//RakNet::BitStream bsOut;
 
 
 			// write the packet to the bitstream (figure out how we want to organize packets)
@@ -230,7 +250,7 @@ namespace NetworkSystem {
 			Packets::removeEntityPacket remPack(netId);
 
 			// bitstream to send to
-			RakNet::BitStream bsOut;
+		//	RakNet::BitStream bsOut;
 
 			// write the packet to the bitstream
 

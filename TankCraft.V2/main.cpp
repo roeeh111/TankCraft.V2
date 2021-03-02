@@ -37,7 +37,7 @@ void testPacket() {
     in.left = 0;
     in.right = 0;
 
-    pack.write(stream);
+  //  pack.write(stream);
 
     auto res = std::stringstream();
     pack.read(res);
