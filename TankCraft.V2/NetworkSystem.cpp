@@ -184,7 +184,7 @@ namespace NetworkSystem {
 			// create a new add entity packet
 			Packets::addEntityPacket addpack = Packets::addEntityPacket(netid);
 
-			data.clientAddressToEntities[pack->systemAddress]
+			data.clientAddressToEntities[pack->systemAddress].push_back(netid);
 
 			// broadcast to all clients to add a new entity with entity ID, and all components
 			data.rpi->Send(reinterpret_cast<char*>(&addpack), 
