@@ -167,6 +167,35 @@ namespace Packets {
 
 
 /*
+* 
+* New Serialization method with protobuf:
+* 
+* 1) make schema with all components
+* 1.5) Each Component schema has a 
+* 
+* 
+* Assume 
+* 
+* 
+* 
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 * Another method with msgpack:
 * 
 * put a wrapper around msgpack.
@@ -194,80 +223,6 @@ namespace Packets {
 */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-// The below serialization is schema-less, therefore more bandwidth is used
-// TODO: do this serialization with a schema system like protobuf, and see the improvement
-
-// one update at a time method: (~35 bytes of metadata per packet) (350 bytes of metadata for 10 updates)
-	// packet type
-	// packet size
-	// entity id
-	// component id
-
-
-
-// WE WILL START WITH THIS ONE, AND CHANGE LATER ON TO IMPROVE
-// multiple update at a time method: (65 bytes of metadata per packet) (65 bytes of metadata for 10 updates)
-// update packet header:
-	// packet type /
-	// packet size /
-	// number of updates /
-	// array of enums of component types /
-	// entity to update /
-	// array of offsets of where each component is stored /
-	// Buffer of size macro(packet size limit) /
-
-/*
-* This method requires:
-* 1) each component has a read/write function that they have to write
-* 2) each component has a type field
-* 3) each component has a size field (size of all of its components)
-* 
-* This method falls short in:
-* 0) has a lot! of metadata per packet
-* 1) doesnt allow for partial component updates (can be added)
-* 2) doesnt allow for components with dynamic sizing (can be added)
-* 
-1) create new packet header, with field initialization
-2) write to packet
-
-update packet.write(template struct component) {
-// set the component type in the component list
-	header.componenttype[first freeblock] = component.type
-
-// set the entity in the entity list
-	header.entitys[first freeblock] = entityid
-
-// set the offset of where the field is stored
-	header.offsets[first freeblock] = header.offsets[firstfreeblock -1 (if not zero)] + header.componenttype[firstfreeblock -1 (ifnonzero)].size
-
-// write the component to the header's buffer
-	write(header.buffer[header.offset[firstfreeblock]], component.size)
-
-// increment the size of the header
-	header.packetsize += component.size
-}
-
-3) write packet to bitstream 
-
-update packet.writetobitstream(bitstream &bistream)
-	// bitstream.write(packet.buffer, packet.size)
-
-*/
-
-// On network game update: loop through component update queue, add as many components to update to the game update, send the game update
-// Improvements: experiment with lowering bandwidth by having less metadata, entity specific updates, etc..
 
 
 /**

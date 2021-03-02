@@ -13,14 +13,13 @@ namespace SceneSystem {
 		std::chrono::seconds s = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch());
 
 		if (data.isServer) {
-			if ((s - test) % 5 > std::chrono::seconds(3)) {
-				std::cout << "adding entity" << std::endl;
-				netSystem.addEntity(data, translationSystem, nullptr, 1);
-			}
 			netSystem.updateServer(data, translationSystem);
 		}
-
 		else {
+			if ((s - test > std::chrono::seconds(5)) && (s - test) % 5 > std::chrono::seconds(3)) {
+				std::cout << "adding entity" << std::endl;
+				netSystem.addEntity(data, translationSystem, nullptr, 0, 1);
+			}
 			netSystem.updateClient(data, translationSystem);
 			uiSystem.updateUI(data);
 			movSystem.updateMovement(data);
@@ -41,9 +40,13 @@ namespace SceneSystem {
 		data.isServer = isServer_;
 		if (!isServer_) {
 			initUISystem();
+			std::cout << "Starting client" << std::endl;
+		}
+		else {
+			std::cout << "Starting Server" << std::endl;
+			data.clientAddressToEntities = std::map<RakNet::SystemAddress, std::list<networkID>>();
 		}
 
-		data.clientAddressToEntities = std::map<RakNet::SystemAddress, std::list<networkID>>();
 		initNetworkSystem(isServer_, maxClients);
 		initIDTranslationSystem();
 		initMovementSystem();
@@ -108,7 +111,7 @@ namespace SceneSystem {
 			else {
 				data.message = "Client started\n";
 				netSystem.clientConnect(data.rpi, SERVER_PORT, "127.0.0.1");
-				data.rakAddress = RakNet::SystemAddress("127.0.0.1");
+				data.rakAddress = RakNet::SystemAddress("127.0.0.1"); // save the server address
 			}
 		}
 	}

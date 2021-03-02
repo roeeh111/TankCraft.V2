@@ -75,7 +75,7 @@ namespace UI {
 	void UISystem::printUI(SceneComponent::SceneComponent& data)
 	{
 		// Clear the current screen
-		system("CLS");
+	//	system("CLS");
 
 		// Print out whatever is in the map
 		std::cout << std::endl;

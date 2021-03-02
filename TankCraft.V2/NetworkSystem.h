@@ -47,13 +47,13 @@ namespace NetworkSystem {
 		void makeServerUpdate(entt::registry &m_reg, RakNet::Packet* pack);
 
 		// add an entity to the server or client
-		void addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, bool isServer);
+		void addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, bool isServer, bool initial);
 
 		void removeEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& system, RakNet::SystemAddress& systemAddress, networkID netId, bool isServer);
 
 		// Server handling an incomming connecting client
 		// add a new connection
-		void handleConnection(SceneComponent::SceneComponent& data);
+		void handleConnection(SceneComponent::SceneComponent& data, RakNet::Packet* pack);
 
 		// Server handling a disconnecting client
 		// Delete entity from the registry and clean up metadata

@@ -63,10 +63,10 @@ void playSingleClient()
 
 void playMultiplyerClient()
 {
-    char str[512];
+    char str;
     printf("(C) or (S)erver?\n");
     std::cin >> str;
-    bool isServer = (str[0] == 's') || (str[0] == 'S');
+    bool isServer = (str == 's') || (str == 'S');
     SceneSystem::TanksScene scene = SceneSystem::TanksScene(isServer, 5);
     if (!isServer) scene.uiSystem.addTank(scene.data, "Player 1");
 
