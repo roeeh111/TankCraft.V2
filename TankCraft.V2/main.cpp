@@ -1,11 +1,12 @@
 #include <iostream>
-#include "SceneSystem.h"
 #include "Serialize.h"
+#include "SceneSystem.h"
 
-#include "Packet.h"
 
+#define MAX_CLIENTS 10
 
 void playSingleClient();
+void playMultiplyerClient();
 void testSerialization();
 void testPacket();
 
@@ -20,9 +21,8 @@ void testPacket();
 
 int main(void)
 {
-    //testSerialization();
-   // playSingleClient();
-    testPacket();
+    //playSingleClient();
+    playMultiplyerClient();
     return 0;
 }
 
@@ -56,9 +56,26 @@ void playSingleClient()
    // scene.printUI();
 
     // loop and update the game 
-    while (true)
+    while (true) {
         scene.update();
+    }
 }
+
+void playMultiplyerClient()
+{
+    char str[512];
+    printf("(C) or (S)erver?\n");
+    std::cin >> str;
+    bool isServer = (str[0] == 's') || (str[0] == 'S');
+    SceneSystem::TanksScene scene = SceneSystem::TanksScene(isServer, 5);
+    if (!isServer) scene.uiSystem.addTank(scene.data, "Player 1");
+
+    while (true) {
+        scene.update();
+    }
+
+}
+
 
 void testSerialization() {
   /*

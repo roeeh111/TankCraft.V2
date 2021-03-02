@@ -1,6 +1,7 @@
 #pragma once
 #include <entt/entt.hpp>
 #include <RakPeerInterface.h>
+#include "Packet.h"
 #include <iostream>
 #include "SceneComponent.h"
 #include "IDTranslationSystem.h"
@@ -49,10 +50,14 @@ namespace NetworkSystem {
 
 		// Server handling a disconnecting client
 		// Delete entity from the registry and clean up metadata
-		void handleDisconnect(bool isServer);
+		void handleDisconnect(std::map<RakNet::SystemAddress, std::list<entt::entity>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress, entt::registry& m_reg);
 
 		// Server handling an incomming connecting client
 		// add a new connection
-		void handleConnection();
+		void handleConnection(std::map<RakNet::SystemAddress, std::list<entt::entity>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress);
+
+		// Server handling a lost client
+		// TODO: Figure out the behavior of this function
+		void handleLost(std::map<RakNet::SystemAddress, std::list<entt::entity>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress);
 	};
 }
