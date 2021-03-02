@@ -68,7 +68,7 @@ void playMultiplyerClient()
     std::cin >> str;
     bool isServer = (str == 's') || (str == 'S');
     SceneSystem::TanksScene scene = SceneSystem::TanksScene(isServer, 5);
-    if (!isServer) scene.uiSystem.addTank(scene.data, "Player 1");
+    //if (!isServer) scene.uiSystem.addTank(scene.data, "Player 1");
 
     while (true) {
         scene.update();

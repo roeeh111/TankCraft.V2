@@ -57,10 +57,10 @@ namespace NetworkSystem {
 
 		// Server handling a disconnecting client
 		// Delete entity from the registry and clean up metadata
-		void handleDisconnect(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem);
+		void handleDisconnect(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack);
 
 		// Server handling a lost client
 		// TODO: Figure out the behavior of this function
-		void handleLostConnection(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem);
+		void handleLostConnection(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack);
 	};
 }

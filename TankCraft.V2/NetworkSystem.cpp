@@ -2,6 +2,7 @@
 #include "NetworkSystem.h"
 #include "Packet.h"
 #include "IDTranslationSystem.h"
+#include "BitStream.h"
 
 namespace NetworkSystem {
 	void NetworkHandler::updateServer(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem)
@@ -19,11 +20,11 @@ namespace NetworkSystem {
 				break;
 
 			case ID_DISCONNECTION_NOTIFICATION:
-				handleDisconnect(data, transSystem);
+				handleDisconnect(data, transSystem, pack);
 				break;
 
 			case ID_CONNECTION_LOST:
-				handleLostConnection(data, transSystem);
+				handleLostConnection(data, transSystem, pack);
 				break;
 
 			case ID_REMOTE_NEW_INCOMING_CONNECTION:
@@ -33,12 +34,12 @@ namespace NetworkSystem {
 
 			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
 				printf("Remote client has disconnected.\n");
-				handleDisconnect(data, transSystem);
+				handleDisconnect(data, transSystem, pack);
 				break;
 
 			case ID_REMOTE_CONNECTION_LOST:
 				printf("Remote client has lost the connection.\n");
-				handleLostConnection(data, transSystem);
+				handleLostConnection(data, transSystem, pack);
 				break;
 
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
@@ -46,7 +47,7 @@ namespace NetworkSystem {
 				break;
 
 			case ADD_ENTITY:
-				std::cout << "adding entity" << std::endl;
+				printf("Received add entity packet from client.\n");
 				addEntity(data, transSystem, pack, data.isServer, 0);
 				break;
 
@@ -61,12 +62,10 @@ namespace NetworkSystem {
 
 			default:
 				// Some unknown packet type, go to the next packet
-
+				printf("Unknown packet");
 				break;
 			}
 		}
-
-
 	}
 
 	void NetworkHandler::updateClient(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem)
@@ -81,6 +80,7 @@ namespace NetworkSystem {
 
 			case ID_CONNECTION_REQUEST_ACCEPTED:
 				data.message = "Connection established.\n";
+				handleConnection(data, pack);
 				break;
 
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
@@ -96,7 +96,8 @@ namespace NetworkSystem {
 				break;
 
 			case ADD_ENTITY:
-				addEntity(data, transSystem, pack, data.isServer, 0);
+				printf("Received add entity packet from server.\n");
+				//addEntity(data, transSystem, pack, data.isServer, 0);
 				break;
 			case REMOVE_ENTITY:
 				break;
@@ -148,36 +149,43 @@ namespace NetworkSystem {
 		// Append all changes to the changedComponentQueue
 	}
 
-
 	// The server recognizes the connection from a client and creates an empty netID  map for that client
 	void NetworkHandler::handleConnection(SceneComponent::SceneComponent& data, RakNet::Packet* pack)
 	{
-		printf("A client has logged in. Address: %s \n", pack->systemAddress.ToString());
-
-		data.clientAddressToEntities[pack->systemAddress] = std::list<networkID>();
+		// If is a server, the rakAddress is not initialized
+		if (data.isServer) {
+			printf("A client has logged in. Client address: %s \n", pack->systemAddress.ToString());
+			data.clientAddressToEntities[pack->systemAddress] = std::list<networkID>();
+		}
+		// If is a client, the map is not initialized.
+		// the rakAddress holds the address of the server
+		else {
+			printf("Connected to the server. Server address: %s \n", pack->systemAddress.ToString());
+			data.rakAddress = pack->systemAddress; // This step is redundant, as the address is hardcoded in the initialization rn
+		}
+		
 	}
 
 	// The server recognizes the disconnection from a client and clears all entities related to that client
-	void NetworkHandler::handleDisconnect(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem)
+	void NetworkHandler::handleDisconnect(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack)
 	{
 		// TODO: how do we keep track of whose client is what entity?
 		// Find all entities that are tagged with the given client's id
 		// call removeEntity on all those entities
 		// TODO: do we run some sort of raknet disconnect function?
-		printf("A client has disconnected. Address: %s \n", data.rakAddress.ToString());
-		for (auto const& netId : data.clientAddressToEntities[data.rakAddress]) {
-			entt::entity entity_to_remove = transSystem.getEntity(data, netId);
-			data.m_reg.remove_if_exists(entity_to_remove);
+		printf("A client has disconnected. Address: %s \n", pack->systemAddress.ToString());
+		for (auto const& netId : data.clientAddressToEntities[pack->systemAddress]) {
+			data.m_reg.destroy(transSystem.getEntity(data, netId));
 			transSystem.freeID(data, netId); // Free the space for that entity
 		}
 
 	}
 
-	void NetworkHandler::handleLostConnection(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem) {
+	void NetworkHandler::handleLostConnection(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack) {
 		// Currently this had the same behavior as the way we handle disconnection. TBD
-		printf("A client lost the connection. Address: %s \n", data.rakAddress.ToString());
-		printf("This client has %d entities.\n", data.clientAddressToEntities[data.rakAddress].size());
-		for (auto const& netId : data.clientAddressToEntities[data.rakAddress]) {
+		printf("A client lost the connection. Address: %s \n", pack->systemAddress.ToString());
+		printf("This client has %d entities.\n", data.clientAddressToEntities[pack->systemAddress].size());
+		for (auto const& netId : data.clientAddressToEntities[pack->systemAddress]) {
 			data.m_reg.destroy(transSystem.getEntity(data, netId));
 			transSystem.freeID(data, netId); // Free the space for that entity
 		}
@@ -188,24 +196,22 @@ namespace NetworkSystem {
 	{
 		// If is Server:
 		if (isServer) {
+
 			// add the entity with entity id given to the m_reg
 			auto newEntity = data.m_reg.create();
 
-			std::cout << "got entity, doing translation" << std::endl;
-
 			// Allocate a new netId for this entity
 			networkID netid = transSystem.createMapping(data, newEntity);
-
-			std::cout << "got trans, doing new packet" << std::endl;
+			
+			// Append into the client entity map
+			data.clientAddressToEntities[pack->systemAddress].push_back(netid);
 
 			// create a new add entity packet
 			Packets::addEntityPacket addpack = Packets::addEntityPacket(netid);
 
-			std::cout << "got packet, adding new address" << std::endl;
-
 			//data.clientAddressToEntities[pack->systemAddress].push_back(netid);
 
-			std::cout << "sending message" << std::endl;
+			std::cout << "Registered entity from client " << pack->systemAddress.GetPort() << ", broadcasting..." << std::endl;
 			// broadcast to all clients to add a new entity with entity ID, and all components
 			data.rpi->Send(reinterpret_cast<char*>(&addpack), 
 				sizeof(addpack), 
@@ -226,7 +232,7 @@ namespace NetworkSystem {
 
 			// if were not requesting, but responding to a request
 			if (!initial) {
-				std::cout << "adding entity in client" << std::endl;
+				std::cout << "Adding entity in client" << std::endl;
 				auto newEntity = data.m_reg.create();
 
 				// cast the input packet to an add entity packet
@@ -240,7 +246,7 @@ namespace NetworkSystem {
 				// if were requesting:
 				// addpacket request
 				Packets::addEntityPacket addpack = Packets::addEntityPacket(0);
-
+				std::cout << "Sending out add entity request packet to server" << std::endl;
 				// Request an addition of a new entity
 				data.rpi->Send(reinterpret_cast<char*>(&addpack),
 					sizeof(addpack),

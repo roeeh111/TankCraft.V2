@@ -16,14 +16,14 @@ namespace SceneSystem {
 			netSystem.updateServer(data, translationSystem);
 		}
 		else {
-			if ((s - test > std::chrono::seconds(5)) && (s - test) % 5 > std::chrono::seconds(3)) {
-				std::cout << "adding entity" << std::endl;
-				netSystem.addEntity(data, translationSystem, nullptr, 0, 1);
-			}
 			netSystem.updateClient(data, translationSystem);
-			uiSystem.updateUI(data);
-			movSystem.updateMovement(data);
-			uiSystem.printUI(data);
+			if ((s - test > std::chrono::seconds(5)) && (s - test) % 5 > std::chrono::seconds(3)) {
+				netSystem.addEntity(data, translationSystem, nullptr, 0, 1);
+				Sleep(5000); // I need to add this pause so that the client sends the packet once every 5 seconds
+			}
+			//uiSystem.updateUI(data);
+			//movSystem.updateMovement(data);
+			//uiSystem.printUI(data);
 		}
 	}
 
@@ -111,7 +111,7 @@ namespace SceneSystem {
 			else {
 				data.message = "Client started\n";
 				netSystem.clientConnect(data.rpi, SERVER_PORT, "127.0.0.1");
-				data.rakAddress = RakNet::SystemAddress("127.0.0.1"); // save the server address
+				data.rakAddress = RakNet::SystemAddress("127.0.0.1|"+ SERVER_PORT); // save the server address
 			}
 		}
 	}
