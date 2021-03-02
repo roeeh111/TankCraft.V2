@@ -4,8 +4,10 @@
 #include <entt/entt.hpp>
 #include <msgpack.hpp>
 #include <sstream>
+#include <iostream>
 #include "Components.h"
 #include "IDTranslationComponent.h"
+#include <MessageIdentifiers.h>
 
 #define UPDATE_LIMIT 10
 #define BUFSIZE 5000
@@ -14,6 +16,15 @@
 /*
 	TODO: find a way to convert from enum packet_type to casting to component quickly
 
+	roee method:
+	1) make a new packet struct, give it the netid of the entity that im changing
+	2) call packet.write(component)
+		(do this till packet is full)
+	3) call string/buffer = packet.serialze
+	4) If we want to send it as a message, write string/buffer to a bitstream/call rpi->send
+
+
+
 */
 
 
@@ -21,55 +32,37 @@
 
 namespace Packets {
 	
-	// TODO: Add more potential packet types
-	enum Packet_Type {
-		updateEntity,
-		addEntity,
-		removeEntity,
-		control,
-		login,
-		logout
-	};
 
 	// Packet base type, all packets have a packet_type
-	class Packet {
+	struct Packet {
 	public:
-		Packet() { type = updateEntity; }
+		Packet() { type = UPDATE_ENTITY; }
 	protected:
-		enum Packet_Type type;
+		enum DefaultMessageIDTypes type;
 	};
 
 	// Packet saying to remove an entity with the given netid
-	class removeEntityPacket : public Packet {
+	struct removeEntityPacket : public Packet {
 	public:
-		removeEntityPacket(networkID netID_) { type = removeEntity; netID = netID_; }
+		removeEntityPacket(networkID netID_) { type = REMOVE_ENTITY; netID = netID_; }
 
-		// Serialization functions
-		void read();
-		void write();
 	protected:
 		networkID netID;
 		// No data field yet, base class of removeEntity
 	};
 
 	// Packet saying to add an entity with the given netid
-	class addEntityPacket : public Packet {
-	public:
-		addEntityPacket(networkID netID_) { type = addEntity; netID = netID_; }
-
-		// Serialization functions
-		void read();
-		void write();
-	protected:
+	struct addEntityPacket {
+		RakNet::MessageID type;
 		networkID netID;
-		// TODO: 
+		addEntityPacket(networkID netID_) { type = ADD_ENTITY; netID = netID_; }
 	};
 
 
 	// Packet saying that user with entity netid inputed control controls
-	class controlPacket : public Packet {
+	struct controlPacket : public Packet {
 	public:
-		controlPacket(networkID netID_, ComponentView::userInput& controls_) { type = control; controls = controls_; }
+		controlPacket(networkID netID_, ComponentView::userInput& controls_) { type = CONTROL; controls = controls_; }
 
 		// Serialization functions
 		void read();
@@ -83,10 +76,10 @@ namespace Packets {
 
 	// Base class for a game update packet. all game updates have an entityID and ComponentID.
 	// Inheriting classes will have an additional data and read/write fields
-	class updateEntityPacket : public Packet {
+	struct updateEntityPacket : public Packet {
 	public:
-		updateEntityPacket() { type = updateEntity; }
-		updateEntityPacket(networkID netID_, ComponentView::ComponentID compID_) { type = updateEntity; netID = netID_; compID = compID; }
+		updateEntityPacket() { type = UPDATE_ENTITY; }
+		updateEntityPacket(networkID netID_, ComponentView::ComponentID compID_) { type = UPDATE_ENTITY; netID = netID_; compID = compID; }
 
 		// Serialization functions
 		void read();
@@ -98,45 +91,21 @@ namespace Packets {
 	};
 
 
-	class loginPacket : public Packet {
-	public:
-		loginPacket() { type = login; }
-
-		/* Serialization functions
-		void read();
-		void write();*/
-	protected:
-		networkID netID;
-		// No data field yet, base class of login
-	};
-
-	class logoutPacket : public Packet {
-	public:
-		logoutPacket() { type = logout; }
-
-		/* Serialization functions
-		void read();
-		void write(); */
-	protected:
-		// No data field yet, base class of logout
-	};
-
-
 	class UpdatePacket {
 	private:
-		enum Packet_Type type;
+		enum DefaultMessageIDTypes type;
 		networkID netID;
 		ComponentView::ComponentID compID;
 		std::stringstream inout;
 
 	public:
 		UpdatePacket() {
-			type = updateEntity;
+			type = UPDATE_ENTITY;
 			inout = std::stringstream();
 		}
 
 		UpdatePacket(networkID netID_) {
-			type = updateEntity;
+			type = UPDATE_ENTITY;
 			netID = netID_;
 			inout = std::stringstream();
 		//	inout << type;
@@ -149,7 +118,7 @@ namespace Packets {
 		// want to get a class type from an enum
 
 		void write() {
-			msgpack::pack(inout, );
+			//msgpack::pack(inout, );
 		}
 
 		void read(std::stringstream &buffer) {

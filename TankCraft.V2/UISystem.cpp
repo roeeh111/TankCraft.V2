@@ -9,7 +9,7 @@ namespace UI {
 
 		// Add the components to the the registry
 		data.m_reg.emplace<ComponentView::mapObject>(clientEntity);
-		data.m_reg.emplace<ComponentView::position>(clientEntity);
+		data.m_reg.emplace<ComponentView::position>(clientEntity, 1);
 		data.m_reg.emplace<ComponentView::score>(clientEntity);
 		data.m_reg.emplace<ComponentView::clientName>(clientEntity, clientName_);
 		data.m_reg.emplace<ComponentView::userInput>(clientEntity);

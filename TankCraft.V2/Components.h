@@ -1,6 +1,7 @@
 #pragma once
 #include <msgpack.hpp>
 #include <list>
+#include "UISystem.h"
 
 namespace ComponentView {
 	typedef enum  {
@@ -51,6 +52,16 @@ namespace ComponentView {
 		uint32_t curx;
 		uint32_t cury;
 		position_() { prevx = 0; prevy = 0; curx = 0; cury = 0; }
+
+		position_(bool spawn) {
+			// set position at random value
+			srand(time(NULL));
+			curx = rand() % WIDTH;
+			cury = rand() % HEIGHT;
+			prevx = 0;
+			prevy = 0;
+		}
+
 		MSGPACK_DEFINE(prevx, prevy, curx, cury);
 	} position;
 
@@ -111,3 +122,12 @@ namespace ComponentView {
 		bool isNetwoked; // If the entity should be networked
 	} networked;
 }
+
+
+/*
+* 
+*  Given enum component id
+*  how do we cast our packet/buffer/datablock to be the component assigned with that id?
+* 
+* 
+*/

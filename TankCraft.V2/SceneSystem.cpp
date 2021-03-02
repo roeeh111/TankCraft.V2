@@ -1,18 +1,27 @@
 #include <vector>
 #include <iostream>
+#include <chrono>
 #include "SceneSystem.h"
 #include "IDTranslationComponent.h"
 #include "FreeListComponent.h"
+
 
 namespace SceneSystem {
 
 	void TanksScene::update()
 	{
+		using namespace std::chrono;
+		milliseconds ms = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+
 		if (data.isServer) {
-			netSystem.updateServer(data);
+			if (test < 5) {
+				netSystem.addEntity(data, translationSystem, nullptr, 1);
+				test++;
+			}
+			netSystem.updateServer(data, translationSystem);
 		}
 		else {
-			netSystem.updateClient(data);
+			netSystem.updateClient(data, translationSystem);
 			uiSystem.updateUI(data);
 			movSystem.updateMovement(data);
 			uiSystem.printUI(data);
@@ -37,6 +46,7 @@ namespace SceneSystem {
 	TanksScene::~TanksScene()
 	{
 		data.m_reg.clear();
+	//	netSystem.clientDisconnect(data.rpi, data.address);
 		RakNet::RakPeerInterface::DestroyInstance(data.rpi);
 	}
 
@@ -92,6 +102,7 @@ namespace SceneSystem {
 			else {
 				data.message = "Client started\n";
 				netSystem.clientConnect(data.rpi, SERVER_PORT, "127.0.0.1");
+				data.rakAddress = RakNet::SystemAddress("127.0.0.1");
 			}
 		}
 	}

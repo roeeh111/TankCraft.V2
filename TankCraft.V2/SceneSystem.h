@@ -1,5 +1,6 @@
 #pragma once
 #include <entt/entt.hpp>
+#include <chrono>
 #include <RakPeerInterface.h>
 #include "Components.h"
 #include "SceneComponent.h"
@@ -37,6 +38,10 @@ namespace SceneSystem {
 		TranslationSystem::IDTranslation translationSystem;
 		NetworkSystem::NetworkHandler netSystem;
 		MovementSystem::MovementSystem movSystem;
+
+		std::chrono::milliseconds test = duration_cast<milliseconds>(
+			std::chrono::system_clock::now().time_since_epoch()
+			);
 
 	private:
 		void initNetworkSystem(bool isServer_, uint32_t maxClients);
