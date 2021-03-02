@@ -10,16 +10,16 @@ namespace SceneSystem {
 
 	void TanksScene::update()
 	{
-		using namespace std::chrono;
-		milliseconds ms = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+		std::chrono::seconds s = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch());
 
 		if (data.isServer) {
-			if (test < 5) {
+			if ((s - test) % 5 > std::chrono::seconds(3)) {
+				std::cout << "adding entity" << std::endl;
 				netSystem.addEntity(data, translationSystem, nullptr, 1);
-				test++;
 			}
 			netSystem.updateServer(data, translationSystem);
 		}
+
 		else {
 			netSystem.updateClient(data, translationSystem);
 			uiSystem.updateUI(data);
@@ -34,10 +34,16 @@ namespace SceneSystem {
 		// Data
 		data = SceneComponent::SceneComponent();
 
+		test = std::chrono::duration_cast<std::chrono::seconds>(
+			std::chrono::system_clock::now().time_since_epoch()
+			);
+
 		data.isServer = isServer_;
 		if (!isServer_) {
 			initUISystem();
 		}
+
+		data.clientAddressToEntities = std::map<RakNet::SystemAddress, std::list<networkID>>();
 		initNetworkSystem(isServer_, maxClients);
 		initIDTranslationSystem();
 		initMovementSystem();

@@ -20,7 +20,7 @@ namespace SceneComponent {
 		std::map<networkID, entt::entity> netToEnttid;
 
 		// The map from each client to its list of entities
-		std::map<RakNet::SystemAddress, std::list<entt::entity>> clientAddressToEntities;
+		std::map<RakNet::SystemAddress, std::list<networkID>> clientAddressToEntities;
 
 		// the address were connected to
 	//	const char* address;

@@ -39,9 +39,7 @@ namespace SceneSystem {
 		NetworkSystem::NetworkHandler netSystem;
 		MovementSystem::MovementSystem movSystem;
 
-		std::chrono::milliseconds test = duration_cast<milliseconds>(
-			std::chrono::system_clock::now().time_since_epoch()
-			);
+		std::chrono::seconds test; 
 
 	private:
 		void initNetworkSystem(bool isServer_, uint32_t maxClients);

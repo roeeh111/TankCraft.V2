@@ -141,28 +141,30 @@ namespace NetworkSystem {
 
 
 	// The server recognizes the connection from a client and creates an entity map for that client
-	void NetworkHandler::handleConnection(std::map<RakNet::SystemAddress, std::list<entt::entity>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress)
+	void NetworkHandler::handleConnection(std::map<RakNet::SystemAddress, std::list<networkID>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress)
 	{
 		printf("A client has logged in. Address: %s \n", systemAddress.ToString());
 
-		clientAddressToEntities[systemAddress] = std::list<entt::entity>();
+		clientAddressToEntities[systemAddress] = std::list<networkID>();
 	}
 
 	// The server recognizes the disconnection from a client and clears all entities related to that client
-	void NetworkHandler::handleDisconnect(std::map<RakNet::SystemAddress, std::list<entt::entity>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress, entt::registry& m_reg)
+	void NetworkHandler::handleDisconnect(std::map<RakNet::SystemAddress, std::list<networkID>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress, entt::registry& m_reg)
 	{
 		// TODO: how do we keep track of whose client is what entity?
 		// Find all entities that are tagged with the given client's id
 		// call removeEntity on all those entities
 		// TODO: do we run some sort of raknet disconnect function?
 		printf("A client has disconnected. Address: %s \n", systemAddress.ToString());
-		for (auto const& entity : clientAddressToEntities[systemAddress]) {
+		for (auto const& entityid : clientAddressToEntities[systemAddress]) {
+			// Add free
+
 			m_reg.remove_if_exists(entity);									// TODO: will want to change this as the types of entities grows
 		}
 
 	}
 
-	void NetworkHandler::handleLost(std::map<RakNet::SystemAddress, std::list<entt::entity>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress) {
+	void NetworkHandler::handleLost(std::map<RakNet::SystemAddress, std::list<networkID>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress) {
 		// Do nothing yet
 		printf("A client lost the connection. Address: %s \n", systemAddress.ToString());
 		printf("This client has %d entities.\n", clientAddressToEntities[systemAddress].size());
@@ -182,6 +184,7 @@ namespace NetworkSystem {
 			// create a new add entity packet
 			Packets::addEntityPacket addpack = Packets::addEntityPacket(netid);
 
+			data.clientAddressToEntities[pack->systemAddress]
 
 			// broadcast to all clients to add a new entity with entity ID, and all components
 			data.rpi->Send(reinterpret_cast<char*>(&addpack), 

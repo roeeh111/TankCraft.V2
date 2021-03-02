@@ -53,14 +53,14 @@ namespace NetworkSystem {
 
 		// Server handling a disconnecting client
 		// Delete entity from the registry and clean up metadata
-		void handleDisconnect(std::map<RakNet::SystemAddress, std::list<entt::entity>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress, entt::registry& m_reg);
+		void handleDisconnect(std::map<RakNet::SystemAddress, std::list<networkID>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress, entt::registry& m_reg);
 
 		// Server handling an incomming connecting client
 		// add a new connection
-		void handleConnection(std::map<RakNet::SystemAddress, std::list<entt::entity>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress);
+		void handleConnection(std::map<RakNet::SystemAddress, std::list<networkID>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress);
 
 		// Server handling a lost client
 		// TODO: Figure out the behavior of this function
-		void handleLost(std::map<RakNet::SystemAddress, std::list<entt::entity>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress);
+		void handleLost(std::map<RakNet::SystemAddress, std::list<networkID>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress);
 	};
 }

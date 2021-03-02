@@ -23,7 +23,18 @@
 	3) call string/buffer = packet.serialze
 	4) If we want to send it as a message, write string/buffer to a bitstream/call rpi->send
 
+	to read:
+	5) get the packet type (should be update_entity) O(1) we can do
+	6) get the enttiy id that were writing to O(1) we can do
+	7) get component i, with component type componentID[i] im stuck here 
+	8) do what you want with the data we can do
 
+
+	!! i dont dont know how to get from an enum, to casting as a struct !!
+
+	how to go from an enum, to an object cast
+
+	how do we represent an object type in data, and then cast something to that type
 
 */
 
