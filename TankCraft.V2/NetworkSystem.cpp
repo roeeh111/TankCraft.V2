@@ -97,7 +97,7 @@ namespace NetworkSystem {
 
 			case ADD_ENTITY:
 				printf("Received add entity packet from server.\n");
-				//addEntity(data, transSystem, pack, data.isServer, 0);
+				addEntity(data, transSystem, pack, data.isServer, 0);
 				break;
 			case REMOVE_ENTITY:
 				break;
