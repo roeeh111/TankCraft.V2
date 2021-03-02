@@ -8,22 +8,26 @@ namespace SceneComponent {
 	class SceneComponent {
 	public:
 		// The main UI
+		// This data is the SAME across all clients
 		std::vector<std::vector<char>> map;
 
 		// main registry
+		// This data is DIFFERENT across the server and all clients
 		entt::registry m_reg;
 
-		// The interface with raknet 
+		// Peer to Peer interface with raknet
 		RakNet::RakPeerInterface* rpi;
 
 		// The translation of net to entity structure
+		// This data should be SERVER ONLY and ONE PER CLIENT
 		std::map<networkID, entt::entity> netToEnttid;
 
 		// The map from each client to its list of entities
+		// This data should be SERVER ONLY
 		std::map<RakNet::SystemAddress, std::list<entt::entity>> clientAddressToEntities;
 
 		// The message to be displayed at the bottom of the board
-		// Fro debug purposes and notifications
+		// For debug purposes and notifications
 		std::string message;
 
 		// Whether this scene is the server or a client 

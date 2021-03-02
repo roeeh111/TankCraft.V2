@@ -68,19 +68,19 @@ namespace NetworkSystem {
 			{
 
 			case ID_CONNECTION_REQUEST_ACCEPTED:
-				data.message = "Our connection request has been accepted.\n";
+				data.message = "Connection established.\n";
 				break;
 
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
-				printf("The server is full.\n");
+				data.message = "The server is full.\n";
 				return;
 
 			case ID_DISCONNECTION_NOTIFICATION:
-				printf("We have been disconnected.\n");
+				data.message = "We have been disconnected.\n";
 				return;
 
 			case ID_CONNECTION_LOST:
-				printf("Connection lost.\n");
+				data.message = "Connection lost.\n";
 				return;
 
 			default: 				// Message with identifier pack->data[0]
@@ -164,7 +164,7 @@ namespace NetworkSystem {
 	}
 
 	// TODO:
-	void NetworkHandler::addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, bool isServer)
+	void NetworkHandler::addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::SystemAddress& systemAddress, bool isServer)
 	{
 		// If is Server:
 		if (isServer) {
@@ -173,7 +173,7 @@ namespace NetworkSystem {
 
 			// Allocate a new netId for this entity
 			networkID netid = transSystem.createMapping(data, newEntity);
-
+			data.clientAddressToEntities[systemAddress].push_back(newEntity);
 
 			// TODO:			(also figure out how we want to packetize all of the components)
 			// add all components of the entity with the given values to the new entity
@@ -195,7 +195,7 @@ namespace NetworkSystem {
 	}
 
 	// TODO:
-	void NetworkHandler::removeEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& system, networkID netId, bool isServer)
+	void NetworkHandler::removeEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& system, RakNet::SystemAddress& systemAddress, networkID netId, bool isServer)
 	{
 		// If is Server:
 		if (isServer) {
