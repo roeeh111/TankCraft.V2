@@ -15,30 +15,30 @@ namespace NetworkSystem {
 			switch (pack->data[0])
 			{
 			case ID_NEW_INCOMING_CONNECTION:
-				handleConnection(data.clientAddressToEntities, pack->systemAddress);
+				handleConnection(data);
 				break;
 
 			case ID_DISCONNECTION_NOTIFICATION:
-				handleDisconnect(data.clientAddressToEntities, pack->systemAddress, data.m_reg);
+				handleDisconnect(data, transSystem);
 				break;
 
 			case ID_CONNECTION_LOST:
-				handleLost(data.clientAddressToEntities, pack->systemAddress);
+				handleLostConnection(data, transSystem);
 				break;
 
 			case ID_REMOTE_NEW_INCOMING_CONNECTION:
 				printf("Remote client has connected.\n");
-				handleConnection(data.clientAddressToEntities, pack->systemAddress);
+				handleConnection(data);
 				break;
 
 			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
 				printf("Remote client has disconnected.\n");
-				handleDisconnect(data.clientAddressToEntities, pack->systemAddress, data.m_reg);
+				handleDisconnect(data, transSystem);
 				break;
 
 			case ID_REMOTE_CONNECTION_LOST:
 				printf("Remote client has lost the connection.\n");
-				handleLost(data.clientAddressToEntities, pack->systemAddress);
+				handleLostConnection(data, transSystem);
 				break;
 
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
@@ -140,34 +140,38 @@ namespace NetworkSystem {
 	}
 
 
-	// The server recognizes the connection from a client and creates an entity map for that client
-	void NetworkHandler::handleConnection(std::map<RakNet::SystemAddress, std::list<networkID>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress)
+	// The server recognizes the connection from a client and creates an empty netID  map for that client
+	void NetworkHandler::handleConnection(SceneComponent::SceneComponent& data)
 	{
-		printf("A client has logged in. Address: %s \n", systemAddress.ToString());
+		printf("A client has logged in. Address: %s \n", data.rakAddress.ToString());
 
-		clientAddressToEntities[systemAddress] = std::list<networkID>();
+		data.clientAddressToEntities[data.rakAddress] = std::list<networkID>();
 	}
 
 	// The server recognizes the disconnection from a client and clears all entities related to that client
-	void NetworkHandler::handleDisconnect(std::map<RakNet::SystemAddress, std::list<networkID>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress, entt::registry& m_reg)
+	void NetworkHandler::handleDisconnect(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem)
 	{
 		// TODO: how do we keep track of whose client is what entity?
 		// Find all entities that are tagged with the given client's id
 		// call removeEntity on all those entities
 		// TODO: do we run some sort of raknet disconnect function?
-		printf("A client has disconnected. Address: %s \n", systemAddress.ToString());
-		for (auto const& entityid : clientAddressToEntities[systemAddress]) {
-			// Add free
-
-			m_reg.remove_if_exists(entity);									// TODO: will want to change this as the types of entities grows
+		printf("A client has disconnected. Address: %s \n", data.rakAddress.ToString());
+		for (auto const& netId : data.clientAddressToEntities[data.rakAddress]) {
+			transSystem.freeID(data, netId); // Free the space for that entity
+			entt::entity entity_to_remove = transSystem.getEntity(data, netId);
+			data.m_reg.remove_if_exists(entity_to_remove);
 		}
 
 	}
 
-	void NetworkHandler::handleLost(std::map<RakNet::SystemAddress, std::list<networkID>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress) {
-		// Do nothing yet
-		printf("A client lost the connection. Address: %s \n", systemAddress.ToString());
-		printf("This client has %d entities.\n", clientAddressToEntities[systemAddress].size());
+	void NetworkHandler::handleLostConnection(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem) {
+		// Currently this had the same behavior as the way we handle disconnection. TBD
+		printf("A client lost the connection. Address: %s \n", data.rakAddress.ToString());
+		printf("This client has %d entities.\n", data.clientAddressToEntities[data.rakAddress].size());
+		for (auto const& netId : data.clientAddressToEntities[data.rakAddress]) {
+			transSystem.freeID(data, netId); // Free the space for that entity
+			data.m_reg.destroy(transSystem.getEntity(data, netId));
+		}
 	}
 
 	// TODO:
@@ -218,12 +222,12 @@ namespace NetworkSystem {
 	}
 
 	// TODO:
-	void NetworkHandler::removeEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& system, RakNet::SystemAddress& systemAddress, networkID netId, bool isServer)
+	void NetworkHandler::removeEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::SystemAddress& systemAddress, networkID netId, bool isServer)
 	{
 		// If is Server:
 		if (isServer) {
 			// Remove the given entity from the m_reg
-			system.freeID(data, netId);
+			transSystem.freeID(data, netId);
 
 			// Create new remove entity packet
 			Packets::removeEntityPacket remPack(netId);
@@ -245,7 +249,7 @@ namespace NetworkSystem {
 		else {
 			// If is client:
 			// Remove the given entity from the m_reg
-			data.m_reg.destroy(system.getEntity(data, netId));
+			data.m_reg.destroy(transSystem.getEntity(data, netId));
 
 			// Send to the server that we are removing this entity
 

@@ -51,16 +51,16 @@ namespace NetworkSystem {
 
 		void removeEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& system, RakNet::SystemAddress& systemAddress, networkID netId, bool isServer);
 
-		// Server handling a disconnecting client
-		// Delete entity from the registry and clean up metadata
-		void handleDisconnect(std::map<RakNet::SystemAddress, std::list<networkID>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress, entt::registry& m_reg);
-
 		// Server handling an incomming connecting client
 		// add a new connection
-		void handleConnection(std::map<RakNet::SystemAddress, std::list<networkID>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress);
+		void handleConnection(SceneComponent::SceneComponent& data);
+
+		// Server handling a disconnecting client
+		// Delete entity from the registry and clean up metadata
+		void handleDisconnect(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem);
 
 		// Server handling a lost client
 		// TODO: Figure out the behavior of this function
-		void handleLost(std::map<RakNet::SystemAddress, std::list<networkID>>& clientAddressToEntities, RakNet::SystemAddress& systemAddress);
+		void handleLostConnection(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem);
 	};
 }
