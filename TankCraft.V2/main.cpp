@@ -10,13 +10,11 @@ void playMultiplyerClient();
 void testSerialization();
 void testPacket();
 
-// TODO: fix bitstream/stringstream issues
+// TODO: add replication
 
-// TODO: refactor original movement code to control component based (fix the bugs)
+// TODO: add remove/update entity in networking
 
-// TODO: Add Networking through state synchronization
-
-// TODO: add user input system (fix the bugs) 
+// TODO: fix bugs in user input system 
 
 
 int main(void)

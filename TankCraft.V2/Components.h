@@ -3,6 +3,12 @@
 #include <list>
 #include "UISystem.h"
 
+/*
+* Header for all of the games components
+*
+*/
+
+
 namespace ComponentView {
 	typedef enum  {
 		nullComp, // if the component is some null value
@@ -20,28 +26,18 @@ namespace ComponentView {
 		ComponentID type;
 		uint16_t size;		// Limit the size of a component to a uint16, its pretty big, can be changed
 		baseComponent_() { type = nullComp; size = sizeof(ComponentID); }
-		void write(char* dst) {};
-		void read(char* dst) {};
 	} baseComponent;
 
 
 	// lets try with only this one
-	typedef struct userInput_ : baseComponent{
+	typedef struct userInput_ {
 		bool up;
 		bool down;
 		bool left;
 		bool right;
 		bool dirty;
 		userInput_() { up = 0; down = 0; left = 0; right = 0; dirty = 0; type = input; size = 4 * sizeof(char); }
-
-		// write all our fields at the given destination (assume that we wont go over)
-		// right now we write it at byte granularity, can do bit in the future
-	//	void write(char* dst) { dst[0] = up; dst[1] = down; dst[2] = left; dst[3] = right; }
-
-		// read fields at destination into the component
-//		void read(unsigned char* dst) { up = dst[0]; down = dst[1]; left = dst[2]; right = dst[3]; }
-
-		MSGPACK_DEFINE(up, down, left, right);
+	//	MSGPACK_DEFINE(up, down, left, right);
 	} userInput;
 
 
@@ -62,7 +58,7 @@ namespace ComponentView {
 			prevy = 0;
 		}
 
-		MSGPACK_DEFINE(prevx, prevy, curx, cury);
+//		MSGPACK_DEFINE(prevx, prevy, curx, cury);
 	} position;
 
 
@@ -114,20 +110,8 @@ namespace ComponentView {
 
 	// Not being used for now. Only used to distinguish whether an entity is networked.
 	typedef struct networked_ {
-		//RakNet::RakPeerInterface* peer; // refrence to the client/server racknet interface
 		//std::list<component&> components; // List of components that are networked		// TODO: may need to pair the component with a type
 		long clientID;
-		// TODO: Should we have a queue of components to change????
-
 		bool isNetwoked; // If the entity should be networked
 	} networked;
 }
-
-
-/*
-* 
-*  Given enum component id
-*  how do we cast our packet/buffer/datablock to be the component assigned with that id?
-* 
-* 
-*/

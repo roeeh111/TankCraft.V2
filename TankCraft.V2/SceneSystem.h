@@ -10,6 +10,12 @@
 #include "MovementSystem.h"
 
 /*
+*  The main "system" and data in our scene.
+* 
+*/
+
+
+/*
  To fix our lagging and waiting issue:
  -> first figure out whats buging with the controls
  -> multithread! let the movement system be its own thread, and the ui system be its own thread. that way, theres no blocking between them
@@ -39,6 +45,7 @@ namespace SceneSystem {
 		NetworkSystem::NetworkHandler netSystem;
 		MovementSystem::MovementSystem movSystem;
 
+		// time stamp for testing purposes
 		std::chrono::seconds test; 
 
 	private:

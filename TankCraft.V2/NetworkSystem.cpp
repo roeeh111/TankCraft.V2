@@ -108,6 +108,7 @@ namespace NetworkSystem {
 
 			default:
 				// Some unknown packet type, go to the next packet
+				printf("some packet from server.\n");
 				break;
 			}
 		}
@@ -169,10 +170,6 @@ namespace NetworkSystem {
 	// The server recognizes the disconnection from a client and clears all entities related to that client
 	void NetworkHandler::handleDisconnect(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack)
 	{
-		// TODO: how do we keep track of whose client is what entity?
-		// Find all entities that are tagged with the given client's id
-		// call removeEntity on all those entities
-		// TODO: do we run some sort of raknet disconnect function?
 		printf("A client has disconnected. Address: %s \n", pack->systemAddress.ToString());
 		for (auto const& netId : data.clientAddressToEntities[pack->systemAddress]) {
 			data.m_reg.destroy(transSystem.getEntity(data, netId));
@@ -186,6 +183,7 @@ namespace NetworkSystem {
 		printf("A client lost the connection. Address: %s \n", pack->systemAddress.ToString());
 		printf("This client has %d entities.\n", data.clientAddressToEntities[pack->systemAddress].size());
 		for (auto const& netId : data.clientAddressToEntities[pack->systemAddress]) {
+			std::cout << "removing entity " << netId << std::endl;
 			data.m_reg.destroy(transSystem.getEntity(data, netId));
 			transSystem.freeID(data, netId); // Free the space for that entity
 		}
@@ -202,6 +200,7 @@ namespace NetworkSystem {
 
 			// Allocate a new netId for this entity
 			networkID netid = transSystem.createMapping(data, newEntity);
+			std::cout << "Registered new entity " << netid << std::endl;
 			
 			// Append into the client entity map
 			data.clientAddressToEntities[pack->systemAddress].push_back(netid);
@@ -232,7 +231,7 @@ namespace NetworkSystem {
 
 			// if were not requesting, but responding to a request
 			if (!initial) {
-				std::cout << "Adding entity in client" << std::endl;
+				std::cout << "Adding entity in client after receiving a packet" << std::endl;
 				auto newEntity = data.m_reg.create();
 
 				// cast the input packet to an add entity packet

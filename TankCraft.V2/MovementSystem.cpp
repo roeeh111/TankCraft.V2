@@ -16,7 +16,7 @@ namespace MovementSystem {
 		
 
 		// TODO:
-		// Networking version: if user input is dirty, signal networking system to send control packet
+		// Networked version: if user input is dirty, signal networking system to send control packet
 		// The acutal update will happen from the network calling moveEntity
 	}
 

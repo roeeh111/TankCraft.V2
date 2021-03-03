@@ -1,6 +1,21 @@
 #include "UISystem.h"
 #include "Components.h"
 
+/*
+
+// On creation, add the userinput component to the client entity
+
+user input pipeline:
+user makes keyboard input
+sets userinput component, and dirty bit
+
+on network system loop, checks if user input is dirty
+if it is dirty, creates new control packet, and sends it to the server
+
+Server responds with a position component for the entity, client sets the new position value on game update
+
+*/
+
 namespace UI {
 
 	void UISystem::addTank(SceneComponent::SceneComponent& data, std::string clientName_)
@@ -14,9 +29,6 @@ namespace UI {
 		data.m_reg.emplace<ComponentView::clientName>(clientEntity, clientName_);
 		data.m_reg.emplace<ComponentView::userInput>(clientEntity);
 		printUI(data);
-
-		// TODO: call add entity for the network system of this entity!!!!
-
 	}
 
 
@@ -43,29 +55,19 @@ namespace UI {
 		for (auto entity : view) {
 
 			auto& pos = view.get<ComponentView::position>(entity);
-			//auto& scr = view.get<score>(entity);
 			auto& disp = view.get<ComponentView::mapObject>(entity);
 
-		//	if (pos.dirty) {
-
-				// If the dirty bit is set, set old location to '.', and 
-				// set new location to what it needs to be. also set dirty bit to 0
-
-				// If weve met a cookie, eat it, add it to points, and remove it from the map
-				if (data.map[pos.cury][pos.curx] == 'c') {
-					// if we have a points component, increment it
-					if (data.m_reg.has<ComponentView::score>(entity)) {
-						// Get the entities score
-						auto& scr = data.m_reg.get<ComponentView::score>(entity);
-						scr.points++;
-					}
+			// If weve met a cookie, eat it, add it to points, and remove it from the map
+			if (data.map[pos.cury][pos.curx] == 'c') {
+				// if we have a points component, increment it
+				if (data.m_reg.has<ComponentView::score>(entity)) {
+					// Get the entities score
+					auto& scr = data.m_reg.get<ComponentView::score>(entity);
+					scr.points++;
 				}
-				data.map[pos.prevy][pos.prevx] = '.';
-				data.map[pos.cury][pos.curx] = disp.mapChar;
-
-			//	pos.dirty = 0;
-
-		//	}
+			}
+			data.map[pos.prevy][pos.prevx] = '.';
+			data.map[pos.cury][pos.curx] = disp.mapChar;
 		}
 	}
 
@@ -75,7 +77,7 @@ namespace UI {
 	void UISystem::printUI(SceneComponent::SceneComponent& data)
 	{
 		// Clear the current screen
-	//	system("CLS");
+		system("CLS");
 
 		// Print out whatever is in the map
 		std::cout << std::endl;
@@ -93,22 +95,6 @@ namespace UI {
 		}
 		std::cout << data.message << std::endl;
 	}
-
-
-	/*
-	
-	// On creation, add the userinput component to the client entity
-
-	user input pipeline:
-	user makes keyboard input
-	sets userinput component, and dirty bit
-
-	on network system loop, checks if user input is dirty
-	if it is dirty, creates new control packet, and sends it to the server
-	
-	Server responds with a position component for the entity, client sets the new position value on game update
-	
-	*/
 
 	
 	void UISystem::getKeyBoardInput(entt::registry& m_reg, entt::entity& clientEntity)

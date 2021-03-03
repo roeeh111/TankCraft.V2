@@ -8,6 +8,12 @@
 #include <sstream>
 
 
+/*
+*  Serialization tests.
+*  
+*/
+
+
 // TODO: this implementation is slow, it creates a stringstream from a bitstream in order to serialize.
 //		 Go back and optimize this process. Its this way now because i want to move on to other things.
 

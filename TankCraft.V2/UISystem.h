@@ -5,6 +5,10 @@
 #define WIDTH 20
 #define HEIGHT 20
 
+/*
+*  The system for getting a user's input, and printing the games state to the console.
+* 
+*/
 
 namespace UI {
 	class UISystem {
@@ -15,8 +19,7 @@ namespace UI {
 		void printUI(SceneComponent::SceneComponent& data);
 
 		// Get input from the user, and set its position component
-		// Also, set the dirty bit = 1								TODO:: can improve this by not having to loop over all components with position, 
-//		void getUserInput(entt::registry& m_reg, entt::entity& clientEntity);				//		But all components that have position and are dirty (or some signaling)
+//		void getUserInput(entt::registry& m_reg, entt::entity& clientEntity); // Might need this later, but has been refactored into other methods
 
 		// Add a tank entity to the game
 		void addTank(SceneComponent::SceneComponent& data, std::string clientName_);
