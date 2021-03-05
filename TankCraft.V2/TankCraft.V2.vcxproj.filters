@@ -516,11 +516,14 @@
     <ClInclude Include="NetworkSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="SceneSystem.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
     <ClInclude Include="UISystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="SceneSystem.h">
-      <Filter>Header Files\Systems</Filter>
+    <ClInclude Include="..\..\..\..\Desktop\Engine Capstone\TanksProtobuf\Tanks.pb.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -866,11 +869,17 @@
     <ClCompile Include="NetworkSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="SceneSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
     <ClCompile Include="UISystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="SceneSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
+    <ClCompile Include="ProtoTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Desktop\Engine Capstone\TanksProtobuf\Tanks.pb.cc">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

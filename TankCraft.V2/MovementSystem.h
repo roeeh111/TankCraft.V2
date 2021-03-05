@@ -10,3 +10,8 @@ namespace MovementSystem {
 		void moveEntity(entt::registry& m_reg, entt::entity& entity, ComponentView::userInput& input);
 	};
 }
+
+/*
+*  System for moving an entity with a position around.
+* 
+*/

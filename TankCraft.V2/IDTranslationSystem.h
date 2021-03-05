@@ -22,14 +22,11 @@ namespace TranslationSystem {
 
 	private:
 		networkID allocateID(entt::registry& m_reg);
-		FreeListComponent::freelist getFreelist(entt::registry& m_reg);
+		FreeListComponent::freelist &getFreelist(entt::registry& m_reg);
 
 	};
 
 }
-
-
-
 
 /*
 *
@@ -42,7 +39,7 @@ namespace TranslationSystem {
 * -System will map an networkID to its local entityID (each client/server has different entity ids/different mappings. but the same networkids)
 *
 *
-*Underlying structure:
+* Underlying structure:
 * - a map of long to entt:entity
 * - Free list of availible values (array of booleans of size max uint32_t. Use the linux method to get free elements)
 * - GenerateID() -> Generates a new network id to be used
@@ -50,7 +47,6 @@ namespace TranslationSystem {
 * - CreateMapping() -> generates a new id, and maps that id to the local entity
 * - IDMap is stored globally in the scene
 *
-*
+* To get the entityid associated with this netid, just call get with the map
 */
 
-// To get the entityid associated with this netid, just call get with the map

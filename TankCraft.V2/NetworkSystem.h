@@ -7,10 +7,14 @@
 #include "IDTranslationSystem.h"
 #include "IDTranslationComponent.h"
 
-//#include "Packet.h"
-// TODO: add multithreading library
+// TODO: add multithreading to the server
 
-// Problem = we have a cyclic header decleration
+/*
+*  The networking system
+* 
+*  TODO: add implememt game update, control input.
+* 
+*/
 
 #define RELIABILITY RELIABLE_ORDERED
 #define SERVER_PORT 60000

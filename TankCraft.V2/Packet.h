@@ -14,28 +14,8 @@
 
 
 /*
-	TODO: find a way to convert from enum packet_type to casting to component quickly
-
-	roee method:
-	1) make a new packet struct, give it the netid of the entity that im changing
-	2) call packet.write(component)
-		(do this till packet is full)
-	3) call string/buffer = packet.serialze
-	4) If we want to send it as a message, write string/buffer to a bitstream/call rpi->send
-
-	to read:
-	5) get the packet type (should be update_entity) O(1) we can do
-	6) get the enttiy id that were writing to O(1) we can do
-	7) get component i, with component type componentID[i] im stuck here 
-	8) do what you want with the data we can do
-
-
-	!! i dont dont know how to get from an enum, to casting as a struct !!
-
-	how to go from an enum, to an object cast
-
-	how do we represent an object type in data, and then cast something to that type
-
+* header with all our packets, still needs a lot of work. 
+*
 */
 
 
@@ -166,34 +146,6 @@ namespace Packets {
 }
 
 
-/*
-* 
-* New Serialization method with protobuf:
-* 
-* 1) make schema with all components
-* 1.5) Each Component schema has a 
-* 
-* 
-* Assume 
-* 
-* 
-* 
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 * Another method with msgpack:
@@ -258,14 +210,6 @@ namespace Packets {
 			- buttload of metadata (can have more or less depending on how you make it)
 
 **/
-
-
-
-/*
-
-
-
-*/
 
 
 

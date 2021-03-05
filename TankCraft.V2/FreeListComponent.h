@@ -17,3 +17,9 @@ namespace FreeListComponent {
 		}
 	} freelist;
 }
+
+/*
+*  Component containing a freelist.
+*  Used by the server's Id translation system for generating netid's
+*
+*/

@@ -31,7 +31,9 @@ namespace TranslationSystem {
     {
         networkID itr;
         // Find a free space in the freelist, and set it as taken
-        auto flist = getFreelist(m_reg);
+        auto &flist = getFreelist(m_reg);
+
+        // set our current iterator to the last mapping + 1
         itr = flist.lastMapping;
             
         // Find the next free spot in the freelist
@@ -46,21 +48,20 @@ namespace TranslationSystem {
 
         // Set the location as used
         flist.map[itr] = 1;
-        flist.lastMapping = itr;
+        flist.lastMapping = itr + 1;
         return itr;
     }
 
-    FreeListComponent::freelist IDTranslation::getFreelist(entt::registry& m_reg)
+    FreeListComponent::freelist &IDTranslation::getFreelist(entt::registry& m_reg)
     {
         // Fetch all the free list component from the registry
         auto view = m_reg.view<FreeListComponent::freelist>();
         // This for loop will only iterate once
         for (auto entity : view) {
-            FreeListComponent::freelist flist = view.get<FreeListComponent::freelist>(entity);
+            FreeListComponent::freelist &flist = view.get<FreeListComponent::freelist>(entity);
             return flist;
         }
-        // If there's no free list, then create one
-        return FreeListComponent::freelist();
+        std::cerr << "cant find a freelist" << std::endl;
     }
 
 
