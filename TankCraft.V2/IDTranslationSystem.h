@@ -3,6 +3,7 @@
 #include "SceneComponent.h"
 #include "FreeListComponent.h"
 #include "IDTranslationComponent.h"
+#include "Tanks.pb.h"
 
 
 namespace TranslationSystem {
@@ -16,6 +17,9 @@ namespace TranslationSystem {
 
 		networkID setMapping(SceneComponent::SceneComponent& data, networkID netId, entt::entity entityId);
 
+		void addEntity(SceneComponent::SceneComponent& data, ProtoMessaging::AddRemoveEntityMessage* msg);
+
+		void removeEntity(SceneComponent::SceneComponent& data, ProtoMessaging::AddRemoveEntityMessage* msg);
 
 		// Get the entity associated with the netid
 		entt::entity getEntity(SceneComponent::SceneComponent& data, networkID netId);

@@ -3,6 +3,8 @@
 #include "Packet.h"
 #include "IDTranslationSystem.h"
 #include "BitStream.h"
+#include "CreateEntity.h"
+#include "MessagingSystem.h"
 
 namespace NetworkSystem {
 	void NetworkHandler::updateServer(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem)
@@ -190,13 +192,13 @@ namespace NetworkSystem {
 	}
 
 	// TODO:
-	void NetworkHandler::addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, bool isServer, bool initial)
+	void NetworkHandler::addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, bool isServer, bool responding)
 	{
-		// If is Server:
+		// If is Server: (we dont need to examine the netid/timestamp of the incomming packet. So make a new message object and sendit)
 		if (isServer) {
 
 			// add the entity with entity id given to the m_reg
-			auto newEntity = data.m_reg.create();
+			auto newEntity = RegWrapper::createEntity(data.m_reg, true);			
 
 			// Allocate a new netId for this entity
 			networkID netid = transSystem.createMapping(data, newEntity);
@@ -206,14 +208,13 @@ namespace NetworkSystem {
 			data.clientAddressToEntities[pack->systemAddress].push_back(netid);
 
 			// create a new add entity packet
-			Packets::addEntityPacket addpack = Packets::addEntityPacket(netid);
+			RakNet::BitStream stream = RakNet::BitStream();
+			MessagingSystem::writeAddEntity(stream, netid);
 
-			//data.clientAddressToEntities[pack->systemAddress].push_back(netid);
 
 			std::cout << "Registered entity from client " << pack->systemAddress.GetPort() << ", broadcasting..." << std::endl;
 			// broadcast to all clients to add a new entity with entity ID, and all components
-			data.rpi->Send(reinterpret_cast<char*>(&addpack), 
-				sizeof(addpack), 
+			data.rpi->Send(&stream, 
 				HIGH_PRIORITY, 
 				RELIABLE_ORDERED, 
 				0, 
@@ -226,29 +227,28 @@ namespace NetworkSystem {
 		}
 		else {
 			// If is client:
-			// if client doesnt have an entity with this netid 
-			// add the entity with the entity id given to the m_reg
-
 			// if were not requesting, but responding to a request
-			if (!initial) {
+			if (responding) {
 				std::cout << "Adding entity in client after receiving a packet" << std::endl;
-				auto newEntity = data.m_reg.create();
+				auto newEntity = RegWrapper::createEntity(data.m_reg, true);
 
-				// cast the input packet to an add entity packet
-				Packets::addEntityPacket* addpack = (Packets::addEntityPacket*)pack->data;
+				std::string str = std::string((char*) (pack->data + 1));							// TODO: this may cause a bug, skipping over the first character
+				ProtoMessaging::AddRemoveEntityMessage* msg = MessagingSystem::readAddEntity(str);
 
 				// when unpacking input packet, get the netID passed to us
 				// Create a new mapping of netID and entity
-				transSystem.setMapping(data, addpack->netID, newEntity);
+				transSystem.setMapping(data, msg->netid(), newEntity);
 			}
 			else {
 				// if were requesting:
-				// addpacket request
-				Packets::addEntityPacket addpack = Packets::addEntityPacket(0);
 				std::cout << "Sending out add entity request packet to server" << std::endl;
+				RakNet::BitStream stream = RakNet::BitStream();
+
+				MessagingSystem::writeAddEntity(stream, 0);
+
+
 				// Request an addition of a new entity
-				data.rpi->Send(reinterpret_cast<char*>(&addpack),
-					sizeof(addpack),
+				data.rpi->Send(&stream,
 					HIGH_PRIORITY,
 					RELIABLE_ORDERED,
 					0,
@@ -256,9 +256,6 @@ namespace NetworkSystem {
 					false);
 
 			}
-
-			// TODO: 
-			// add all components of the entitty with the given valies to the new entity
 		}
 	}
 

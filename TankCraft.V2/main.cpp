@@ -1,6 +1,6 @@
 #include <iostream>
-#include "Serialize.h"
 #include "SceneSystem.h"
+#include "ProtoTest.h"
 
 
 #define MAX_CLIENTS 10
@@ -21,6 +21,7 @@ int main(void)
 {
     //playSingleClient();
     playMultiplyerClient();
+    //testSerialization();
     return 0;
 }
 
@@ -76,24 +77,6 @@ void playMultiplyerClient()
 
 
 void testSerialization() {
-  /*
-    ComponentView::position* p = new ComponentView::position();
-    ComponentView::position res;
-    ComponentView::position res2;
-    p->prevx = 3;
-    p->cury = 6;
-
-    std::stringstream ss = std::stringstream();
-    Serialization::write<ComponentView::position>(ss, *p);      // Writing has no problems....
-    Serialization::read<ComponentView::position>(ss, res2);
-
- //   std::strin stream = std::stringstream();
-    RakNet::BitStream stream = RakNet::BitStream();
-    Serialization::write<ComponentView::position>(stream, *p);      // Writing has no problems....
-    Serialization::read<ComponentView::position>(stream, res);
-
-    assert(p->cury == res.cury);
-    assert(p->prevx == res.prevx);
-    std::cout << "finito" << std::endl;
-    */
+    ProtoTests::testAddEntity();
+    ProtoTests::testUpdateEntity();
 }

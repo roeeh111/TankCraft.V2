@@ -1,5 +1,6 @@
 #include "UISystem.h"
 #include "Components.h"
+#include "CreateEntity.h"
 
 /*
 
@@ -20,7 +21,8 @@ namespace UI {
 
 	void UISystem::addTank(SceneComponent::SceneComponent& data, std::string clientName_)
 	{
-		auto clientEntity = data.m_reg.create();
+	//	auto clientEntity = data.m_reg.create(); 
+		auto clientEntity = RegWrapper::createEntity(data.m_reg, true);
 
 		// Add the components to the the registry
 		data.m_reg.emplace<ComponentView::mapObject>(clientEntity);

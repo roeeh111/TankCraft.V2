@@ -1,5 +1,6 @@
 #include "IDTranslationSystem.h"
 #include "Components.h"
+#include "CreateEntity.h"
 
 namespace TranslationSystem {
     networkID IDTranslation::createMapping(SceneComponent::SceneComponent& data, entt::entity entityId)
@@ -25,6 +26,25 @@ namespace TranslationSystem {
     {
         return data.netToEnttid[netId];
     }
+
+    void IDTranslation::addEntity(SceneComponent::SceneComponent& data, ProtoMessaging::AddRemoveEntityMessage* msg)
+    {
+        // Assume the message has been verified, or add verification for udp
+
+        // make a mapping of the given netid and a local entity netid value
+        auto newEntity = RegWrapper::createEntity(data.m_reg, true);
+
+        setMapping(data, msg->netid(), newEntity);  //	TODO: change this to createEntity
+
+    }
+
+    void IDTranslation::removeEntity(SceneComponent::SceneComponent& data, ProtoMessaging::AddRemoveEntityMessage* msg)
+    {
+        freeID(data, msg->netid());
+    }
+
+
+
 
 
     networkID IDTranslation::allocateID(entt::registry& m_reg)

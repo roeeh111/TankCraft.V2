@@ -30,7 +30,7 @@ namespace ComponentView {
 
 
 	// lets try with only this one
-	typedef struct userInput_ {
+	typedef struct userInput_ : baseComponent {
 		bool up;
 		bool down;
 		bool left;
@@ -108,10 +108,11 @@ namespace ComponentView {
 	//	MSGPACK_DEFINE(damage);
 	} damageDone;
 
-	// Not being used for now. Only used to distinguish whether an entity is networked.
+	// To signify if the entity is networked.
+	// Could be filled with additional network important information, but for now only filled with a boolean
 	typedef struct networked_ {
 		//std::list<component&> components; // List of components that are networked		// TODO: may need to pair the component with a type
-		long clientID;
+		//long clientID;
 		bool isNetwoked; // If the entity should be networked
 	} networked;
 }

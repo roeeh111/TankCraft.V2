@@ -4,23 +4,24 @@
 #include "SceneSystem.h"
 #include "IDTranslationComponent.h"
 #include "FreeListComponent.h"
+#include "CreateEntity.h"
 
 
 namespace SceneSystem {
 
 	void TanksScene::update()
 	{	
-	//	std::chrono::seconds s = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch());
+		std::chrono::seconds s = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch());
 
 		if (data.isServer) {
 			netSystem.updateServer(data, translationSystem);
 		}
 		else {
 			netSystem.updateClient(data, translationSystem);
-			//if ((s - test > std::chrono::seconds(5)) && (s - test) % 5 > std::chrono::seconds(3)) {
-		//		netSystem.addEntity(data, translationSystem, nullptr, 0, 1);
-			//	Sleep(5000); // I need to add this pause so that the client sends the packet once every 5 seconds
-		//	}
+			if ((s - test > std::chrono::seconds(5)) && (s - test) % 5 > std::chrono::seconds(3)) {
+				netSystem.addEntity(data, translationSystem, nullptr, 0, 0);
+				Sleep(5000); // I need to add this pause so that the client sends the packet once every 5 seconds
+			}
 			uiSystem.updateUI(data);
 			movSystem.updateMovement(data);
 			uiSystem.printUI(data);
@@ -121,7 +122,9 @@ namespace SceneSystem {
 	{
 		// Initialize our translation system
 		data.netToEnttid = std::map<networkID, entt::entity>();
-		auto freeListEntity = data.m_reg.create();
+		//auto freeListEntity = data.m_reg.create();		
+		auto freeListEntity = RegWrapper::createEntity(data.m_reg, false);
+
 
 		// Add the components to the the registry
 		data.m_reg.emplace<FreeListComponent::freelist> (freeListEntity);

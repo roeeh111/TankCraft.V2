@@ -51,7 +51,7 @@ namespace NetworkSystem {
 		void makeServerUpdate(entt::registry &m_reg, RakNet::Packet* pack);
 
 		// add an entity to the server or client
-		void addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, bool isServer, bool initial);
+		void addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, bool isServer, bool responding);
 
 		void removeEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& system, RakNet::SystemAddress& systemAddress, networkID netId, bool isServer);
 

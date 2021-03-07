@@ -2,7 +2,7 @@
 #include "MovementSystem.h"
 #include "UISystem.h"
 
-#include "UISystem.h"
+
 namespace MovementSystem {
 	void MovementSystem::updateMovement(SceneComponent::SceneComponent& data)
 	{
