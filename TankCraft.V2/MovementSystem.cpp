@@ -4,7 +4,7 @@
 
 
 namespace MovementSystem {
-	void MovementSystem::updateMovement(SceneComponent::SceneComponent& data)
+	void MovementSystem::updateMovement(GameData::GameData& data)
 	{
 		// For now, loop over all entities with position and user input
 		// and call moveEntity

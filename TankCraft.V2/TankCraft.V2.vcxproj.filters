@@ -507,9 +507,6 @@
     <ClInclude Include="IDTranslationComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="SceneComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="IDTranslationSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
@@ -535,6 +532,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameAdmin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

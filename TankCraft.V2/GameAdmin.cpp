@@ -33,7 +33,7 @@ namespace GameAdmin {
 	TanksScene::TanksScene(bool isServer_, uint32_t maxClients)
 	{
 		// Data
-		data = SceneComponent::SceneComponent();
+		data = GameData::GameData();
 
 		test = std::chrono::duration_cast<std::chrono::seconds>(
 			std::chrono::system_clock::now().time_since_epoch()

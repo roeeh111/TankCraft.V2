@@ -3,7 +3,7 @@
 #include "CreateEntity.h"
 
 namespace TranslationSystem {
-    networkID IDTranslation::createMapping(SceneComponent::SceneComponent& data, entt::entity entityId)
+    networkID IDTranslation::createMapping(GameData::GameData& data, entt::entity entityId)
     {
         // Allocate a new id for our entity
         networkID id = allocateID(data.m_reg);
@@ -15,19 +15,19 @@ namespace TranslationSystem {
         return id;
     }
 
-    networkID IDTranslation::setMapping(SceneComponent::SceneComponent& data, networkID netId, entt::entity entityId)
+    networkID IDTranslation::setMapping(GameData::GameData& data, networkID netId, entt::entity entityId)
     {
         auto flist = getFreelist(data.m_reg);
         data.netToEnttid[netId] = entityId;
         return netId;
     }
 
-    entt::entity IDTranslation::getEntity(SceneComponent::SceneComponent& data, networkID netId)
+    entt::entity IDTranslation::getEntity(GameData::GameData& data, networkID netId)
     {
         return data.netToEnttid[netId];
     }
 
-    void IDTranslation::addEntity(SceneComponent::SceneComponent& data, ProtoMessaging::AddRemoveEntityMessage* msg)
+    void IDTranslation::addEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg)
     {
         // Assume the message has been verified, or add verification for udp
 
@@ -38,7 +38,7 @@ namespace TranslationSystem {
 
     }
 
-    void IDTranslation::removeEntity(SceneComponent::SceneComponent& data, ProtoMessaging::AddRemoveEntityMessage* msg)
+    void IDTranslation::removeEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg)
     {
         freeID(data, msg->netid());
     }
@@ -85,7 +85,7 @@ namespace TranslationSystem {
     }
 
 
-    void IDTranslation::freeID(SceneComponent::SceneComponent& data, networkID id)
+    void IDTranslation::freeID(GameData::GameData& data, networkID id)
     {
         // Get the freelist
         auto flist = getFreelist(data.m_reg);

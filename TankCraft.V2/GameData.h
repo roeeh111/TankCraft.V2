@@ -4,8 +4,8 @@
 #include "IDTranslationComponent.h"
 #include <string>
 
-namespace SceneComponent {
-	class SceneComponent {
+namespace GameData {
+	class GameData {
 	public:
 		// The main UI
 		// This data is the SAME across all clients

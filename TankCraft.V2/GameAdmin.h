@@ -3,7 +3,7 @@
 #include <chrono>
 #include <RakPeerInterface.h>
 #include "Components.h"
-#include "SceneComponent.h"
+#include "GameData.h"
 #include "UISystem.h"
 #include "IDTranslationSystem.h"
 #include "NetworkSystem.h"
@@ -37,7 +37,7 @@ namespace GameAdmin {
 		~TanksScene();
 
 		// Data is stored in the component
-		SceneComponent::SceneComponent data;
+		GameData::GameData data;
 
 		// Systems
 		UI::UISystem uiSystem;
