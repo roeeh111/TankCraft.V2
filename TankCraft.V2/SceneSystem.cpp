@@ -11,17 +11,19 @@ namespace SceneSystem {
 
 	void TanksScene::update()
 	{	
-		std::chrono::seconds s = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch());
 
 		if (data.isServer) {
 			netSystem.updateServer(data, translationSystem);
 		}
 		else {
 			netSystem.updateClient(data, translationSystem);
-			if ((s - test > std::chrono::seconds(5)) && (s - test) % 5 > std::chrono::seconds(3)) {
-				netSystem.addEntity(data, translationSystem, nullptr, 0, 0);
-				Sleep(5000); // I need to add this pause so that the client sends the packet once every 5 seconds
-			}
+			netSystem.addEntity(data, translationSystem, nullptr, 0, 0);
+			Sleep(5000); // I need to add this pause so that the client sends the packet once every 5 seconds
+
+			netSystem.removeEntity(data, translationSystem, nullptr, 0, false, false);
+
+
+
 			uiSystem.updateUI(data);
 			movSystem.updateMovement(data);
 			uiSystem.printUI(data);

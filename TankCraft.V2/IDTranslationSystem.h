@@ -24,6 +24,9 @@ namespace TranslationSystem {
 		// Get the entity associated with the netid
 		entt::entity getEntity(SceneComponent::SceneComponent& data, networkID netId);
 
+		// Whether the system has a mapping for this netId
+		bool hasMapping(SceneComponent::SceneComponent& data, networkID netId);
+
 	private:
 		networkID allocateID(entt::registry& m_reg);
 		FreeListComponent::freelist &getFreelist(entt::registry& m_reg);

@@ -17,7 +17,7 @@ namespace TranslationSystem {
 
     networkID IDTranslation::setMapping(SceneComponent::SceneComponent& data, networkID netId, entt::entity entityId)
     {
-        auto flist = getFreelist(data.m_reg);
+        const auto &flist = getFreelist(data.m_reg);
         data.netToEnttid[netId] = entityId;
         return netId;
     }
@@ -44,7 +44,11 @@ namespace TranslationSystem {
     }
 
 
-
+    bool IDTranslation::hasMapping(SceneComponent::SceneComponent& data, networkID netId)
+    {
+        const auto& flist = getFreelist(data.m_reg);
+        return flist.map[netId];
+    }
 
 
     networkID IDTranslation::allocateID(entt::registry& m_reg)
@@ -88,7 +92,7 @@ namespace TranslationSystem {
     void IDTranslation::freeID(SceneComponent::SceneComponent& data, networkID id)
     {
         // Get the freelist
-        auto flist = getFreelist(data.m_reg);
+        auto& flist = getFreelist(data.m_reg);
         flist.map[id] = 0;
     }
 

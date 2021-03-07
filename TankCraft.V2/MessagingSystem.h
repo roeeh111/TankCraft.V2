@@ -42,7 +42,7 @@ namespace MessagingSystem {
 	void writeAddEntity(RakNet::BitStream& stream, networkID netid);
 
 	// Given a bitstream and a netid, write a removeEntity packet to the bitstream
-	bool writeRemoveEntity(RakNet::BitStream& stream);
+	void writeRemoveEntity(RakNet::BitStream& stream, networkID netid);
 
 	// Given a bitstream and a controls component, write a controlsPacket to the bitstream
 	bool writeControls(RakNet::BitStream& stream);
@@ -53,11 +53,7 @@ namespace MessagingSystem {
 
 	// Given a bitstream, read it into a addRemoveEntityPacket, verify its integrity and return the message
 	// (entity addition can be handled by another system)
-	ProtoMessaging::AddRemoveEntityMessage* readAddEntity(std::string stream);
-
-	// Given a bitstream, read it into a addRemoveEntityPacket, verify its integrity and remove the entity
-	// (entity removal can be handled by another system)
-	bool readRemoveEntity(RakNet::BitStream& stream);
+	ProtoMessaging::AddRemoveEntityMessage* readAddRemoveEntity(std::string stream);
 
 	// Given a bitstream, read it into a ControlsPacket, verify its integrity and execute the controls
 	bool readControls(RakNet::BitStream& stream);
