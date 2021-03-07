@@ -74,7 +74,9 @@ namespace TranslationSystem {
 
     FreeListComponent::freelist &IDTranslation::getFreelist(entt::registry& m_reg)
     {
+        // Fetch all the free list component from the registry
         auto view = m_reg.view<FreeListComponent::freelist>();
+        // This for loop will only iterate once
         for (auto entity : view) {
             FreeListComponent::freelist &flist = view.get<FreeListComponent::freelist>(entity);
             return flist;

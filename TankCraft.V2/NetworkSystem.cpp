@@ -254,7 +254,6 @@ namespace NetworkSystem {
 					0,
 					data.rakAddress,
 					false);
-
 			}
 		}
 	}
