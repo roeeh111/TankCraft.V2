@@ -28,6 +28,9 @@
     <Filter Include="Header Files\Tests">
       <UniqueIdentifier>{9dae64cb-5208-4e6d-bd52-b0c71f5825f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ProtoSchemas">
+      <UniqueIdentifier>{be47b12f-526c-4e8b-b428-4177624ed57f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h">
@@ -504,9 +507,6 @@
     <ClInclude Include="IDTranslationComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="SceneComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="IDTranslationSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
@@ -514,9 +514,6 @@
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
     <ClInclude Include="NetworkSystem.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
     <ClInclude Include="UISystem.h">
@@ -528,10 +525,16 @@
     <ClInclude Include="MessagingSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Desktop\Engine_Capstone\TanksProtobuf\Tanks.pb.h">
+    <ClInclude Include="CreateEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CreateEntity.h">
+    <ClInclude Include="Tanks.pb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameAdmin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -878,23 +881,23 @@
     <ClCompile Include="NetworkSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="SceneSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
-    </ClCompile>
     <ClCompile Include="UISystem.cpp">
       <Filter>Source Files\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="ProtoTest.cpp">
-      <Filter>Header Files\Tests</Filter>
     </ClCompile>
     <ClCompile Include="MessagingSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Desktop\Engine_Capstone\TanksProtobuf\Tanks.pb.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CreateEntity.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tanks.pb.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameAdmin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProtoTest.cpp">
+      <Filter>Header Files\Tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -911,6 +914,9 @@
     </None>
     <None Include="..\..\..\..\..\..\RakNet\Source\RakNet_vc9.vcproj">
       <Filter>RakNet</Filter>
+    </None>
+    <None Include="Tanks.proto">
+      <Filter>Header Files\ProtoSchemas</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@
 #include "MovementSystem.h"
 
 namespace NetworkSystem {
-	void NetworkHandler::updateServer(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem)
+	void NetworkHandler::updateServer(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem)
 	{
 		RakNet::Packet* pack;
 
@@ -63,8 +63,6 @@ namespace NetworkSystem {
 				break;
 
 			case CONTROL:
-				printf("Received control packet from client.\n");
-				handleControl(data, transSystem, MovementSystem::MovementSystem & movSystem, RakNet::Packet * pack)
 				break;
 
 			default:
@@ -75,7 +73,7 @@ namespace NetworkSystem {
 		}
 	}
 
-	void NetworkHandler::updateClient(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem)
+	void NetworkHandler::updateClient(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem)
 	{
 		// Pointer to some network packet
 		RakNet::Packet* pack;
@@ -158,10 +156,28 @@ namespace NetworkSystem {
 		//RakNet::AddressOrGUID(RakNet::SystemAddress(hostAddress));
 	}
 
+	// TODO:
+	void NetworkHandler::makeClientUpdate(entt::registry &m_reg, RakNet::Packet* pack)
+	{
+		// Deserialize packet
+		// get the entity
+		// find the component that entity is refrencing
+		// Aquire lock for component
+		// change the fields of component
+		// release lock for component
+	}
 
+	// TODO:
+	void NetworkHandler::makeServerUpdate(entt::registry &m_reg, RakNet::Packet* pack)
+	{
+		// Validate packet??
+		// Deserealize the packet
+		// Execute what the controls would do to the server (probably a function from another system)
+		// Append all changes to the changedComponentQueue
+	}
 
 	// The server recognizes the connection from a client and creates an empty netID  map for that client
-	void NetworkHandler::handleConnection(SceneComponent::SceneComponent& data, RakNet::Packet* pack)
+	void NetworkHandler::handleConnection(GameData::GameData& data, RakNet::Packet* pack)
 	{
 		// If is a server, the rakAddress is not initialized
 		if (data.isServer) {
@@ -178,7 +194,7 @@ namespace NetworkSystem {
 	}
 
 	// The server recognizes the disconnection from a client and clears all entities related to that client
-	void NetworkHandler::handleDisconnect(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack)
+	void NetworkHandler::handleDisconnect(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack)
 	{
 		printf("A client has disconnected. Address: %s \n", pack->systemAddress.ToString());
 		for (auto const& netId : data.clientAddressToEntities[pack->systemAddress]) {
@@ -188,7 +204,7 @@ namespace NetworkSystem {
 
 	}
 
-	void NetworkHandler::handleLostConnection(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack) {
+	void NetworkHandler::handleLostConnection(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack) {
 		// Currently this had the same behavior as the way we handle disconnection. TBD
 		printf("A client lost the connection. Address: %s \n", pack->systemAddress.ToString());
 		printf("This client has %d entities.\n", data.clientAddressToEntities[pack->systemAddress].size());
@@ -199,8 +215,7 @@ namespace NetworkSystem {
 		}
 	}
 
-	// TODO:
-	void NetworkHandler::addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, bool isServer, bool responding)
+	void NetworkHandler::addEntity(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, bool isServer, bool responding)
 	{
 		// If is Server: (we dont need to examine the netid/timestamp of the incomming packet. So make a new message object and sendit)
 		if (isServer) {
@@ -268,7 +283,7 @@ namespace NetworkSystem {
 	}
 
 	// TODO:
-	void NetworkHandler::removeEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, networkID remID, bool isServer, bool responding)
+	void NetworkHandler::removeEntity(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, networkID remID, bool isServer, bool responding)
 	{
 		// If is Server:
 		if (isServer) {
@@ -351,5 +366,22 @@ namespace NetworkSystem {
 		}
 	}
 
+	// 
+	void NetworkHandler::sendClientInput(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack) {
+		std::cout << "Sending out client input to the server" << std::endl;
+		RakNet::BitStream stream = RakNet::BitStream();
+
+		// HERE we write the control into the stream
+		//MessagingSystem::writeControls(stream, 0);
+
+
+		// Request an addition of a new entity
+		data.rpi->Send(&stream,
+			HIGH_PRIORITY,
+			RELIABLE_ORDERED,
+			0,
+			data.rakAddress,
+			false);
+	}
 }
 

@@ -3,7 +3,7 @@
 #include <chrono>
 #include <RakPeerInterface.h>
 #include "Components.h"
-#include "SceneComponent.h"
+#include "GameData.h"
 #include "UISystem.h"
 #include "IDTranslationSystem.h"
 #include "NetworkSystem.h"
@@ -22,7 +22,7 @@
 	- will need to lock the controls component and position component?
 */
 
-namespace SceneSystem {
+namespace GameAdmin {
 
 	// Tank scene is the scene for the tank game.
 	// All scenes are managed within the scene system
@@ -37,7 +37,7 @@ namespace SceneSystem {
 		~TanksScene();
 
 		// Data is stored in the component
-		SceneComponent::SceneComponent data;
+		GameData::GameData data;
 
 		// Systems
 		UI::UISystem uiSystem;

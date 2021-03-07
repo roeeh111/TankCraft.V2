@@ -1,6 +1,6 @@
 #pragma once
 #include <entt/entt.hpp>
-#include "SceneComponent.h"
+#include "GameData.h"
 #include "FreeListComponent.h"
 #include "IDTranslationComponent.h"
 #include "Tanks.pb.h"
@@ -10,22 +10,22 @@ namespace TranslationSystem {
 	class IDTranslation {
 	public:
 		// Set this specific id as free
-		void freeID(SceneComponent::SceneComponent&data, networkID id);
+		void freeID(GameData::GameData& data, networkID id);
 		
 		// Create a mapping of new netid->entityid
-		networkID createMapping(SceneComponent::SceneComponent& data, entt::entity entityId);
+		networkID createMapping(GameData::GameData& data, entt::entity entityId);
 
-		networkID setMapping(SceneComponent::SceneComponent& data, networkID netId, entt::entity entityId);
+		networkID setMapping(GameData::GameData& data, networkID netId, entt::entity entityId);
 
-		void addEntity(SceneComponent::SceneComponent& data, ProtoMessaging::AddRemoveEntityMessage* msg);
+		void addEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg);
 
-		void removeEntity(SceneComponent::SceneComponent& data, ProtoMessaging::AddRemoveEntityMessage* msg);
+		void removeEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg);
 
 		// Get the entity associated with the netid
-		entt::entity getEntity(SceneComponent::SceneComponent& data, networkID netId);
+		entt::entity getEntity(GameData::GameData& data, networkID netId);
 
 		// Whether the system has a mapping for this netId
-		bool hasMapping(SceneComponent::SceneComponent& data, networkID netId);
+		bool hasMapping(GameData::GameData& data, networkID netId);
 
 	private:
 		networkID allocateID(entt::registry& m_reg);

@@ -1,13 +1,13 @@
 #include <vector>
 #include <iostream>
 #include <chrono>
-#include "SceneSystem.h"
+#include "GameAdmin.h"
 #include "IDTranslationComponent.h"
 #include "FreeListComponent.h"
 #include "CreateEntity.h"
 
 
-namespace SceneSystem {
+namespace GameAdmin {
 
 	void TanksScene::update()
 	{	
@@ -35,7 +35,7 @@ namespace SceneSystem {
 	TanksScene::TanksScene(bool isServer_, uint32_t maxClients)
 	{
 		// Data
-		data = SceneComponent::SceneComponent();
+		data = GameData::GameData();
 
 		test = std::chrono::duration_cast<std::chrono::seconds>(
 			std::chrono::system_clock::now().time_since_epoch()

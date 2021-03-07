@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+// To add another component to be serialized, must create a new 
+// instance of the component in this file, and add a new repeated field
+// in update entity message
+
+package ProtoMessaging;
+
+// the control component
+message ControlComponent {
+  bool up = 1;
+  bool down = 2;
+  bool left = 3;
+  bool right = 4;
+  int32 netid = 5;
+}
+
+// position component
+message PositionComponent {
+  int32 prevx = 1;
+  int32 prevy = 2;
+  int32 curx = 3;
+  int32 cury = 4;
+  int32 netid = 5;
+}
+
+// map ui component
+message MapObjectComponent {
+  bytes mapChar = 1;
+  int32 netid = 2;
+}
+
+// score component
+message ScoreComponent {
+  int32 points = 1;
+  int32 netid = 2;
+}
+
+// client name component
+message ClientNameComponent {
+  string name = 1;
+  int32 netid = 2;
+}
+
+// health component
+message HealthComponent {
+  int32 hp = 1;
+  int32 netid = 2;
+}
+
+// message for sending a control component
+message ControlMessage {
+  bytes id = 1;
+  int64 timestamp = 2;
+  ControlComponent control = 3;
+}
+
+// message to add or remove an entity depending on what id is
+message AddRemoveEntityMessage {
+  bytes id = 1;
+  int64 timestamp = 2;
+  int32 netid = 3;
+}
+
+message UpdateEntityMessage {
+  bytes id = 1;
+  int64 timestamp = 2;
+  repeated PositionComponent positionComps = 3;
+  repeated MapObjectComponent mapObjectComps = 4;
+  repeated ScoreComponent scoreComps = 5;
+  repeated ClientNameComponent clientNameComps = 6;
+  repeated HealthComponent healthComps = 7;
+}
