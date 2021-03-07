@@ -25,7 +25,7 @@ namespace TranslationSystem {
 		entt::entity getEntity(GameData::GameData& data, networkID netId);
 
 		// Whether the system has a mapping for this netId
-		bool hasMapping(SceneComponent::SceneComponent& data, networkID netId);
+		bool hasMapping(GameData::GameData& data, networkID netId);
 
 	private:
 		networkID allocateID(entt::registry& m_reg);

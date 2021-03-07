@@ -44,7 +44,7 @@ namespace TranslationSystem {
     }
 
 
-    bool IDTranslation::hasMapping(SceneComponent::SceneComponent& data, networkID netId)
+    bool IDTranslation::hasMapping(GameData::GameData& data, networkID netId)
     {
         const auto& flist = getFreelist(data.m_reg);
         return flist.map[netId];

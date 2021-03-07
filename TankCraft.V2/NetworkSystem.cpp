@@ -243,7 +243,7 @@ namespace NetworkSystem {
 	}
 
 	// TODO:
-	void NetworkHandler::removeEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, networkID remID, bool isServer, bool responding)
+	void NetworkHandler::removeEntity(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, networkID remID, bool isServer, bool responding)
 	{
 		// If is Server:
 		if (isServer) {
