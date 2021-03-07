@@ -1,5 +1,5 @@
 #include <iostream>
-#include "SceneSystem.h"
+#include "GameAdmin.h"
 #include "ProtoTest.h"
 
 
@@ -20,8 +20,8 @@ void testPacket();
 int main(void)
 {
     //playSingleClient();
-    playMultiplyerClient();
-    //testSerialization();
+    //playMultiplyerClient();
+    testSerialization();
     return 0;
 }
 
@@ -47,7 +47,7 @@ void testPacket() {
 void playSingleClient()
 {
     // instantiate scene object
-    SceneSystem::TanksScene scene = SceneSystem::TanksScene(false, 1);
+    GameAdmin::TanksScene scene = GameAdmin::TanksScene(false, 1);
 
     // add a single client
     scene.uiSystem.addTank(scene.data, "Roee");
@@ -66,7 +66,7 @@ void playMultiplyerClient()
     printf("(C) or (S)erver?\n");
     std::cin >> str;
     bool isServer = (str == 's') || (str == 'S');
-    SceneSystem::TanksScene scene = SceneSystem::TanksScene(isServer, 5);
+    GameAdmin::TanksScene scene = GameAdmin::TanksScene(isServer, 5);
     //if (!isServer) scene.uiSystem.addTank(scene.data, "Player 1");
 
     while (true) {

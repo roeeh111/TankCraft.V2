@@ -1,13 +1,13 @@
 #include <vector>
 #include <iostream>
 #include <chrono>
-#include "SceneSystem.h"
+#include "GameAdmin.h"
 #include "IDTranslationComponent.h"
 #include "FreeListComponent.h"
 #include "CreateEntity.h"
 
 
-namespace SceneSystem {
+namespace GameAdmin {
 
 	void TanksScene::update()
 	{	

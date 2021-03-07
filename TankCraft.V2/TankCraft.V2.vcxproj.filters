@@ -519,9 +519,6 @@
     <ClInclude Include="NetworkSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="SceneSystem.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="UISystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
@@ -535,6 +532,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tanks.pb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameAdmin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -881,14 +881,8 @@
     <ClCompile Include="NetworkSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="SceneSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
-    </ClCompile>
     <ClCompile Include="UISystem.cpp">
       <Filter>Source Files\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="ProtoTest.cpp">
-      <Filter>Header Files\Tests</Filter>
     </ClCompile>
     <ClCompile Include="MessagingSystem.cpp">
       <Filter>Source Files\Systems</Filter>
@@ -898,6 +892,12 @@
     </ClCompile>
     <ClCompile Include="Tanks.pb.cc">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameAdmin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProtoTest.cpp">
+      <Filter>Header Files\Tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

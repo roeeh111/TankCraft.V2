@@ -132,26 +132,6 @@ namespace NetworkSystem {
 		//RakNet::AddressOrGUID(RakNet::SystemAddress(hostAddress));
 	}
 
-	// TODO:
-	void NetworkHandler::makeClientUpdate(entt::registry &m_reg, RakNet::Packet* pack)
-	{
-		// Deserialize packet
-		// get the entity
-		// find the component that entity is refrencing
-		// Aquire lock for component
-		// change the fields of component
-		// release lock for component
-	}
-
-	// TODO:
-	void NetworkHandler::makeServerUpdate(entt::registry &m_reg, RakNet::Packet* pack)
-	{
-		// Validate packet??
-		// Deserealize the packet
-		// Execute what the controls would do to the server (probably a function from another system)
-		// Append all changes to the changedComponentQueue
-	}
-
 	// The server recognizes the connection from a client and creates an empty netID  map for that client
 	void NetworkHandler::handleConnection(SceneComponent::SceneComponent& data, RakNet::Packet* pack)
 	{

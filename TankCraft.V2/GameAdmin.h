@@ -22,7 +22,7 @@
 	- will need to lock the controls component and position component?
 */
 
-namespace SceneSystem {
+namespace GameAdmin {
 
 	// Tank scene is the scene for the tank game.
 	// All scenes are managed within the scene system
