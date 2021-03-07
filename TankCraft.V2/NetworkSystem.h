@@ -39,17 +39,6 @@ namespace NetworkSystem {
 		// Disconnect from the given server address as a client
 		void clientDisconnect(RakNet::RakPeerInterface* peer, const char* hostAddress);
 
-
-
-		// Deserealizes the packet, checks that it is a game update packet.
-		// If packet is a game update, aquires the lock to the component, and updates the data of that component
-		void makeClientUpdate(entt::registry &m_reg, RakNet::Packet* pack);
-
-		// Depending on the type of packet and its valididy, will execute the control
-		// commands given by the packet.
-		// Execution of those controls will append new components to the changeQueue
-		void makeServerUpdate(entt::registry &m_reg, RakNet::Packet* pack);
-
 		// add an entity to the server or client
 		void addEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, bool isServer, bool responding);
 
@@ -66,5 +55,9 @@ namespace NetworkSystem {
 		// Server handling a lost client
 		// TODO: Figure out the behavior of this function
 		void handleLostConnection(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack);
+
+		// create handle control function in network system
+		// gets client control packet, and calls movement system move entity
+		void handleControl();
 	};
 }

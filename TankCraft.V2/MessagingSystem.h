@@ -53,10 +53,11 @@ namespace MessagingSystem {
 
 	// Given a bitstream, read it into a addRemoveEntityPacket, verify its integrity and return the message
 	// (entity addition can be handled by another system)
-	ProtoMessaging::AddRemoveEntityMessage* readAddRemoveEntity(std::string stream);
+	ProtoMessaging::AddRemoveEntityMessage* readAddRemoveEntity(std::string &stream);
 
-	// Given a bitstream, read it into a ControlsPacket, verify its integrity and execute the controls
-	bool readControls(RakNet::BitStream& stream);
+	// Given a bitstream, read it into a ControlsPacket, verify its integrity and return a user input component as an output parameter
+	// also reuturns the entity that inputted the controls, or entt::null if entity does not exist
+	entt::entity readControls(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, std::string& stream, ComponentView::userInput* ret);
 
 }
 

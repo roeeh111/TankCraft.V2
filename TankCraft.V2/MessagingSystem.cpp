@@ -1,6 +1,7 @@
 #include <MessageIdentifiers.h>
 #include "MessagingSystem.h"
 #include <ctime>
+#include "IDTranslationSystem.h"
 
 namespace MessagingSystem {
     /*
@@ -21,6 +22,7 @@ namespace MessagingSystem {
 
         // Write the packet to the stream
         stream.Write(msg->SerializeAsString());
+        delete msg;
     }
 
     void writeRemoveEntity(RakNet::BitStream& stream, networkID netid)
@@ -36,6 +38,7 @@ namespace MessagingSystem {
 
         // Write the packet to the stream
         stream.Write(msg->SerializeAsString());
+        delete msg;
     }
 
 
@@ -43,26 +46,39 @@ namespace MessagingSystem {
     * Read defenitions:
     */
 
-    ProtoMessaging::AddRemoveEntityMessage* readAddRemoveEntity(std::string stream)
+    ProtoMessaging::AddRemoveEntityMessage* readAddRemoveEntity(std::string &stream)
     {
         // Assume we got the first bit of the bitstream, so the bitstream only has our 
         auto msg = new ProtoMessaging::AddRemoveEntityMessage();
         msg->ParseFromString(stream);
         return msg;
     }
+
+    entt::entity readControls(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, std::string& stream, ComponentView::userInput* ret)
+    {
+        entt::entity ent;
+
+        auto msg = new ProtoMessaging::ControlMessage();
+        msg->ParseFromString(stream);
+
+        // if the netid doesnt exist, return nullptr
+        if (transSystem.hasMapping(data, msg->control().netid())) {
+            ent = transSystem.getEntity(data, msg->control().netid());
+        }
+        else {
+            return entt::null;
+        }
+
+        // copy over the values
+        ret->down = msg->control().down();
+        ret->up = msg->control().up();
+        ret->left = msg->control().left();
+        ret->right = msg->control().right();
+
+
+        delete msg;
+        return ent;
+    }
+
+
 }
-
-/*
-
-How do we want to decide what to do when reading.writing entity packets?
-
-I say, use this system to serialize/deserealize the data
-And in the network/update layer do the actual decision making
-
-*/
-
-/*
-*
-* So the general structure is this:
-* 
-*/

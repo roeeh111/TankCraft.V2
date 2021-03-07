@@ -5,6 +5,7 @@
 #include "BitStream.h"
 #include "CreateEntity.h"
 #include "MessagingSystem.h"
+#include "MovementSystem.h"
 
 namespace NetworkSystem {
 	void NetworkHandler::updateServer(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem)
@@ -62,6 +63,8 @@ namespace NetworkSystem {
 				break;
 
 			case CONTROL:
+				printf("Received control packet from client.\n");
+				handleControl(data, transSystem, MovementSystem::MovementSystem & movSystem, RakNet::Packet * pack)
 				break;
 
 			default:
@@ -103,10 +106,12 @@ namespace NetworkSystem {
 				printf("Received add entity packet from server.\n");
 				addEntity(data, transSystem, pack, data.isServer, 0);
 				break;
+
 			case REMOVE_ENTITY:
 				printf("Received remove entity packet from server.\n");
 				removeEntity(data, transSystem, pack, 0, false, true);
 				break;
+
 			case UPDATE_ENTITY:
 				break;
 			case CONTROL:
@@ -120,6 +125,23 @@ namespace NetworkSystem {
 		}
 	}
 
+
+	void NetworkHandler::handleControl(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, MovementSystem::MovementSystem &movSystem, RakNet::Packet* pack)
+	{
+		// given a packet, call readcontrol
+		ComponentView::userInput contrl;
+		std::string stream = std::string((char*)(pack->data + 1));
+
+		entt::entity ent = MessagingSystem::readControls(data, transSystem, stream, &contrl);
+		if (!(ent == entt::null)) {
+			// if readcontrol returns not nullentitiy, call movementsystem.move(component) 
+			movSystem.moveEntity(data.m_reg, ent, contrl);	
+		}
+	}
+
+
+
+
 	bool NetworkHandler::clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress)
 	{
 		if (!(peer->Connect(hostAddress, port, 0, 0) == RakNet::CONNECTION_ATTEMPT_STARTED)) {
@@ -131,30 +153,12 @@ namespace NetworkSystem {
 
 	void NetworkSystem::NetworkHandler::clientDisconnect(RakNet::RakPeerInterface* peer, const char* hostAddress)
 	{
-		peer->CloseConnection(RakNet::SystemAddress(hostAddress) , 1);
+		peer->CloseConnection(RakNet::SystemAddress(hostAddress), 1);
 		std::cout << "Closing connection to " << RakNet::SystemAddress(hostAddress).ToString() << std::endl;
 		//RakNet::AddressOrGUID(RakNet::SystemAddress(hostAddress));
 	}
 
-	// TODO:
-	void NetworkHandler::makeClientUpdate(entt::registry &m_reg, RakNet::Packet* pack)
-	{
-		// Deserialize packet
-		// get the entity
-		// find the component that entity is refrencing
-		// Aquire lock for component
-		// change the fields of component
-		// release lock for component
-	}
 
-	// TODO:
-	void NetworkHandler::makeServerUpdate(entt::registry &m_reg, RakNet::Packet* pack)
-	{
-		// Validate packet??
-		// Deserealize the packet
-		// Execute what the controls would do to the server (probably a function from another system)
-		// Append all changes to the changedComponentQueue
-	}
 
 	// The server recognizes the connection from a client and creates an empty netID  map for that client
 	void NetworkHandler::handleConnection(SceneComponent::SceneComponent& data, RakNet::Packet* pack)
@@ -242,6 +246,7 @@ namespace NetworkSystem {
 				// when unpacking input packet, get the netID passed to us
 				// Create a new mapping of netID and entity
 				transSystem.setMapping(data, msg->netid(), newEntity);
+				delete msg;
 			}
 			else {
 				// if were requesting:
@@ -304,8 +309,7 @@ namespace NetworkSystem {
 				pack->systemAddress,
 				true);
 			std::cout << "sent message" << std::endl;
-
-
+			delete msg;
 		}
 		else {
 			// If is client:
@@ -326,6 +330,7 @@ namespace NetworkSystem {
 
 				// Free the netid from the translation system
 				transSystem.freeID(data, msg->netid());
+				delete msg;
 			}
 			else {
 				// if were requesting:
