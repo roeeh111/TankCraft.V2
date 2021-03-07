@@ -36,20 +36,20 @@ To pack and send data:
 namespace MessagingSystem {
 
 	// given a bitstream and the ToUpdate map, write a gameupdate packet to the bitstream
-	bool writeGameUpdate(RakNet::BitStream &stream);
+	void writeGameUpdate(RakNet::BitStream &stream);
 
 	// Given a bitstream and a netid, write a addEntity packet to the bitstream
 	void writeAddEntity(RakNet::BitStream& stream, networkID netid);
 
 	// Given a bitstream and a netid, write a removeEntity packet to the bitstream
-	bool writeRemoveEntity(RakNet::BitStream& stream);
+	void writeRemoveEntity(RakNet::BitStream& stream);
 
 	// Given a bitstream and a controls component, write a controlsPacket to the bitstream
-	bool writeControls(RakNet::BitStream& stream);
+	void writeControls(RakNet::BitStream& stream, ComponentView::userInput control);
 
 	// Given a bitstream, read it into a GameUpdatePacket, verify its integrity and do the actual game updates
 	// (game updates can be handled by another system)
-	bool readGameUpdate(RakNet::BitStream& stream);
+	void readGameUpdate(RakNet::BitStream& stream);
 
 	// Given a bitstream, read it into a addRemoveEntityPacket, verify its integrity and return the message
 	// (entity addition can be handled by another system)
@@ -57,10 +57,10 @@ namespace MessagingSystem {
 
 	// Given a bitstream, read it into a addRemoveEntityPacket, verify its integrity and remove the entity
 	// (entity removal can be handled by another system)
-	bool readRemoveEntity(RakNet::BitStream& stream);
+	ProtoMessaging::AddRemoveEntityMessage* readRemoveEntity(RakNet::BitStream& stream);
 
-	// Given a bitstream, read it into a ControlsPacket, verify its integrity and execute the controls
-	bool readControls(RakNet::BitStream& stream);
+	// Given a bitstream, read it into a ControlPacket, verify its integrity and execute the controls
+	ProtoMessaging::ControlMessage* readControl(RakNet::BitStream& stream);
 
 }
 

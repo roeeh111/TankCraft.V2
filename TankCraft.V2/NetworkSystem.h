@@ -55,5 +55,7 @@ namespace NetworkSystem {
 		// Server handling a lost client
 		// TODO: Figure out the behavior of this function
 		void handleLostConnection(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack);
+
+		void sendClientInput(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack);
 	};
 }

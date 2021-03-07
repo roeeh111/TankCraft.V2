@@ -1,4 +1,5 @@
 #include "UISystem.h"
+#include "NetworkSystem.h"
 #include "Components.h"
 #include "CreateEntity.h"
 
@@ -19,6 +20,7 @@ Server responds with a position component for the entity, client sets the new po
 
 namespace UI {
 
+	//TODO: Take out the registry wrting and call network system's add entity function
 	void UISystem::addTank(GameData::GameData& data, std::string clientName_)
 	{
 	//	auto clientEntity = data.m_reg.create(); 
@@ -36,17 +38,15 @@ namespace UI {
 
 	void UISystem::updateUI(GameData::GameData& data)
 	{
-
+		/*
 		// get all elements that take user input
 		auto view = data.m_reg.view<ComponentView::userInput>();
-
-
 		for (auto entity : view) {
 			// Get the user input for our object
 			getKeyBoardInput(data.m_reg, entity);
 			//getUserInput(data.m_reg, entity);
 		}
-
+		*/
 		// update the map
 		updateMapPositions(data);
 	}
@@ -72,9 +72,6 @@ namespace UI {
 			data.map[pos.cury][pos.curx] = disp.mapChar;
 		}
 	}
-
-
-
 
 	void UISystem::printUI(GameData::GameData& data)
 	{

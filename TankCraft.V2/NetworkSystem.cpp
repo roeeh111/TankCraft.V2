@@ -60,6 +60,7 @@ namespace NetworkSystem {
 				break;
 
 			case CONTROL:
+				printf("Received input packet from client.\n");
 				break;
 
 			default:
@@ -171,7 +172,6 @@ namespace NetworkSystem {
 		}
 	}
 
-	// TODO:
 	void NetworkHandler::addEntity(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, bool isServer, bool responding)
 	{
 		// If is Server: (we dont need to examine the netid/timestamp of the incomming packet. So make a new message object and sendit)
@@ -283,5 +283,22 @@ namespace NetworkSystem {
 		}
 	}
 
+	// 
+	void NetworkHandler::sendClientInput(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack) {
+		std::cout << "Sending out client input to the server" << std::endl;
+		RakNet::BitStream stream = RakNet::BitStream();
+
+		// HERE we write the control into the stream
+		//MessagingSystem::writeControls(stream, 0);
+
+
+		// Request an addition of a new entity
+		data.rpi->Send(&stream,
+			HIGH_PRIORITY,
+			RELIABLE_ORDERED,
+			0,
+			data.rakAddress,
+			false);
+	}
 }
 

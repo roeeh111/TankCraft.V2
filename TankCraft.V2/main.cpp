@@ -20,8 +20,8 @@ void testPacket();
 int main(void)
 {
     //playSingleClient();
-    //playMultiplyerClient();
-    testSerialization();
+    playMultiplyerClient();
+    //testSerialization();
     return 0;
 }
 
