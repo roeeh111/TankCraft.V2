@@ -28,6 +28,9 @@
     <Filter Include="Header Files\Tests">
       <UniqueIdentifier>{9dae64cb-5208-4e6d-bd52-b0c71f5825f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ProtoSchemas">
+      <UniqueIdentifier>{be47b12f-526c-4e8b-b428-4177624ed57f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h">
@@ -528,10 +531,10 @@
     <ClInclude Include="MessagingSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Desktop\Engine_Capstone\TanksProtobuf\Tanks.pb.h">
+    <ClInclude Include="CreateEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CreateEntity.h">
+    <ClInclude Include="Tanks.pb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -890,10 +893,10 @@
     <ClCompile Include="MessagingSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Desktop\Engine_Capstone\TanksProtobuf\Tanks.pb.cc">
+    <ClCompile Include="CreateEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CreateEntity.cpp">
+    <ClCompile Include="Tanks.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -911,6 +914,9 @@
     </None>
     <None Include="..\..\..\..\..\..\RakNet\Source\RakNet_vc9.vcproj">
       <Filter>RakNet</Filter>
+    </None>
+    <None Include="Tanks.proto">
+      <Filter>Header Files\ProtoSchemas</Filter>
     </None>
   </ItemGroup>
 </Project>
