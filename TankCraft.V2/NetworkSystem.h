@@ -42,7 +42,7 @@ namespace NetworkSystem {
 		// add an entity to the server or client
 		void addEntity(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, bool isServer, bool responding);
 
-		void removeEntity(GameData::GameData& data, TranslationSystem::IDTranslation& system, RakNet::SystemAddress& systemAddress, networkID netId, bool isServer);
+		void removeEntity(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, networkID remID, bool isServer, bool responding);
 
 		// Server handling an incomming connecting client
 		// add a new connection
