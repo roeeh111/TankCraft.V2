@@ -50,7 +50,7 @@ void playSingleClient()
     GameAdmin::TanksScene scene = GameAdmin::TanksScene(false, 1);
 
     // add a single client
-    scene.uiSystem.addTank(scene.data, "Roee");
+    UI::addTank(scene.data, "Roee");
 
    // scene.printUI();
 

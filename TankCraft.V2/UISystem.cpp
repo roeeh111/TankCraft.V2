@@ -21,7 +21,7 @@ Server responds with a position component for the entity, client sets the new po
 namespace UI {
 
 	//TODO: Take out the registry wrting and call network system's add entity function
-	void UISystem::addTank(GameData::GameData& data, std::string clientName_)
+	void addTank(GameData::GameData& data, std::string clientName_)
 	{
 	//	auto clientEntity = data.m_reg.create(); 
 		auto clientEntity = RegWrapper::createEntity(data.m_reg, true);
@@ -36,7 +36,7 @@ namespace UI {
 	}
 
 
-	void UISystem::updateUI(GameData::GameData& data)
+	void updateUI(GameData::GameData& data)
 	{
 		/*
 		// get all elements that take user input
@@ -51,7 +51,7 @@ namespace UI {
 		updateMapPositions(data);
 	}
 
-	void UISystem::updateMapPositions(GameData::GameData& data) {
+	void updateMapPositions(GameData::GameData& data) {
 		// get all elements that have a mapObject and position, and then do the updates
 		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
 		for (auto entity : view) {
@@ -73,7 +73,7 @@ namespace UI {
 		}
 	}
 
-	void UISystem::printUI(GameData::GameData& data)
+	void printUI(GameData::GameData& data)
 	{
 		// Clear the current screen
 		system("CLS");
@@ -96,7 +96,7 @@ namespace UI {
 	}
 
 	
-	void UISystem::getKeyBoardInput(entt::registry& m_reg, entt::entity& clientEntity)
+	void getKeyBoardInput(entt::registry& m_reg, entt::entity& clientEntity)
 	{
 		char input;
 		std::cin >> input;

@@ -13,20 +13,20 @@ namespace GameAdmin {
 	{	
 
 		if (data.isServer) {
-			netSystem.updateServer(data, translationSystem);
+			NetworkSystem::updateServer(data);
 		}
 		else {
-			netSystem.updateClient(data, translationSystem);
-			netSystem.addEntity(data, translationSystem, nullptr, 0, 0);
+			NetworkSystem::updateClient(data);
+			NetworkSystem::addEntity(data, nullptr, 0, 0);
 			Sleep(5000); // I need to add this pause so that the client sends the packet once every 5 seconds
 
-			netSystem.removeEntity(data, translationSystem, nullptr, 0, false, false);
+			NetworkSystem::removeEntity(data, nullptr, 0, false, false);
 
 
 
-			uiSystem.updateUI(data);
-			movSystem.updateMovement(data);
-			uiSystem.printUI(data);
+			UI::updateUI(data);
+			MovementSystem::updateMovement(data);
+			UI::printUI(data);
 		}
 		
 	}
@@ -88,7 +88,7 @@ namespace GameAdmin {
 			std::cout << std::endl;
 		}
 
-		uiSystem.printUI(data);
+		UI::printUI(data);
 	}
 
 
@@ -114,7 +114,7 @@ namespace GameAdmin {
 			}
 			else {
 				data.message = "Client started\n";
-				netSystem.clientConnect(data.rpi, SERVER_PORT, "127.0.0.1");
+				NetworkSystem::clientConnect(data.rpi, SERVER_PORT, "127.0.0.1");
 				data.rakAddress = RakNet::SystemAddress("127.0.0.1|"+ SERVER_PORT); // save the server address
 			}
 		}

@@ -8,7 +8,7 @@
 #include "MovementSystem.h"
 
 namespace NetworkSystem {
-	void NetworkHandler::updateServer(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem)
+	void updateServer(GameData::GameData& data)
 	{
 		RakNet::Packet* pack;
 
@@ -23,11 +23,11 @@ namespace NetworkSystem {
 				break;
 
 			case ID_DISCONNECTION_NOTIFICATION:
-				handleDisconnect(data, transSystem, pack);
+				handleDisconnect(data, pack);
 				break;
 
 			case ID_CONNECTION_LOST:
-				handleLostConnection(data, transSystem, pack);
+				handleLostConnection(data, pack);
 				break;
 
 			case ID_REMOTE_NEW_INCOMING_CONNECTION:
@@ -37,12 +37,12 @@ namespace NetworkSystem {
 
 			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
 				printf("Remote client has disconnected.\n");
-				handleDisconnect(data, transSystem, pack);
+				handleDisconnect(data, pack);
 				break;
 
 			case ID_REMOTE_CONNECTION_LOST:
 				printf("Remote client has lost the connection.\n");
-				handleLostConnection(data, transSystem, pack);
+				handleLostConnection(data, pack);
 				break;
 
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
@@ -51,12 +51,12 @@ namespace NetworkSystem {
 
 			case ADD_ENTITY:
 				printf("Received add entity packet from client.\n");
-				addEntity(data, transSystem, pack, data.isServer, 0);
+				addEntity(data, pack, data.isServer, 0);
 				break;
 
 			case REMOVE_ENTITY:
 				printf("Received remove entity packet from client.\n");
-				removeEntity(data, transSystem, pack, 0, true, false);
+				removeEntity(data, pack, 0, true, false);
 				break;
 
 			case UPDATE_ENTITY:
@@ -73,7 +73,7 @@ namespace NetworkSystem {
 		}
 	}
 
-	void NetworkHandler::updateClient(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem)
+	void updateClient(GameData::GameData& data)
 	{
 		// Pointer to some network packet
 		RakNet::Packet* pack;
@@ -102,12 +102,12 @@ namespace NetworkSystem {
 
 			case ADD_ENTITY:
 				printf("Received add entity packet from server.\n");
-				addEntity(data, transSystem, pack, data.isServer, 0);
+				addEntity(data, pack, data.isServer, 0);
 				break;
 
 			case REMOVE_ENTITY:
 				printf("Received remove entity packet from server.\n");
-				removeEntity(data, transSystem, pack, 0, false, true);
+				removeEntity(data, pack, 0, false, true);
 				break;
 
 			case UPDATE_ENTITY:
@@ -124,23 +124,23 @@ namespace NetworkSystem {
 	}
 
 
-	void NetworkHandler::handleControl(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, MovementSystem::MovementSystem &movSystem, RakNet::Packet* pack)
+	void handleControl(GameData::GameData& data, RakNet::Packet* pack)
 	{
 		// given a packet, call readcontrol
 		ComponentView::userInput contrl;
 		std::string stream = std::string((char*)(pack->data + 1));
 
-		//entt::entity ent = MessagingSystem::readControls(data, transSystem, stream, &contrl);
-		//if (!(ent == entt::null)) {
-			// if readcontrol returns not nullentitiy, call movementsystem.move(component) 
-	//		movSystem.moveEntity(data.m_reg, ent, contrl);	
-	//	}
+		entt::entity ent = MessagingSystem::readControls(data, stream, &contrl);
+		if (!(ent == entt::null)) {
+		//	 if readcontrol returns not nullentitiy, call movementsystem.move(component) 
+			MovementSystem::moveEntity(data.m_reg, ent, contrl);
+		}
 	}
 
 
 
 
-	bool NetworkHandler::clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress)
+	bool clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress)
 	{
 		if (!(peer->Connect(hostAddress, port, 0, 0) == RakNet::CONNECTION_ATTEMPT_STARTED)) {
 			std::cerr << "Connection attempt failed" << std::endl;
@@ -149,7 +149,7 @@ namespace NetworkSystem {
 		return true;
 	}
 
-	void NetworkSystem::NetworkHandler::clientDisconnect(RakNet::RakPeerInterface* peer, const char* hostAddress)
+	void clientDisconnect(RakNet::RakPeerInterface* peer, const char* hostAddress)
 	{
 		peer->CloseConnection(RakNet::SystemAddress(hostAddress), 1);
 		std::cout << "Closing connection to " << RakNet::SystemAddress(hostAddress).ToString() << std::endl;
@@ -158,7 +158,7 @@ namespace NetworkSystem {
 
 
 	// The server recognizes the connection from a client and creates an empty netID  map for that client
-	void NetworkHandler::handleConnection(GameData::GameData& data, RakNet::Packet* pack)
+	void handleConnection(GameData::GameData& data, RakNet::Packet* pack)
 	{
 		// If is a server, the rakAddress is not initialized
 		if (data.isServer) {
@@ -175,28 +175,28 @@ namespace NetworkSystem {
 	}
 
 	// The server recognizes the disconnection from a client and clears all entities related to that client
-	void NetworkHandler::handleDisconnect(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack)
+	void handleDisconnect(GameData::GameData& data, RakNet::Packet* pack)
 	{
 		printf("A client has disconnected. Address: %s \n", pack->systemAddress.ToString());
 		for (auto const& netId : data.clientAddressToEntities[pack->systemAddress]) {
-			data.m_reg.destroy(transSystem.getEntity(data, netId));
-			transSystem.freeID(data, netId); // Free the space for that entity
+			data.m_reg.destroy(TranslationSystem::getEntity(data, netId));
+			TranslationSystem::freeID(data, netId); // Free the space for that entity
 		}
 
 	}
 
-	void NetworkHandler::handleLostConnection(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack) {
+	void handleLostConnection(GameData::GameData& data, RakNet::Packet* pack) {
 		// Currently this had the same behavior as the way we handle disconnection. TBD
 		printf("A client lost the connection. Address: %s \n", pack->systemAddress.ToString());
 		printf("This client has %d entities.\n", data.clientAddressToEntities[pack->systemAddress].size());
 		for (auto const& netId : data.clientAddressToEntities[pack->systemAddress]) {
 			std::cout << "removing entity " << netId << std::endl;
-			data.m_reg.destroy(transSystem.getEntity(data, netId));
-			transSystem.freeID(data, netId); // Free the space for that entity
+			data.m_reg.destroy(TranslationSystem::getEntity(data, netId));
+			TranslationSystem::freeID(data, netId); // Free the space for that entity
 		}
 	}
 
-	void NetworkHandler::addEntity(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, bool isServer, bool responding)
+	void addEntity(GameData::GameData& data, RakNet::Packet* pack, bool isServer, bool responding)
 	{
 		// If is Server: (we dont need to examine the netid/timestamp of the incomming packet. So make a new message object and sendit)
 		if (isServer) {
@@ -205,7 +205,7 @@ namespace NetworkSystem {
 			auto newEntity = RegWrapper::createEntity(data.m_reg, true);			
 
 			// Allocate a new netId for this entity
-			networkID netid = transSystem.createMapping(data, newEntity);
+			networkID netid = TranslationSystem::createMapping(data, newEntity);
 			std::cout << "Registered new entity " << netid << std::endl;
 			
 			// Append into the client entity map
@@ -241,7 +241,7 @@ namespace NetworkSystem {
 
 				// when unpacking input packet, get the netID passed to us
 				// Create a new mapping of netID and entity
-				transSystem.setMapping(data, msg->netid(), newEntity);
+				TranslationSystem::setMapping(data, msg->netid(), newEntity);
 				delete msg;
 			}
 			else {
@@ -264,7 +264,7 @@ namespace NetworkSystem {
 	}
 
 	// TODO:
-	void NetworkHandler::removeEntity(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, networkID remID, bool isServer, bool responding)
+	void removeEntity(GameData::GameData& data, RakNet::Packet* pack, networkID remID, bool isServer, bool responding)
 	{
 		// If is Server:
 		if (isServer) {
@@ -275,9 +275,9 @@ namespace NetworkSystem {
 			std::cout << "Server removing entity " << msg->netid() << std::endl;
 
 			// Remove the given entity from the m_reg
-			if (transSystem.hasMapping(data, msg->netid())) {
+			if (TranslationSystem::hasMapping(data, msg->netid())) {
 				std::cout << "Server removing entity " << msg->netid() << std::endl;
-				data.m_reg.destroy(transSystem.getEntity(data, msg->netid()));
+				data.m_reg.destroy(TranslationSystem::getEntity(data, msg->netid()));
 			}
 			else {
 				return;
@@ -287,7 +287,7 @@ namespace NetworkSystem {
 			data.clientAddressToEntities[pack->systemAddress].remove(msg->netid());
 
 			// Free the netid from the translation system
-			transSystem.freeID(data, msg->netid());
+			TranslationSystem::freeID(data, msg->netid());
 
 			// Write the packet data back to the stream
 			RakNet::BitStream stream = RakNet::BitStream();
@@ -317,15 +317,15 @@ namespace NetworkSystem {
 				ProtoMessaging::AddRemoveEntityMessage* msg = MessagingSystem::readAddRemoveEntity(str);
 
 				// Remove the given entity from the m_reg
-				if (transSystem.hasMapping(data, msg->netid())) {
-					data.m_reg.destroy(transSystem.getEntity(data, msg->netid()));
+				if (TranslationSystem::hasMapping(data, msg->netid())) {
+					data.m_reg.destroy(TranslationSystem::getEntity(data, msg->netid()));
 				}
 				else {
 					return;
 				}
 
 				// Free the netid from the translation system
-				transSystem.freeID(data, msg->netid());
+				TranslationSystem::freeID(data, msg->netid());
 				delete msg;
 			}
 			else {
@@ -348,7 +348,7 @@ namespace NetworkSystem {
 	}
 
 	// 
-	void NetworkHandler::sendClientInput(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack) {
+	void sendClientInput(GameData::GameData& data, RakNet::Packet* pack) {
 		std::cout << "Sending out client input to the server" << std::endl;
 		RakNet::BitStream stream = RakNet::BitStream();
 

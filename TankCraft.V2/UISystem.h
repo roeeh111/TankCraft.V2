@@ -11,25 +11,22 @@
 */
 
 namespace UI {
-	class UISystem {
-	public:
-		void updateUI(GameData::GameData& data);
+	void updateUI(GameData::GameData& data);
 
-		// print out the current game map to console
-		void printUI(GameData::GameData& data);
+	// print out the current game map to console
+	void printUI(GameData::GameData& data);
 
-		// Get input from the user, and set its position component
+	// Get input from the user, and set its position component
 //		void getUserInput(entt::registry& m_reg, entt::entity& clientEntity); // Might need this later, but has been refactored into other methods
 
-		// Add a tank entity to the game
-		void addTank(GameData::GameData& data, std::string clientName_);
+	// Add a tank entity to the game
+	void addTank(GameData::GameData& data, std::string clientName_);
 
-		// Getting keyboard input
-		void getKeyBoardInput(entt::registry& m_reg, entt::entity& clientEntity);
+	// Getting keyboard input
+	void getKeyBoardInput(entt::registry& m_reg, entt::entity& clientEntity);
 
 
-		// Update each ui entity's position in the map
-		void updateMapPositions(GameData::GameData& data);
+	// Update each ui entity's position in the map
+	void updateMapPositions(GameData::GameData& data);
 
-	};
 }

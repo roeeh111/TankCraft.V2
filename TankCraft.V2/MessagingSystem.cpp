@@ -74,7 +74,7 @@ namespace MessagingSystem {
         return msg;
     }
 
-    entt::entity readControls(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, std::string& stream, ComponentView::userInput* ret)
+    entt::entity readControls(GameData::GameData& data, std::string& stream, ComponentView::userInput* ret)
     {
         entt::entity ent;
 
@@ -82,8 +82,8 @@ namespace MessagingSystem {
         msg->ParseFromString(stream);
 
         // if the netid doesnt exist, return nullptr
-        if (transSystem.hasMapping(data, msg->control().netid())) {
-            ent = transSystem.getEntity(data, msg->control().netid());
+        if (TranslationSystem::hasMapping(data, msg->control().netid())) {
+            ent = TranslationSystem::getEntity(data, msg->control().netid());
         }
         else {
             return entt::null;

@@ -4,7 +4,7 @@
 
 
 namespace MovementSystem {
-	void MovementSystem::updateMovement(GameData::GameData& data)
+	void updateMovement(GameData::GameData& data)
 	{
 		// For now, loop over all entities with position and user input
 		// and call moveEntity
@@ -20,7 +20,7 @@ namespace MovementSystem {
 		// The acutal update will happen from the network calling moveEntity
 	}
 
-	void MovementSystem::moveEntity(entt::registry &m_reg, entt::entity &entity, ComponentView::userInput &input) {
+	void moveEntity(entt::registry &m_reg, entt::entity &entity, ComponentView::userInput &input) {
 		auto& points = m_reg.get<ComponentView::position>(entity);
 
 

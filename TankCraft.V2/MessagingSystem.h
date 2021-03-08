@@ -56,7 +56,7 @@ namespace MessagingSystem {
 	ProtoMessaging::AddRemoveEntityMessage* readAddRemoveEntity(std::string &stream);
 
 	// Given a bitstream, read it into a ControlsPacket, verify its integrity and execute the controls
-	bool readControls(RakNet::BitStream& stream);
+	entt::entity readControls(GameData::GameData& data, std::string& stream, ComponentView::userInput* ret);
 
 }
 

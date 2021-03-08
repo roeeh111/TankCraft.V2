@@ -3,7 +3,7 @@
 #include "CreateEntity.h"
 
 namespace TranslationSystem {
-    networkID IDTranslation::createMapping(GameData::GameData& data, entt::entity entityId)
+    networkID createMapping(GameData::GameData& data, entt::entity entityId)
     {
         // Allocate a new id for our entity
         networkID id = allocateID(data.m_reg);
@@ -15,19 +15,19 @@ namespace TranslationSystem {
         return id;
     }
 
-    networkID IDTranslation::setMapping(GameData::GameData& data, networkID netId, entt::entity entityId)
+    networkID setMapping(GameData::GameData& data, networkID netId, entt::entity entityId)
     {
         const auto &flist = getFreelist(data.m_reg);
         data.netToEnttid[netId] = entityId;
         return netId;
     }
 
-    entt::entity IDTranslation::getEntity(GameData::GameData& data, networkID netId)
+    entt::entity getEntity(GameData::GameData& data, networkID netId)
     {
         return data.netToEnttid[netId];
     }
 
-    void IDTranslation::addEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg)
+    void addEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg)
     {
         // Assume the message has been verified, or add verification for udp
 
@@ -38,20 +38,20 @@ namespace TranslationSystem {
 
     }
 
-    void IDTranslation::removeEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg)
+    void removeEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg)
     {
         freeID(data, msg->netid());
     }
 
 
-    bool IDTranslation::hasMapping(GameData::GameData& data, networkID netId)
+    bool hasMapping(GameData::GameData& data, networkID netId)
     {
         const auto& flist = getFreelist(data.m_reg);
         return flist.map[netId];
     }
 
 
-    networkID IDTranslation::allocateID(entt::registry& m_reg)
+    networkID allocateID(entt::registry& m_reg)
     {
         networkID itr;
         // Find a free space in the freelist, and set it as taken
@@ -76,7 +76,7 @@ namespace TranslationSystem {
         return itr;
     }
 
-    FreeListComponent::freelist &IDTranslation::getFreelist(entt::registry& m_reg)
+    FreeListComponent::freelist &getFreelist(entt::registry& m_reg)
     {
         // Fetch all the free list component from the registry
         auto view = m_reg.view<FreeListComponent::freelist>();
@@ -89,7 +89,7 @@ namespace TranslationSystem {
     }
 
 
-    void IDTranslation::freeID(GameData::GameData& data, networkID id)
+    void freeID(GameData::GameData& data, networkID id)
     {
         // Get the freelist
         auto& flist = getFreelist(data.m_reg);

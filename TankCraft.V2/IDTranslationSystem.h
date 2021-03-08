@@ -7,31 +7,27 @@
 
 
 namespace TranslationSystem {
-	class IDTranslation {
-	public:
-		// Set this specific id as free
-		void freeID(GameData::GameData& data, networkID id);
+	// Set this specific id as free
+	void freeID(GameData::GameData& data, networkID id);
 		
-		// Create a mapping of new netid->entityid
-		networkID createMapping(GameData::GameData& data, entt::entity entityId);
+	// Create a mapping of new netid->entityid
+	networkID createMapping(GameData::GameData& data, entt::entity entityId);
 
-		networkID setMapping(GameData::GameData& data, networkID netId, entt::entity entityId);
+	networkID setMapping(GameData::GameData& data, networkID netId, entt::entity entityId);
 
-		void addEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg);
+	void addEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg);
 
-		void removeEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg);
+	void removeEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg);
 
-		// Get the entity associated with the netid
-		entt::entity getEntity(GameData::GameData& data, networkID netId);
+	// Get the entity associated with the netid
+	entt::entity getEntity(GameData::GameData& data, networkID netId);
 
-		// Whether the system has a mapping for this netId
-		bool hasMapping(GameData::GameData& data, networkID netId);
+	// Whether the system has a mapping for this netId
+	bool hasMapping(GameData::GameData& data, networkID netId);
 
-	private:
-		networkID allocateID(entt::registry& m_reg);
-		FreeListComponent::freelist &getFreelist(entt::registry& m_reg);
+	networkID allocateID(entt::registry& m_reg);
+	FreeListComponent::freelist &getFreelist(entt::registry& m_reg);
 
-	};
 
 }
 

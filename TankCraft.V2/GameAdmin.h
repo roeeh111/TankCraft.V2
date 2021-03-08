@@ -39,12 +39,6 @@ namespace GameAdmin {
 		// Data is stored in the component
 		GameData::GameData data;
 
-		// Systems
-		UI::UISystem uiSystem;
-		TranslationSystem::IDTranslation translationSystem;
-		NetworkSystem::NetworkHandler netSystem;
-		MovementSystem::MovementSystem movSystem;
-
 		// time stamp for testing purposes
 		std::chrono::seconds test; 
 

@@ -22,43 +22,39 @@
 
 
 namespace NetworkSystem {
-	class NetworkHandler {
-	public:
+	// TODO: may need a refrence to the m_reg if its not global
+	// Go through all incoming packets to the server, and dispatch game changes accordingly
+	// Broadcast the results to all clients
+	void updateServer(GameData::GameData& data);
 
-		// TODO: may need a refrence to the m_reg if its not global
-		// Go through all incoming packets to the server, and dispatch game changes accordingly
-		// Broadcast the results to all clients
-		void updateServer(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem);
+	// Go through all incomming game updates, and update the client's game accordingly
+	// In addition, go through all controls inputted, and send them up to the server
+	void updateClient(GameData::GameData& data);
 
-		// Go through all incomming game updates, and update the client's game accordingly
-		// In addition, go through all controls inputted, and send them up to the server
-		void updateClient(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem);
+	// Connect to the given server address as a client
+	bool clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress);
 
-		// Connect to the given server address as a client
-		bool clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress);
+	// Disconnect from the given server address as a client
+	void clientDisconnect(RakNet::RakPeerInterface* peer, const char* hostAddress);
 
-		// Disconnect from the given server address as a client
-		void clientDisconnect(RakNet::RakPeerInterface* peer, const char* hostAddress);
+	// add an entity to the server or client
+	void addEntity(GameData::GameData& data, RakNet::Packet* pack, bool isServer, bool responding);
 
-		// add an entity to the server or client
-		void addEntity(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, bool isServer, bool responding);
+	void removeEntity(GameData::GameData& data, RakNet::Packet* pack, networkID remID, bool isServer, bool responding);
 
-		void removeEntity(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack, networkID remID, bool isServer, bool responding);
+	// Server handling an incomming connecting client
+	// add a new connection
+	void handleConnection(GameData::GameData& data, RakNet::Packet* pack);
 
-		// Server handling an incomming connecting client
-		// add a new connection
-		void handleConnection(GameData::GameData& data, RakNet::Packet* pack);
+	// Server handling a disconnecting client
+	// Delete entity from the registry and clean up metadata
+	void handleDisconnect(GameData::GameData& data,  RakNet::Packet* pack);
 
-		// Server handling a disconnecting client
-		// Delete entity from the registry and clean up metadata
-		void handleDisconnect(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack);
+	// Server handling a lost client
+	// TODO: Figure out the behavior of this function
+	void handleLostConnection(GameData::GameData& data, RakNet::Packet* pack);
 
-		// Server handling a lost client
-		// TODO: Figure out the behavior of this function
-		void handleLostConnection(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack);
+	void sendClientInput(GameData::GameData& data, RakNet::Packet* pack);
 
-		void sendClientInput(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack);
-
-		void handleControl(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, MovementSystem::MovementSystem& movSystem, RakNet::Packet* pack);
-	};
+	void handleControl(GameData::GameData& data, RakNet::Packet* pack);
 }
