@@ -74,7 +74,7 @@ namespace MessagingSystem {
         return msg;
     }
 
-    entt::entity readControls(SceneComponent::SceneComponent& data, TranslationSystem::IDTranslation& transSystem, std::string& stream, ComponentView::userInput* ret)
+    entt::entity readControls(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, std::string& stream, ComponentView::userInput* ret)
     {
         entt::entity ent;
 

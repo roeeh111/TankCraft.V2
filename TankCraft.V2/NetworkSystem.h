@@ -6,6 +6,7 @@
 #include "GameData.h"
 #include "IDTranslationSystem.h"
 #include "IDTranslationComponent.h"
+#include "MovementSystem.h"
 
 // TODO: add multithreading to the server
 
@@ -57,5 +58,7 @@ namespace NetworkSystem {
 		void handleLostConnection(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack);
 
 		void sendClientInput(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, RakNet::Packet* pack);
+
+		void handleControl(GameData::GameData& data, TranslationSystem::IDTranslation& transSystem, MovementSystem::MovementSystem& movSystem, RakNet::Packet* pack);
 	};
 }
