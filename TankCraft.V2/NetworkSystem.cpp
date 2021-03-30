@@ -63,6 +63,8 @@ namespace NetworkSystem {
 				break;
 
 			case CONTROL:
+				printf("Received control packet from client, inputting controls.\n");
+				handleControl(data, pack);
 				break;
 
 			default:
@@ -135,6 +137,18 @@ namespace NetworkSystem {
 		//	 if readcontrol returns not nullentitiy, call movementsystem.move(component) 
 			MovementSystem::moveEntity(data.m_reg, ent, contrl);
 		}
+	}
+
+	void sendControl(GameData::GameData& data, ComponentView::userInput& usrInput, networkID netid) {
+		RakNet::BitStream stream = RakNet::BitStream();
+
+		MessagingSystem::writeControls(stream, usrInput, netid);
+		data.rpi->Send(&stream,
+			HIGH_PRIORITY,
+			RELIABLE_ORDERED,
+			0,
+			data.rakAddress,
+			false);
 	}
 
 

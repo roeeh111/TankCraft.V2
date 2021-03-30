@@ -18,7 +18,7 @@
 *
 */
 
-
+/*
 
 
 namespace Packets {
@@ -145,7 +145,7 @@ namespace Packets {
 
 }
 
-
+*/
 
 /*
 * Another method with msgpack:

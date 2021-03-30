@@ -305,6 +305,7 @@
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\WSAStartupSingleton.h" />
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\XBox360Includes.h" />
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h" />
+    <ClInclude Include="BaseComponent.h" />
     <ClInclude Include="CreateEntity.h" />
     <ClInclude Include="FreeListComponent.h" />
     <ClInclude Include="MovementSystem.h" />
@@ -431,6 +432,7 @@
     <ClCompile Include="..\..\..\..\..\..\RakNet\Source\VitaIncludes.cpp" />
     <ClCompile Include="..\..\..\..\..\..\RakNet\Source\WSAStartupSingleton.cpp" />
     <ClCompile Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.cpp" />
+    <ClCompile Include="Components.cpp" />
     <ClCompile Include="CreateEntity.cpp" />
     <ClCompile Include="IDTranslationSystem.cpp" />
     <ClCompile Include="main.cpp" />
@@ -444,6 +446,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\..\..\..\RakNet\Source\CMakeLists.txt" />
+    <Text Include="BuildSteps.txt" />
+    <Text Include="Presentation.txt" />
+    <Text Include="TODOS.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\..\RakNet\Source\RakNet.vcproj" />

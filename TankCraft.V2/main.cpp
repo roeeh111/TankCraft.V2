@@ -8,39 +8,33 @@
 void playSingleClient();
 void playMultiplyerClient();
 void testSerialization();
-void testPacket();
 
-// TODO: add replication
+// (add addition to update queue, and flush of update queue)
 
-// TODO: add remove/update entity in networking
+// TODO: add login process, where client sends over to add an entity, then updates that entity with its username
 
-// TODO: fix bugs in user input system 
+// TODO: add component change -> addition of component to update map system (start by hard coding in the movement and scene systems)
 
+// TODO: add initialization of netid->component list in data map somewhere in the code (probably on entity creation)
+
+// TODO: add control input in networking (add to the update list on change)
+
+// TODO: in Id translation system, set that only the server creates a freelist. (need to change all the get,set methods so that a client doesnt access the freelist)
+
+// TODO: fix bugs in input system 
+
+// TODO: add replication (kind of done by hardcoding)
+
+//  NOTE: if we settle on protobuf as our replication library, we can change all game components to be protobuf components
+//        Right now, keep them seperate so we can keep a layer seperation between protobuf serialization and the rest of our system.
+//        In the case that we want to change to another library.
 
 int main(void)
 {
     //playSingleClient();
-    playMultiplyerClient();
-    //testSerialization();
+    //playMultiplyerClient();
+    testSerialization();
     return 0;
-}
-
-// updates field is correct
-void testPacket() {
-    networkID s = 5;
-    auto stream = std::stringstream();
-    Packets::UpdatePacket pack = Packets::UpdatePacket(s);
-    ComponentView::userInput in = ComponentView::userInput();
-    in.up = 1;
-    in.down = 1;
-    in.left = 0;
-    in.right = 0;
-
-  //  pack.write(stream);
-
-    auto res = std::stringstream();
-    pack.read(res);
-
 }
 
 
@@ -77,6 +71,10 @@ void playMultiplyerClient()
 
 
 void testSerialization() {
-    ProtoTests::testAddEntity();
-    ProtoTests::testUpdateEntity();
+    //ProtoTests::testAddEntity();
+    //ProtoTests::testControl();
+    //ProtoTests::testUpdateEntity();
+    GameAdmin::TanksScene scene = GameAdmin::TanksScene(false, 1);
+
+    ProtoTests::testGameUpdate(scene.data);
 }

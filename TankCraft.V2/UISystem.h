@@ -23,7 +23,7 @@ namespace UI {
 	void addTank(GameData::GameData& data, std::string clientName_);
 
 	// Getting keyboard input
-	void getKeyBoardInput(entt::registry& m_reg, entt::entity& clientEntity);
+	void getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity);
 
 
 	// Update each ui entity's position in the map

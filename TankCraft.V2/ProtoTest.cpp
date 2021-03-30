@@ -1,6 +1,25 @@
 #include "ProtoTest.h"
+#include "MessagingSystem.h"
 
 namespace ProtoTests {
+
+	void testGameUpdate(GameData::GameData& data) {
+		data.updateMap[0] =  std::list<baseComponent>();
+
+		auto pos = ComponentView::position();
+		pos.curx = 0;
+		pos.cury = 1;
+		pos.prevx = 2;
+		pos.prevy = 3;
+		data.updateMap[0].push_back(pos);
+
+
+
+		std::string str = MessagingSystem::writeGameUpdate(data.updateMap);
+		MessagingSystem::readGameUpdate(data, str);
+	}
+
+
 
 	void testAddEntity() {
 		ProtoMessaging::AddRemoveEntityMessage armess = ProtoMessaging::AddRemoveEntityMessage();
@@ -8,6 +27,7 @@ namespace ProtoTests {
 		armess.set_timestamp(69);
 
 		std::string str = armess.SerializeAsString();
+		std::cout << "Size of add/remove entity message for 8 bytes = " << str.size() << std::endl;
 
 		// Assume we got the first bit of the bitstream
 		ProtoMessaging::AddRemoveEntityMessage armess2 = ProtoMessaging::AddRemoveEntityMessage();
@@ -19,6 +39,20 @@ namespace ProtoTests {
 
 	void testControl() {
 		// eh, i dont need to write a test, addentity test proves that it works enough
+		auto contmess = ProtoMessaging::ControlMessage();
+		auto contrcomp = new ProtoMessaging::ControlComponent();
+		contmess.set_timestamp(69);
+
+		contrcomp->set_down(true);
+		contrcomp->set_up(true);
+		contrcomp->set_up(true);
+		contrcomp->set_up(true);
+		contmess.set_allocated_control(contrcomp);
+
+		std::string str = contmess.SerializeAsString();
+		std::cout << "Size of control message for 8 bytes = " << str.size() << std::endl;
+
+
 	}
 
 	void testUpdateEntity() {
@@ -42,6 +76,8 @@ namespace ProtoTests {
 
 
 		std::string str = udmess.SerializeAsString();
+		std::cout << "Size of update entity message for 32 bytes = " << str.size() << std::endl;
+
 
 		// Assume that we passed the id for an update entity, and know that we have an update entitiy
 		ProtoMessaging::UpdateEntityMessage *udmess2 = new ProtoMessaging::UpdateEntityMessage();

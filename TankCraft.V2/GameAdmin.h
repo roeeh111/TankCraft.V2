@@ -44,8 +44,12 @@ namespace GameAdmin {
 
 	private:
 		void initNetworkSystem(bool isServer_, uint32_t maxClients);
-		void initIDTranslationSystem();
+		void initIDTranslationSystem(bool isServer);
 		void initUISystem();
 		void initMovementSystem();
+		void initMessageSystem();
+
+		void clientLogin();
+		void serverLogin(uint32_t maxClients);
 	};
 }

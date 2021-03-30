@@ -6,4 +6,5 @@ namespace ProtoTests {
 	void testAddEntity();
 	void testControl();
 	void testUpdateEntity();
+	void testGameUpdate(GameData::GameData& data);
 }

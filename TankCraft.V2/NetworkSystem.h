@@ -56,5 +56,9 @@ namespace NetworkSystem {
 
 	void sendClientInput(GameData::GameData& data, RakNet::Packet* pack);
 
+	// Handle an incoming control packet
 	void handleControl(GameData::GameData& data, RakNet::Packet* pack);
+
+	// send a control packet to the server
+	void sendControl(GameData::GameData& data, ComponentView::userInput& usrInput, networkID netid);
 }

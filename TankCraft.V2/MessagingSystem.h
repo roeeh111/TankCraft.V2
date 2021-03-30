@@ -4,7 +4,9 @@
 #include "BitStream.h"
 #include "Tanks.pb.h"
 #include "IDTranslationComponent.h"
+#include "BaseComponent.h"
 
+#define FIRST_COMPONENT_IN_UPDATE 2
 
 /*
 *  System for creating, serializing (maybe sending?) network messages
@@ -36,7 +38,7 @@ To pack and send data:
 namespace MessagingSystem {
 
 	// given a bitstream and the ToUpdate map, write a gameupdate packet to the bitstream
-	void writeGameUpdate(RakNet::BitStream &stream);
+	void writeGameUpdate(RakNet::BitStream &stream, std::map<networkID, std::list<baseComponent>>& updateMap); // add refrence to list of components to update
 
 	// Given a bitstream and a netid, write a addEntity packet to the bitstream
 	void writeAddEntity(RakNet::BitStream& stream, networkID netid);
@@ -45,11 +47,11 @@ namespace MessagingSystem {
 	void writeRemoveEntity(RakNet::BitStream& stream, networkID netid);
 
 	// Given a bitstream and a controls component, write a controlsPacket to the bitstream
-	void writeControls(RakNet::BitStream& stream, ComponentView::userInput control);
+	void writeControls(RakNet::BitStream& stream, ComponentView::userInput control, networkID netid);
 
 	// Given a bitstream, read it into a GameUpdatePacket, verify its integrity and do the actual game updates
 	// (game updates can be handled by another system)
-	void readGameUpdate(RakNet::BitStream& stream);
+	void readGameUpdate(GameData::GameData& data, std::string& stream);
 
 	// Given a bitstream, read it into a addRemoveEntityPacket, verify its integrity and return the message
 	// (entity addition can be handled by another system)
@@ -57,6 +59,18 @@ namespace MessagingSystem {
 
 	// Given a bitstream, read it into a ControlsPacket, verify its integrity and execute the controls
 	entt::entity readControls(GameData::GameData& data, std::string& stream, ComponentView::userInput* ret);
+
+
+	/*
+	* Functions to read a protobuf component into a game component (TBH, WE CAN JUST USE PROTOBUF COMPONENTS IN THE GAME....)
+	*/
+	void readPosComp(GameData::GameData& data, ProtoMessaging::PositionComponent& comp);
+	void readObjComp(GameData::GameData& data, ProtoMessaging::MapObjectComponent& comp);
+	void readNameComp(GameData::GameData& data, ProtoMessaging::ClientNameComponent& comp);
+
+
+	// Debug only
+	std::string writeGameUpdate(std::map<networkID, std::list<baseComponent>> & updateMap);
 
 }
 

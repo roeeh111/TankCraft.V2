@@ -1,0 +1,5 @@
+
+1) Install Raknet
+2) Install Protobuf
+3) In Raknet message types, add an ADD_ENTITY and REMOVE_ENTITY and CONTROL and UPDATE_ENTITY in the message enum
+4) remove any msgpack dependancies (honestly tho, do this before)

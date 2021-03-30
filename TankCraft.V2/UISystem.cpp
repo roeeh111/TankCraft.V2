@@ -1,5 +1,6 @@
 #include "UISystem.h"
 #include "NetworkSystem.h"
+#include "IDTranslationSystem.h"
 #include "Components.h"
 #include "CreateEntity.h"
 
@@ -21,12 +22,13 @@ Server responds with a position component for the entity, client sets the new po
 namespace UI {
 
 	//TODO: Take out the registry wrting and call network system's add entity function
+	// Can make this a part of the login system!!!!
 	void addTank(GameData::GameData& data, std::string clientName_)
 	{
 	//	auto clientEntity = data.m_reg.create(); 
-		auto clientEntity = RegWrapper::createEntity(data.m_reg, true);
+		auto clientEntity = RegWrapper::createEntity(data.m_reg, true);		// TODO: add this entity to the update queue
 
-		// Add the components to the the registry
+		// Add the components to the the registry							// TODO: add these updates to the update queue
 		data.m_reg.emplace<ComponentView::mapObject>(clientEntity);
 		data.m_reg.emplace<ComponentView::position>(clientEntity, 1);
 		data.m_reg.emplace<ComponentView::score>(clientEntity);
@@ -38,15 +40,16 @@ namespace UI {
 
 	void updateUI(GameData::GameData& data)
 	{
-		/*
-		// get all elements that take user input
-		auto view = data.m_reg.view<ComponentView::userInput>();
-		for (auto entity : view) {
-			// Get the user input for our object
-			getKeyBoardInput(data.m_reg, entity);
-			//getUserInput(data.m_reg, entity);
+		if (!data.isServer) {
+			// get all elements that take user input
+			auto view = data.m_reg.view<ComponentView::userInput>();
+			for (auto entity : view) {
+				// Get the user input for our object
+				getKeyBoardInput(data, entity);
+				//getUserInput(data.m_reg, entity);
+			}
 		}
-		*/
+		
 		// update the map
 		updateMapPositions(data);
 	}
@@ -76,7 +79,7 @@ namespace UI {
 	void printUI(GameData::GameData& data)
 	{
 		// Clear the current screen
-		system("CLS");
+		//system("CLS");
 
 		// Print out whatever is in the map
 		std::cout << std::endl;
@@ -96,13 +99,13 @@ namespace UI {
 	}
 
 	
-	void getKeyBoardInput(entt::registry& m_reg, entt::entity& clientEntity)
+	void getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity)
 	{
 		char input;
 		std::cin >> input;
 
 		// Get the userInput component for this entity
-		ComponentView::userInput& usrInput = m_reg.get<ComponentView::userInput>(clientEntity);
+		ComponentView::userInput& usrInput = data.m_reg.get<ComponentView::userInput>(clientEntity);
 
 		usrInput.dirty = 1;
 		// set the user input values depending on what we got
@@ -121,8 +124,14 @@ namespace UI {
 		else {
 			usrInput.dirty = 0;
 		}
+
+		/* TODO:																		(need a map from entity->netid for this to be quick)
+		* For now, send the control to the user exactly as we inputed it.
+		* For later versions, append it to a tochange queue
+		*/
+		//NetworkSystem::sendControl(data, usrInput, );
+
 	}
-	
 
 }
 

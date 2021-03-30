@@ -1,0 +1,21 @@
+
+To read from packet: 
+- we have only a packet/protobuffer
+- loop through all components (from 0 to components.count/size)
+- for each component call read(m_reg, protoComponent, netid)
+	(reads the value in the protocomponent into the entity's component field (should also validate that that entity exists))
+
+To write to a packet:
+	-once you edit some component, if it is networked, add it to the update map (update map flush implemented)
+	-implement networking side of process
+
+TODO: make adding to the update map signal based, on change of the component struct, if its networked, add the change to the update map
+TODO: implement doing this over the network
+
+
+How were going to add components/entities to the update map
+1) add locks to each component that is going to be networked
+2) on update, lock that component, then do the update
+3) after update, unlock that component, (unlock function will signal to a listener to add that component to the update queue)
+4) listener will be some thread/function that waits for people to signal it
+5) on component creation, add that the thread/function will be listening for its signal?

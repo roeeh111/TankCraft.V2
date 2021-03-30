@@ -537,6 +537,9 @@
     <ClInclude Include="GameData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BaseComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -899,10 +902,22 @@
     <ClCompile Include="ProtoTest.cpp">
       <Filter>Header Files\Tests</Filter>
     </ClCompile>
+    <ClCompile Include="Components.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\..\..\..\RakNet\Source\CMakeLists.txt">
       <Filter>RakNet</Filter>
+    </Text>
+    <Text Include="Presentation.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="BuildSteps.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="TODOS.txt">
+      <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

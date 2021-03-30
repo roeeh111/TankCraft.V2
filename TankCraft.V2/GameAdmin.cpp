@@ -14,15 +14,15 @@ namespace GameAdmin {
 
 		if (data.isServer) {
 			NetworkSystem::updateServer(data);
+		//	UI::updateUI(data);
+		//	UI::printUI(data);
 		}
 		else {
 			NetworkSystem::updateClient(data);
-			NetworkSystem::addEntity(data, nullptr, 0, 0);
-			Sleep(5000); // I need to add this pause so that the client sends the packet once every 5 seconds
-
-			NetworkSystem::removeEntity(data, nullptr, 0, false, false);
-
-
+			if (data.first) {
+				NetworkSystem::addEntity(data, nullptr, 0, 0);
+				data.first = false;
+			}
 
 			UI::updateUI(data);
 			MovementSystem::updateMovement(data);
@@ -31,29 +31,51 @@ namespace GameAdmin {
 		
 	}
 
+	void TanksScene::clientLogin()
+	{
+		initUISystem();
+		initNetworkSystem(data.isServer, 1);
+		initIDTranslationSystem(false); // TODO: change this 
+		initMovementSystem();
+
+		// Started up on socket, prompt the user to pass in a username
+		std::string uinput;
+		std::cout << "Please enter a username:" << std::endl;
+		std::cin >> uinput;
+
+		// create a new tank entity with that username, call network add entity and update entity (or put on update queue)
+		UI::addTank(data, uinput);
+	}
+
+	void TanksScene::serverLogin(uint32_t maxClients) {
+		data.clientAddressToEntities = std::map<RakNet::SystemAddress, std::list<networkID>>();
+		initNetworkSystem(data.isServer, maxClients);
+		initIDTranslationSystem(true); // TODO: change this 
+		initMovementSystem();
+	}
 
 	TanksScene::TanksScene(bool isServer_, uint32_t maxClients)
 	{
 		// Data
 		data = GameData::GameData();
+		data.first = true;
 
+		// for debug
 		test = std::chrono::duration_cast<std::chrono::seconds>(
 			std::chrono::system_clock::now().time_since_epoch()
 			);
 
 		data.isServer = isServer_;
+
+
 		if (!isServer_) {
-			initUISystem();
 			std::cout << "Starting client" << std::endl;
+			clientLogin();
 		}
 		else {
 			std::cout << "Starting Server" << std::endl;
-			data.clientAddressToEntities = std::map<RakNet::SystemAddress, std::list<networkID>>();
+			serverLogin(maxClients);
 		}
-
-		initNetworkSystem(isServer_, maxClients);
-		initIDTranslationSystem();
-		initMovementSystem();
 	}
 
 	TanksScene::~TanksScene()
@@ -67,6 +89,7 @@ namespace GameAdmin {
 	void TanksScene::initUISystem() {
 		// start by filling the matrix with blank dots
 		data.map = std::vector<std::vector<char>>();
+
 
 		//Grow rows by m
 		data.map.resize(HEIGHT);
@@ -120,12 +143,12 @@ namespace GameAdmin {
 		}
 	}
 
-	void TanksScene::initIDTranslationSystem()
+	void TanksScene::initIDTranslationSystem(bool isServer) // right now, both the client and the server have a freelist entity, do they need that?
 	{
 		// Initialize our translation system
 		data.netToEnttid = std::map<networkID, entt::entity>();
 		//auto freeListEntity = data.m_reg.create();		
-		auto freeListEntity = RegWrapper::createEntity(data.m_reg, false);
+		auto freeListEntity = RegWrapper::createEntity(data.m_reg, false);			// Only other time an entity is created, 
 
 
 		// Add the components to the the registry
@@ -135,5 +158,13 @@ namespace GameAdmin {
 	void TanksScene::initMovementSystem()
 	{
 		// Empty function, nothing to do yet
+	}
+
+	// Initialize the outgoing game update message
+	void TanksScene::initMessageSystem()
+	{
+		// initialize the update map
+		data.updateMap = std::map<networkID, std::list<baseComponent>>();
+
 	}
 }

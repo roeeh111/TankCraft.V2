@@ -1,0 +1,38 @@
+
+
+class Pig {
+	position pos;
+	velocity vel;
+	3dmesh mesh;
+};
+
+class PigWithHat : Pig {
+	Hat h;
+}
+
+class PigWithKnife : Pig {
+	Weapon knife;
+}
+
+class PigWithHatAndKnife : ??? {
+	Hat h;
+	Weapon knife;
+}
+
+class PigWithHatAndKnifeThatFlies : PigWithHatAndKnife {
+	cape c;
+}
+
+
+
+
+Components:								Systems:
+
+Position								UI System
+Score									Network System
+ClientName								Movement System
+Health									Translation System
+WeaponDamage							Reflection System
+UserInput
+MapObject
+IsNetworked
