@@ -33,7 +33,7 @@ namespace GameData {
 		std::map<RakNet::SystemAddress, std::list<networkID>> clientAddressToEntities;
 
 		// The map of entities to components to update
-		std::map<networkID, std::list<baseComponent>> updateMap; // DO i need this???
+		std::map<networkID, std::list<baseComponent*>> updateMap; // DO i need this???
 
 		// the address were connected to
 	//	const char* address;

@@ -38,7 +38,7 @@ To pack and send data:
 namespace MessagingSystem {
 
 	// given a bitstream and the ToUpdate map, write a gameupdate packet to the bitstream
-	void writeGameUpdate(RakNet::BitStream &stream, std::map<networkID, std::list<baseComponent>>& updateMap); // add refrence to list of components to update
+	void writeGameUpdate(RakNet::BitStream &stream, std::map<networkID, std::list<baseComponent*>>& updateMap); // add refrence to list of components to update
 
 	// Given a bitstream and a netid, write a addEntity packet to the bitstream
 	void writeAddEntity(RakNet::BitStream& stream, networkID netid);
@@ -64,13 +64,13 @@ namespace MessagingSystem {
 	/*
 	* Functions to read a protobuf component into a game component (TBH, WE CAN JUST USE PROTOBUF COMPONENTS IN THE GAME....)
 	*/
-	void readPosComp(GameData::GameData& data, ProtoMessaging::PositionComponent& comp);
-	void readObjComp(GameData::GameData& data, ProtoMessaging::MapObjectComponent& comp);
-	void readNameComp(GameData::GameData& data, ProtoMessaging::ClientNameComponent& comp);
+	void readPosComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index);
+	void readObjComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index);
+	void readNameComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index);
 
 
 	// Debug only
-	std::string writeGameUpdate(std::map<networkID, std::list<baseComponent>> & updateMap);
+	std::string writeGameUpdate(std::map<networkID, std::list<baseComponent*>> & updateMap);
 
 }
 

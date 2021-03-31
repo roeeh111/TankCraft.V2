@@ -38,7 +38,7 @@ namespace ComponentView {
 		bool dirty;
 		userInput_() { up = 0; down = 0; left = 0; right = 0; dirty = 0; }
 
-		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid);
+		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 	} userInput;
 
 
@@ -58,7 +58,7 @@ namespace ComponentView {
 			prevx = 0;
 			prevy = 0;
 		}
-		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid);
+		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 	} position;
 
 
@@ -66,7 +66,7 @@ namespace ComponentView {
 		char mapChar;
 		mapObject_() { mapChar = 'X'; }
 		mapObject_(char newChar) { mapChar = newChar; }
-		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid);
+		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 	} mapObject;
 
 	typedef struct score_ : baseComponent {
@@ -83,14 +83,14 @@ namespace ComponentView {
 			}
 			return *this;
 		}
-		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid);
+		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 	} score;
 
 	typedef struct clientName_ : baseComponent {
 		std::string name;
 		clientName_() { name = ""; }
 		clientName_(std::string name_) { name = name_; }
-		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid);
+		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 	} clientName;
 
 
@@ -104,7 +104,7 @@ namespace ComponentView {
 		int32_t damage;
 		damageDone_() { damage = 0; }
 		damageDone_(int32_t dm) { damage = dm; }
-		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid);
+		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 	} damageDone;
 
 	// To signify if the entity is networked.
@@ -113,6 +113,6 @@ namespace ComponentView {
 		//std::list<component&> components; // List of components that are networked		// TODO: may need to pair the component with a type
 		//long clientID;
 		bool isNetwoked; // If the entity should be networked
-		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid);
+		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 	} networked;
 }

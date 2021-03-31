@@ -74,7 +74,7 @@ void testSerialization() {
     //ProtoTests::testAddEntity();
     //ProtoTests::testControl();
     //ProtoTests::testUpdateEntity();
-    GameAdmin::TanksScene scene = GameAdmin::TanksScene(false, 1);
+    //GameAdmin::TanksScene scene = GameAdmin::TanksScene(false, 1);
 
-    ProtoTests::testGameUpdate(scene.data);
+    ProtoTests::testGameUpdate();
 }

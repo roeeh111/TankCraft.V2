@@ -164,7 +164,7 @@ namespace GameAdmin {
 	void TanksScene::initMessageSystem()
 	{
 		// initialize the update map
-		data.updateMap = std::map<networkID, std::list<baseComponent>>();
+		data.updateMap = std::map<networkID, std::list<baseComponent*>>();
 
 	}
 }
