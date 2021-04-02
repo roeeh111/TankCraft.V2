@@ -44,10 +44,10 @@ namespace MessagingSystem {
 
         // The control component, fill its values
         auto controlComp = new ProtoMessaging::ControlComponent();
-        controlComp->set_up(control.up);
-        controlComp->set_down(control.down);
-        controlComp->set_left(control.left);
-        controlComp->set_right(control.right);
+        controlComp->set_up(control.up());
+        controlComp->set_down(control.down());
+        controlComp->set_left(control.left());
+        controlComp->set_right(control.right());
         controlComp->set_netid(netid);
 
         msg.set_allocated_control(controlComp);
@@ -217,10 +217,10 @@ namespace MessagingSystem {
         }
 
         // copy over the values
-        ret->down = msg->control().down();
-        ret->up = msg->control().up();
-        ret->left = msg->control().left();
-        ret->right = msg->control().right();
+        ret->setDown(msg->control().down());
+        ret->setUp(msg->control().up());
+        ret->setLeft(msg->control().left());
+        ret->setRight(msg->control().right());
 
 
         delete msg;
@@ -272,7 +272,7 @@ namespace MessagingSystem {
         const google::protobuf::Descriptor* objectdescriptor = comp.GetDescriptor();
         const google::protobuf::FieldDescriptor* mapchar_field = objectdescriptor->FindFieldByName("mapChar");
 
-        obj.mapChar = comp.mapchar()[0];
+        obj.setMapChar(comp.mapchar()[0]);
     }
 
     void readNameComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index)
@@ -285,7 +285,7 @@ namespace MessagingSystem {
         const google::protobuf::Descriptor* namedescriptor = comp.GetDescriptor();
         const google::protobuf::FieldDescriptor* name_field = namedescriptor->FindFieldByName("name");
 
-        name.name = comp.name();
+        name.setName(comp.name());
     }
 
 }

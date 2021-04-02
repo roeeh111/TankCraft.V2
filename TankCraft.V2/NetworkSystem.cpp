@@ -3,7 +3,7 @@
 #include "Packet.h"
 #include "IDTranslationSystem.h"
 #include "BitStream.h"
-#include "CreateEntity.h"
+#include "RegWrappers.h"
 #include "MessagingSystem.h"
 #include "MovementSystem.h"
 

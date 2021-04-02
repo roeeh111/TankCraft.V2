@@ -1,6 +1,6 @@
 #include "IDTranslationSystem.h"
 #include "Components.h"
-#include "CreateEntity.h"
+#include "RegWrappers.h"
 
 namespace TranslationSystem {
     networkID createMapping(GameData::GameData& data, entt::entity entityId)

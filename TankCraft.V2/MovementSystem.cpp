@@ -13,8 +13,6 @@ namespace MovementSystem {
 			moveEntity(data.m_reg, entity, data.m_reg.get<ComponentView::userInput>(entity));
 		}
 
-		
-
 		// TODO:
 		// Networked version: if user input is dirty, signal networking system to send control packet
 		// The acutal update will happen from the network calling moveEntity
@@ -24,43 +22,46 @@ namespace MovementSystem {
 		auto& points = m_reg.get<ComponentView::position>(entity);
 
 
-		points.prevx = points.curx;
-		points.prevy = points.cury;
+		points.setPrevx(points.curx());
+		points.setPrevy(points.cury());
 
-		if (input.left) {
-			if (points.curx == 0) {
-				points.curx = WIDTH - 1;
+		if (input.left()) {
+			if (points.curx() <= 0) {
+				points.setCurx(WIDTH - 1);
 			}
 			else {
-				points.curx--;
+				points.setCurx(points.curx() - 1);
 			}
 		}
-		else if (input.down) {
-			if (points.cury == HEIGHT - 1) {
-				points.cury = 0;
+		else if (input.down()) {
+			if (points.cury() >= HEIGHT - 1) {
+				points.setCury(0);
 			}
 			else {
-				points.cury++;
+				points.setCury(points.cury() + 1);
+
 			}
 		}
-		else if (input.right) {
-			if (points.curx == WIDTH - 1) {
-				points.curx = 0;
+		else if (input.right()) {
+			if (points.curx() >= WIDTH - 1) {
+				points.setCurx(0);
 			}
 			else {
-				points.curx++;
+				points.setCurx(points.curx() + 1);
 			}
 		}
-		else if (input.up) {
-			if (points.cury == 0) {
-				points.cury = HEIGHT - 1;
+		else if (input.up()) {
+			if (points.cury() <= 0) {
+				points.setCury(HEIGHT - 1);
+
 			}
 			else {
-				points.cury--;
+				points.setCury(points.cury() - 1);
+
 			}
 		}
 
 		// Clear the input 
-		input.dirty = 0; input.left = 0; input.right = 0; input.up = 0; input.right = 0;
+		input.dirty = 0; input.setLeft(0); input.setRight(0); input.setUp(0); input.setRight(0);
 	}
 }

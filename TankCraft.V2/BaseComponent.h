@@ -4,11 +4,10 @@
 
 typedef struct baseComponent_ {
 	//ComponentID type;
-	//uint16_t size;		// Limit the size of a component to a uint16, its pretty big, can be changed
-	baseComponent_() = default;
+	baseComponent_() { dirty = false; }
 	virtual ~baseComponent_() = default;
 	virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) { std::cout << "base write " << std::endl; }
+	bool getDirty() { return dirty; }
 	//virtual void read(ProtoMessaging::UpdateEntityMessage& message, networkID netid, int index) {}
-
-
+	bool dirty;
 } baseComponent;

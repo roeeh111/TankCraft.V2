@@ -306,7 +306,7 @@
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\XBox360Includes.h" />
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h" />
     <ClInclude Include="BaseComponent.h" />
-    <ClInclude Include="CreateEntity.h" />
+    <ClInclude Include="RegWrappers.h" />
     <ClInclude Include="FreeListComponent.h" />
     <ClInclude Include="MovementSystem.h" />
     <ClInclude Include="IDTranslationComponent.h" />

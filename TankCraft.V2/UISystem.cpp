@@ -2,7 +2,7 @@
 #include "NetworkSystem.h"
 #include "IDTranslationSystem.h"
 #include "Components.h"
-#include "CreateEntity.h"
+#include "RegWrappers.h"
 
 /*
 
@@ -63,16 +63,16 @@ namespace UI {
 			auto& disp = view.get<ComponentView::mapObject>(entity);
 
 			// If weve met a cookie, eat it, add it to points, and remove it from the map
-			if (data.map[pos.cury][pos.curx] == 'c') {
+			if (data.map[pos.cury()][pos.curx()] == 'c') {
 				// if we have a points component, increment it
 				if (data.m_reg.has<ComponentView::score>(entity)) {
 					// Get the entities score
 					auto& scr = data.m_reg.get<ComponentView::score>(entity);
-					scr.points++;
+					scr.setPoints(scr.points()+1);
 				}
 			}
-			data.map[pos.prevy][pos.prevx] = '.';
-			data.map[pos.cury][pos.curx] = disp.mapChar;
+			data.map[pos.prevy()][pos.prevx()] = '.';
+			disp.setMapChar(data.map[pos.cury()][pos.curx()]);
 		}
 	}
 
@@ -93,7 +93,7 @@ namespace UI {
 		// Print out points and client names of any entities that have those
 		auto view = data.m_reg.view<ComponentView::score, ComponentView::clientName>();
 		for (auto entity : view) {
-			std::cout << "Points for client " << view.get<ComponentView::clientName>(entity).name << ": " << view.get<ComponentView::score>(entity).points << std::endl;
+			std::cout << "Points for client " << view.get<ComponentView::clientName>(entity).name() << ": " << view.get<ComponentView::score>(entity).points() << std::endl;
 		}
 		std::cout << data.message << std::endl;
 	}
@@ -110,16 +110,16 @@ namespace UI {
 		usrInput.dirty = 1;
 		// set the user input values depending on what we got
 		if (input == 'a') {
-			usrInput.left = 1;
+			usrInput.setLeft(true);
 		}
 		else if (input == 's') {
-			usrInput.down = 1;
+			usrInput.setDown(true);
 		}
 		else if (input == 'd') {
-			usrInput.right = 1;
+			usrInput.setRight(true);
 		}
 		else if (input == 'w') {
-			usrInput.up = 1;
+			usrInput.setUp(true);
 		}
 		else {
 			usrInput.dirty = 0;

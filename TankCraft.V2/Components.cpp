@@ -12,10 +12,10 @@ namespace ComponentView {
 	{
 		std::cout << "in position write" << std::endl;
 		ProtoMessaging::PositionComponent* comp = message.add_positioncomps();
-		comp->set_curx(curx);
-		comp->set_cury(cury);
-		comp->set_prevx(prevx);
-		comp->set_prevy(prevy);
+		comp->set_curx(curx());
+		comp->set_cury(cury());
+		comp->set_prevx(prevx());
+		comp->set_prevy(prevy());
 		comp->set_netid(netid);
 	}
 
@@ -23,7 +23,7 @@ namespace ComponentView {
 	{
 		std::cout << "in mapobj write" << std::endl;
 		ProtoMessaging::MapObjectComponent* comp = message.add_mapobjectcomps();
-		auto s = new std::string(1, mapChar);
+		auto s = new std::string(1, mapChar());
 		comp->set_allocated_mapchar(s);
 		comp->set_netid(netid);
 
@@ -34,7 +34,7 @@ namespace ComponentView {
 	{
 		std::cout << "in clientname write" << std::endl;
 		ProtoMessaging::ClientNameComponent* comp = message.add_clientnamecomps();
-		comp->set_allocated_name(&name);
+		comp->set_name((name()));
 		comp->set_netid(netid);
 	}
 
@@ -49,5 +49,4 @@ namespace ComponentView {
 	void score_::write(ProtoMessaging::UpdateEntityMessage& message, networkID netid)
 	{
 	}
-
 }

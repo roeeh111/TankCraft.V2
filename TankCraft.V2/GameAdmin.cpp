@@ -4,7 +4,7 @@
 #include "GameAdmin.h"
 #include "IDTranslationComponent.h"
 #include "FreeListComponent.h"
-#include "CreateEntity.h"
+#include "RegWrappers.h"
 
 
 namespace GameAdmin {

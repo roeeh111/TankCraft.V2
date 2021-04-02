@@ -7,10 +7,10 @@ namespace ProtoTests {
 		data.updateMap[0] =  std::list<baseComponent*>();
 
 		auto pos = new ComponentView::position();
-		pos->curx = 0;
-		pos->cury = 1;
-		pos->prevx = 2;
-		pos->prevy = 3;
+		pos->setCurx(0);
+		pos->setCury(1);
+		pos->setPrevx(2);
+		pos->setPrevy(3);
 		data.updateMap[0].push_back(pos);
 
 
@@ -26,18 +26,18 @@ namespace ProtoTests {
 		data.updateMap[0] = std::list<baseComponent*>();
 
 		auto pos = new ComponentView::position();
-		pos->curx = 0;
-		pos->cury = 1;
-		pos->prevx = 2;
-		pos->prevy = 3;
+		pos->setCurx(0);
+		pos->setCury(1);
+		pos->setPrevx(2);
+		pos->setPrevy(3);
 		data.updateMap[0].push_back(pos);
 		std::cout << "curx = 0, cury = 1, prevx = 2, prevy = 3" << std::endl;
 
 		auto pos2 = new ComponentView::position();
-		pos2->curx = 4;
-		pos2->cury = 5;
-		pos2->prevx = 6;
-		pos2->prevy = 7;
+		pos2->setCurx(4);
+		pos2->setCury(5);
+		pos2->setPrevx(6);
+		pos2->setPrevy(7);
 		data.updateMap[0].push_back(pos2);
 		std::cout << "curx = 4, cury = 5, prevx = 6, prevy = 7" << std::endl;
 

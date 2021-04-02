@@ -31,6 +31,9 @@
     <Filter Include="Header Files\ProtoSchemas">
       <UniqueIdentifier>{be47b12f-526c-4e8b-b428-4177624ed57f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ENTT Wrappers">
+      <UniqueIdentifier>{cd7c49bd-5079-40f2-9e5f-733eee5933a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h">
@@ -525,9 +528,6 @@
     <ClInclude Include="MessagingSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="CreateEntity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Tanks.pb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -539,6 +539,9 @@
     </ClInclude>
     <ClInclude Include="BaseComponent.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="RegWrappers.h">
+      <Filter>ENTT Wrappers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -890,9 +893,6 @@
     <ClCompile Include="MessagingSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="CreateEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Tanks.pb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -904,6 +904,9 @@
     </ClCompile>
     <ClCompile Include="Components.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateEntity.cpp">
+      <Filter>ENTT Wrappers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
