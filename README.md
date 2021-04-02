@@ -25,7 +25,9 @@ The current list of systems:
 
 ### IDTranslationSystem
 
+The entity ID is a random uint32 stored in the registry. The creation of such ID cannot be easily managed to be generated as the same across all clients. Thus if we want to locate a specific entity, we would need a unified identifier for communication process.
 
+The ID translation system would always create mapping from an entity ID to a network ID during the creation of an entity. The network ID is always assigned by the server and then broadcasted to all clients. 
 
 ### NetworkSystem
 
@@ -47,45 +49,46 @@ The network system currently handles all the networking of the game. It has the 
    			// Append into the client entity map
    			data.clientAddressToEntities[pack->systemAddress].push_back(netid);
    	
+   			//data.clientAddressToEntities[pack->systemAddress].push_back(netid);
+   			
    			// create a new add entity packet
    			Packets::addEntityPacket addpack = Packets::addEntityPacket(netid);
-   	
-   			//data.clientAddressToEntities[pack->systemAddress].push_back(netid);
+   			
+   			// write the serialized data into the bitstream
+   			MessagingSystem::writeAddEntity(stream, netid);
    	
    			std::cout << "Registered entity from client " << pack->systemAddress.GetPort() << ", broadcasting..." << std::endl;
-   			// broadcast to all clients to add a new entity with entity ID, and all components
+   			// broadcast to all clients to add a new entity with specific network ID, and all components
    			data.rpi->Send(reinterpret_cast<char*>(&addpack), 
    				sizeof(addpack), 
    				HIGH_PRIORITY, 
    				RELIABLE_ORDERED, 
    				0, 
-   				pack->systemAddress, 
+				pack->systemAddress, 
    				true);
-   The add entity function for client
-
    		}
+   The add entity function for client
+   
    		else {
-   			// If is client:
-   			// if client doesnt have an entity with this netid 
-   			// add the entity with the entity id given to the m_reg
+   			if (responding) {
+   				// Client receiving the add entity request
    	
-   			// if were not requesting, but responding to a request
-   			if (!initial) {
-   				std::cout << "Adding entity in client" << std::endl;
-   				auto newEntity = data.m_reg.create();
+   				auto newEntity = RegWrapper::createEntity(data.m_reg, true);
    	
-   				// cast the input packet to an add entity packet
-   				Packets::addEntityPacket* addpack = (Packets::addEntityPacket*)pack->data;
+   				std::string str = std::string((char*) (pack->data + 1));		
+   				
+   				ProtoMessaging::AddRemoveEntityMessage* msg = MessagingSystem::readAddRemoveEntity(str);
    	
    				// when unpacking input packet, get the netID passed to us
    				// Create a new mapping of netID and entity
-   				transSystem.setMapping(data, addpack->netID, newEntity);
+   				TranslationSystem::setMapping(data, msg->netid(), newEntity);
+   				delete msg;
    			}
    			else {
-   				// if were requesting:
-   				// addpacket request
+   				// Client sending the add entity request
+   				
    				Packets::addEntityPacket addpack = Packets::addEntityPacket(0);
-   				std::cout << "Sending out add entity request packet to server" << std::endl;
+   	
    				// Request an addition of a new entity
    				data.rpi->Send(reinterpret_cast<char*>(&addpack),
    					sizeof(addpack),
@@ -96,9 +99,11 @@ The network system currently handles all the networking of the game. It has the 
    					false);
    			}
 
+The unresolved problem within this add entity function is that currently in our game we don't have many types of entities. We need to find a way to generalize this add entity function and figure out how to send component information without having to predefine it.
+
 ### MovementSystem
 
-The movement system has nothing inside yet. We plan to have this system manages the user input instead of the UI system.
+The movement system would advance the movement of all entities containing the movement component. Working in progress.
 
 
 
