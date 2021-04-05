@@ -10,21 +10,29 @@ namespace TranslationSystem {
 
         // Insert the mapping into the map
         data.netToEnttid[id] = entityId;
+        data.enttToNetidid[entityId] = id;
 
         // return the networkId associated with the mapping 
         return id;
     }
 
+    // ASSUMED THAT THE MAPPING HAS ALREADY BEEN ALLOCATED
     networkID setMapping(GameData::GameData& data, networkID netId, entt::entity entityId)
     {
         const auto &flist = getFreelist(data.m_reg);
         data.netToEnttid[netId] = entityId;
+        data.enttToNetidid[entityId] = netId;
         return netId;
     }
 
     entt::entity getEntity(GameData::GameData& data, networkID netId)
     {
         return data.netToEnttid[netId];
+    }
+
+    networkID getNetId(GameData::GameData& data, const entt::entity& entity)
+    {
+        return data.enttToNetidid[entity];
     }
 
     void addEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg)
@@ -34,8 +42,12 @@ namespace TranslationSystem {
         // make a mapping of the given netid and a local entity netid value
         auto newEntity = RegWrapper::createEntity(data.m_reg, true);
 
-        setMapping(data, msg->netid(), newEntity);  //	TODO: change this to createEntity
-
+        if (hasMapping(data, msg->netid())) {
+            setMapping(data, msg->netid(), newEntity);
+        }
+        else {
+            createMapping(data, newEntity);
+        }
     }
 
     void removeEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg)

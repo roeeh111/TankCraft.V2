@@ -147,6 +147,7 @@ namespace GameAdmin {
 	{
 		// Initialize our translation system
 		data.netToEnttid = std::map<networkID, entt::entity>();
+		data.enttToNetidid = std::map<entt::entity, networkID>();
 		//auto freeListEntity = data.m_reg.create();		
 		auto freeListEntity = RegWrapper::createEntity(data.m_reg, false);			// Only other time an entity is created, 
 

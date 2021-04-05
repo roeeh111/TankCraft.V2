@@ -537,11 +537,11 @@
     <ClInclude Include="GameData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BaseComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="RegWrappers.h">
       <Filter>ENTT Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentID.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -902,11 +902,14 @@
     <ClCompile Include="ProtoTest.cpp">
       <Filter>Header Files\Tests</Filter>
     </ClCompile>
-    <ClCompile Include="Components.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CreateEntity.cpp">
       <Filter>ENTT Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="Components.cpp">
+      <Filter>Header Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseComponent.cpp">
+      <Filter>Header Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -920,6 +923,9 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="TODOS.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="..\..\..\..\Documents\BaseComponent.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

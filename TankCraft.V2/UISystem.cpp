@@ -107,7 +107,7 @@ namespace UI {
 		// Get the userInput component for this entity
 		ComponentView::userInput& usrInput = data.m_reg.get<ComponentView::userInput>(clientEntity);
 
-		usrInput.dirty = 1;
+		usrInput.dirty_ = 1;
 		// set the user input values depending on what we got
 		if (input == 'a') {
 			usrInput.setLeft(true);
@@ -122,7 +122,7 @@ namespace UI {
 			usrInput.setUp(true);
 		}
 		else {
-			usrInput.dirty = 0;
+			usrInput.dirty_ = 0;
 		}
 
 		/* TODO:																		(need a map from entity->netid for this to be quick)

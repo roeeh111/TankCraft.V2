@@ -135,7 +135,7 @@ namespace NetworkSystem {
 		entt::entity ent = MessagingSystem::readControls(data, stream, &contrl);
 		if (!(ent == entt::null)) {
 		//	 if readcontrol returns not nullentitiy, call movementsystem.move(component) 
-			MovementSystem::moveEntity(data.m_reg, ent, contrl);
+			MovementSystem::moveEntity(data, ent, contrl);
 		}
 	}
 

@@ -5,7 +5,7 @@
 namespace MovementSystem {
 	void updateMovement(GameData::GameData& data);
 
-	void moveEntity(entt::registry& m_reg, entt::entity& entity, ComponentView::userInput& input);
+	void moveEntity(GameData::GameData& data, const entt::entity& entity, ComponentView::userInput& input);
 }
 
 /*

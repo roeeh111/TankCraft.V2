@@ -1,0 +1,37 @@
+#pragma once
+#include <entt/entt.hpp>
+#include "Tanks.pb.h"
+//#include "GameData.h"
+#include "IDTranslationComponent.h"
+
+/* TODO: we might not actually need the dirty bit in the future, but its helpful for debugging*/
+/*
+typedef struct baseComponent_ {
+	//ComponentID type;
+	baseComponent_() { networked = false; }
+	virtual ~baseComponent_() = default;
+	virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) { std::cout << "base write " << std::endl; }
+	virtual void lock() { std::cout << "base lock " << std::endl; };
+	void unlock(GameData::GameData& data, entt::entity& entity);
+	bool isNetworked() { return networked; }
+	//virtual void read(ProtoMessaging::UpdateEntityMessage& message, networkID netid, int index) {}
+	bool networked;
+} baseComponent;
+*/
+
+/* NOTE: a better interaction layer, would be to have a lock and unlock function.
+		on lock we lock, and on unlock we both unlock and append to the update queue if networked AND THATS WHAT THE DIRTY BIT IS USED FOR*/	
+
+
+/* STEPS:
+1) user constructs a component, sets the networked bit if it wants it to be networked (TODO: how are we adding the entitiy to the netid list?)
+2) to mutate a component, user calls component.lock (mutex or something locks the component)
+3) user mutates the component
+4) when user is finished, user calls unlock. (if networked bit is set, append the component to the update queue, unlock the component) (SOMEHOW KEEP TRACK OF THE ENTITY ID FOR UPDATE QUEUE)
+*/
+/*
+TODO:
+- add lock and unlock functions to base component (only append to update queue if the networked bit is set!!!!!)
+- change dirty bit to be networked bit
+- change the setting of dirty/networked bit to be only on construction
+*/

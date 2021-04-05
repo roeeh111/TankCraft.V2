@@ -22,6 +22,9 @@ namespace TranslationSystem {
 	// Get the entity associated with the netid
 	entt::entity getEntity(GameData::GameData& data, networkID netId);
 
+	// Get the netid associated with the entity
+	networkID getNetId(GameData::GameData& data, const entt::entity &entity);	
+
 	// Whether the system has a mapping for this netId
 	bool hasMapping(GameData::GameData& data, networkID netId);
 

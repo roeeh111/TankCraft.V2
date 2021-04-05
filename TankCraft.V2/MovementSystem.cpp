@@ -9,8 +9,8 @@ namespace MovementSystem {
 		// For now, loop over all entities with position and user input
 		// and call moveEntity
 		auto view = data.m_reg.view<ComponentView::userInput, ComponentView::position>();
-		for (auto entity : view) {
-			moveEntity(data.m_reg, entity, data.m_reg.get<ComponentView::userInput>(entity));
+		for (auto &entity : view) {
+			moveEntity(data, entity, data.m_reg.get<ComponentView::userInput>(entity));
 		}
 
 		// TODO:
@@ -18,8 +18,9 @@ namespace MovementSystem {
 		// The acutal update will happen from the network calling moveEntity
 	}
 
-	void moveEntity(entt::registry &m_reg, entt::entity &entity, ComponentView::userInput &input) {
-		auto& points = m_reg.get<ComponentView::position>(entity);
+	void moveEntity(GameData::GameData& data, const entt::entity &entity, ComponentView::userInput &input) {
+		auto& points = data.m_reg.get<ComponentView::position>(entity);
+		points.lock(); // lock the component
 
 
 		points.setPrevx(points.curx());
@@ -60,8 +61,11 @@ namespace MovementSystem {
 
 			}
 		}
+		points.unlock(data, entity);
 
 		// Clear the input 
-		input.dirty = 0; input.setLeft(0); input.setRight(0); input.setUp(0); input.setRight(0);
+		input.lock();
+		input.networked = 0; input.setLeft(0); input.setRight(0); input.setUp(0); input.setRight(0);
+		input.unlock(data, entity);
 	}
 }

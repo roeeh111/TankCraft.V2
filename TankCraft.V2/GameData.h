@@ -4,13 +4,30 @@
 #include <RakPeerInterface.h>
 #include "IDTranslationComponent.h"
 #include "Tanks.pb.h"
-#include "BaseComponent.h"
+#include "ComponentID.h"
+
+namespace GameData { class GameData; };
+
+// The base component, its here now because it bugged out when it was in its own header
+typedef struct baseComponent_ {
+	ComponentID::ComponentID CompId;
+	bool networked; // Temporarily underlined so i can see when it is used
+
+	baseComponent_() { CompId = ComponentID::Base; networked = false; }
+	virtual ~baseComponent_() = default;
+	virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) { std::cout << "base write " << std::endl; }
+	virtual void lock() { std::cout << "base lock " << std::endl; };
+	void unlock(GameData::GameData& data, const entt::entity& entity);
+	bool isNetworked() { return networked; }
+
+
+	//virtual void read(ProtoMessaging::UpdateEntityMessage& message, networkID netid, int index) {}
+} baseComponent;
+
 
 /*
 *  Class containing all of the global data to the system.
 */
-
-
 namespace GameData {
 	class GameData {
 	public:
@@ -27,7 +44,8 @@ namespace GameData {
 
 		// The translation of net to entity structure
 		// This data should be SERVER ONLY and ONE PER CLIENT
-		std::map<networkID, entt::entity> netToEnttid;
+		std::map<networkID, entt::entity> netToEnttid;			// TODO: do i need this? can just use the freelist... (instead of a list of bools, a list of entt entities)
+		std::map<entt::entity, networkID> enttToNetidid;
 
 		// The map from each client to its list of entities
 		std::map<RakNet::SystemAddress, std::list<networkID>> clientAddressToEntities;

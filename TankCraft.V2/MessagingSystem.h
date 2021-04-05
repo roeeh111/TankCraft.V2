@@ -4,7 +4,7 @@
 #include "BitStream.h"
 #include "Tanks.pb.h"
 #include "IDTranslationComponent.h"
-#include "BaseComponent.h"
+//#include "BaseComponent.h"
 
 #define FIRST_COMPONENT_IN_UPDATE 2
 
