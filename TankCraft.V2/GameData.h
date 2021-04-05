@@ -20,7 +20,6 @@ typedef struct baseComponent_ {
 	void unlock(GameData::GameData& data, const entt::entity& entity);
 	bool isNetworked() { return networked; }
 
-
 	//virtual void read(ProtoMessaging::UpdateEntityMessage& message, networkID netid, int index) {}
 } baseComponent;
 
@@ -72,3 +71,4 @@ namespace GameData {
 
 	};
 }
+

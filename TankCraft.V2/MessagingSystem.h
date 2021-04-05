@@ -8,6 +8,8 @@
 
 #define FIRST_COMPONENT_IN_UPDATE 2
 
+// TODO: add component creation to add entity packet. so that we can add components to an entity on creation.
+
 /*
 *  System for creating, serializing (maybe sending?) network messages
 *  
