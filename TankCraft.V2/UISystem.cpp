@@ -32,14 +32,13 @@ namespace UI {
 		//auto clientEntity = RegWrapper::createEntity(data.m_reg, true);	
 		auto clientEntity = NetworkSystem::addEntity(data, nullptr, true, false);	// first of all, add this entity over the network
 
-		// Add the components to the the registry							// TODO: add these updates to the update queue
+		// Add the components to the the registry
 		(data.m_reg.emplace<ComponentView::mapObject>(clientEntity)).unlock(data, clientEntity);
 		(data.m_reg.emplace<ComponentView::position>(clientEntity, 1)).unlock(data, clientEntity);
 		(data.m_reg.emplace<ComponentView::score>(clientEntity)).unlock(data, clientEntity);
 		(data.m_reg.emplace<ComponentView::clientName>(clientEntity, clientName_)).unlock(data, clientEntity);
 		(data.m_reg.emplace<ComponentView::userInput>(clientEntity)).unlock(data, clientEntity);
-		printUI(data);
-	}	// TODO: how are we communicating that this entity now has more components? (i say add them to the component queue)
+	}
 
 
 	void updateUI(GameData::GameData& data)

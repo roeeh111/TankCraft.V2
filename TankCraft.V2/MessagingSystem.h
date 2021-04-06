@@ -4,11 +4,10 @@
 #include "BitStream.h"
 #include "Tanks.pb.h"
 #include "IDTranslationComponent.h"
-//#include "BaseComponent.h"
 
 #define FIRST_COMPONENT_IN_UPDATE 2
 
-// TODO: add component creation to add entity packet. so that we can add components to an entity on creation.
+// NOTE :: can be split into two sections. Currently we send every serialized message, can be split into serialize, and send.
 
 /*
 *  System for creating, serializing (maybe sending?) network messages
@@ -51,6 +50,9 @@ namespace MessagingSystem {
 	// Given a bitstream and a controls component, write a controlsPacket to the bitstream
 	void writeControls(RakNet::BitStream& stream, ComponentView::userInput control, networkID netid);
 
+	// Given a name as a string, serialize it and write it to the passed in bitstream
+	void writeLogin(RakNet::BitStream& stream, std::string& name);
+
 	// Given a bitstream, read it into a GameUpdatePacket, verify its integrity and do the actual game updates
 	// (game updates can be handled by another system)
 	void readGameUpdate(GameData::GameData& data, std::string& stream);
@@ -58,6 +60,9 @@ namespace MessagingSystem {
 	// Given a bitstream, read it into a addRemoveEntityPacket, verify its integrity and return the message
 	// (entity addition can be handled by another system)
 	ProtoMessaging::AddRemoveEntityMessage* readAddRemoveEntity(std::string &stream);
+
+	// Given a string as a serialized login, deserialize it, verify its integrity, and return the login name of the packet.
+	std::string readLogin(std::string& stream);
 
 	// Given a bitstream, read it into a ControlsPacket, verify its integrity and execute the controls
 	entt::entity readControls(GameData::GameData& data, std::string& stream, ComponentView::userInput* ret);

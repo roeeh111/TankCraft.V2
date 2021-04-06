@@ -131,6 +131,19 @@ namespace MessagingSystem {
         return message.SerializeAsString();
     }
 
+    void writeLogin(RakNet::BitStream& stream, std::string& name)
+    {
+        // first, write the packet type to the bitsream
+        RakNet::MessageID type = LOGIN;
+        stream.Write((char*)&type, sizeof(RakNet::MessageID));
+
+        // Create a new message object with our fields
+        auto msg = ProtoMessaging::LoginMessage();
+        msg.set_name(name);
+       
+        // Write the packet to the stream
+        stream.Write(msg.SerializeAsString());
+    }
 
     /*
     * Read defenitions:
@@ -233,6 +246,13 @@ namespace MessagingSystem {
 
         delete msg;
         return ent;
+    }
+
+    std::string readLogin(std::string& stream)
+    {
+        auto msg = new ProtoMessaging::LoginMessage();
+        msg->ParseFromString(stream);
+        return msg->name();
     }
 
 

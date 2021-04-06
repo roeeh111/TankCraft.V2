@@ -67,6 +67,13 @@ namespace NetworkSystem {
 				handleControl(data, pack);
 				break;
 
+			case LOGIN:
+			{
+				std::string stream = std::string((char*)(pack->data + 1));
+				std::string loginName = MessagingSystem::readLogin(stream);
+				UI::addTank(data, loginName);
+				break;
+			}
 			default:
 				// Some unknown packet type, go to the next packet
 				printf("Unknown packet");
@@ -375,7 +382,7 @@ namespace NetworkSystem {
 		RakNet::BitStream stream = RakNet::BitStream();
 
 		// HERE we write the control into the stream
-		//MessagingSystem::writeControls(stream, 0);
+	//	MessagingSystem::writeControls(stream, 0);
 
 
 		// Request an addition of a new entity
@@ -394,6 +401,20 @@ namespace NetworkSystem {
 
 		// Do the game update
 		MessagingSystem::readGameUpdate(data, str);
+	}
+
+	void sendLoginPacket(GameData::GameData& data, std::string& name)
+	{
+		RakNet::BitStream stream = RakNet::BitStream();
+
+		MessagingSystem::writeLogin(stream, name);
+
+		data.rpi->Send(&stream,
+			HIGH_PRIORITY,
+			RELIABLE_ORDERED,
+			0,
+			data.rakAddress,
+			false);
 	}
 }
 

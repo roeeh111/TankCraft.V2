@@ -64,4 +64,7 @@ namespace NetworkSystem {
 
 	// Handle an incoming game update packet
 	void handleGameUpdate(GameData::GameData& data, RakNet::Packet* pack);
+
+	// Send a login packet to the server with the given username
+	void sendLoginPacket(GameData::GameData& data, std::string& name);
 }

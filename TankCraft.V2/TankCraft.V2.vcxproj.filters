@@ -528,9 +528,6 @@
     <ClInclude Include="MessagingSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Tanks.pb.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameAdmin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -542,6 +539,9 @@
     </ClInclude>
     <ClInclude Include="ComponentID.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Tanks.pb.h">
+      <Filter>Header Files\ProtoSchemas</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -893,9 +893,6 @@
     <ClCompile Include="MessagingSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="Tanks.pb.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameAdmin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -910,6 +907,9 @@
     </ClCompile>
     <ClCompile Include="BaseComponent.cpp">
       <Filter>Header Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Tanks.pb.cc">
+      <Filter>Header Files\ProtoSchemas</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
