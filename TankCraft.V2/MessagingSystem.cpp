@@ -5,11 +5,19 @@
 
 namespace MessagingSystem {
 
-    /*
-    * Enqueue defenitions: (to enqueue onto the update map)
-    * 
-    */
+    // System flush
+    void MessagingSystem::FlushGameUpdate(GameData::GameData& data) {
+        RakNet::BitStream stream = RakNet::BitStream();
+        MessagingSystem::writeGameUpdate(stream, data.updateMap);
 
+        // Broadcast the game update
+        data.rpi->Send(&stream,
+            HIGH_PRIORITY,
+            RELIABLE_ORDERED,
+            0,
+            RakNet::UNASSIGNED_SYSTEM_ADDRESS,
+            true);
+    }
 
 
     /*

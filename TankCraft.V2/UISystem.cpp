@@ -25,17 +25,21 @@ namespace UI {
 	// Can make this a part of the login system!!!!
 	void addTank(GameData::GameData& data, std::string clientName_)
 	{
-	//	auto clientEntity = data.m_reg.create(); 
-		auto clientEntity = RegWrapper::createEntity(data.m_reg, true);		// TODO: add this entity to the update queue
+
+		// This function should be only called by the server, so it will add an entity via the network
+		// and then emplace all these components. how are we putting the components on the update map?
+
+		//auto clientEntity = RegWrapper::createEntity(data.m_reg, true);	
+		auto clientEntity = NetworkSystem::addEntity(data, nullptr, true, false);	// first of all, add this entity over the network
 
 		// Add the components to the the registry							// TODO: add these updates to the update queue
-		data.m_reg.emplace<ComponentView::mapObject>(clientEntity);
-		data.m_reg.emplace<ComponentView::position>(clientEntity, 1);
-		data.m_reg.emplace<ComponentView::score>(clientEntity);
-		data.m_reg.emplace<ComponentView::clientName>(clientEntity, clientName_);
-		data.m_reg.emplace<ComponentView::userInput>(clientEntity);
+		(data.m_reg.emplace<ComponentView::mapObject>(clientEntity)).unlock(data, clientEntity);
+		(data.m_reg.emplace<ComponentView::position>(clientEntity, 1)).unlock(data, clientEntity);
+		(data.m_reg.emplace<ComponentView::score>(clientEntity)).unlock(data, clientEntity);
+		(data.m_reg.emplace<ComponentView::clientName>(clientEntity, clientName_)).unlock(data, clientEntity);
+		(data.m_reg.emplace<ComponentView::userInput>(clientEntity)).unlock(data, clientEntity);
 		printUI(data);
-	}
+	}	// TODO: how are we communicating that this entity now has more components? (i say add them to the component queue)
 
 
 	void updateUI(GameData::GameData& data)
@@ -46,7 +50,6 @@ namespace UI {
 			for (auto entity : view) {
 				// Get the user input for our object
 				getKeyBoardInput(data, entity);
-				//getUserInput(data.m_reg, entity);
 			}
 		}
 		

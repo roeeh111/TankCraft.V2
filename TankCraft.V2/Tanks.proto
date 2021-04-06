@@ -71,3 +71,8 @@ message UpdateEntityMessage {
   repeated ClientNameComponent clientNameComps = 6;
   repeated HealthComponent healthComps = 7;
 }
+
+message LoginMessage {
+  string name = 1;
+}
+

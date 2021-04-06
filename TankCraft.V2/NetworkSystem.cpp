@@ -60,7 +60,7 @@ namespace NetworkSystem {
 				break;
 
 			case UPDATE_ENTITY:
-				break;
+				break;						// TODO:: should i do something here? theoretically i shouldnt be getting any of these messages...
 
 			case CONTROL:
 				printf("Received control packet from client, inputting controls.\n");
@@ -113,7 +113,12 @@ namespace NetworkSystem {
 				break;
 
 			case UPDATE_ENTITY:
+			{
+				printf("Received update entity packet from server.\n");
+				std::string stream = std::string((char*)(pack->data + 1));
+				MessagingSystem::readGameUpdate(data, stream);
 				break;
+			}
 			case CONTROL:
 				break;
 
@@ -210,7 +215,7 @@ namespace NetworkSystem {
 		}
 	}
 
-	void addEntity(GameData::GameData& data, RakNet::Packet* pack, bool isServer, bool responding)
+	entt::entity addEntity(GameData::GameData& data, RakNet::Packet* pack, bool isServer, bool responding)
 	{
 		// If is Server: (we dont need to examine the netid/timestamp of the incomming packet. So make a new message object and sendit)
 		if (isServer) {
@@ -240,6 +245,7 @@ namespace NetworkSystem {
 				true);
 			std::cout << "sent message" << std::endl;
 
+			return newEntity;
 			// TODO:			(also figure out how we want to packetize all of the components)
 			// add all components of the entity with the given values to the new entity
 		}
@@ -257,6 +263,7 @@ namespace NetworkSystem {
 				// Create a new mapping of netID and entity
 				TranslationSystem::setMapping(data, msg->netid(), newEntity);
 				delete msg;
+				return newEntity;
 			}
 			else {
 				// if were requesting:
@@ -273,6 +280,7 @@ namespace NetworkSystem {
 					0,
 					data.rakAddress,
 					false);
+				return entt::null;
 			}
 		}
 	}
@@ -377,6 +385,15 @@ namespace NetworkSystem {
 			0,
 			data.rakAddress,
 			false);
+	}
+
+	void handleGameUpdate(GameData::GameData& data, RakNet::Packet* pack)
+	{
+		// Get the update packet
+		std::string str = std::string((char*)(pack->data + 1));
+
+		// Do the game update
+		MessagingSystem::readGameUpdate(data, str);
 	}
 }
 

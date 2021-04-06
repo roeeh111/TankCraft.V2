@@ -5,6 +5,7 @@
 #include "IDTranslationComponent.h"
 #include "FreeListComponent.h"
 #include "RegWrappers.h"
+#include "MessagingSystem.h"
 
 
 namespace GameAdmin {
@@ -14,8 +15,8 @@ namespace GameAdmin {
 
 		if (data.isServer) {
 			NetworkSystem::updateServer(data);
-		//	UI::updateUI(data);
-		//	UI::printUI(data);
+			MovementSystem::updateMovement(data);
+			MessagingSystem::FlushGameUpdate(data);
 		}
 		else {
 			NetworkSystem::updateClient(data);
@@ -25,18 +26,17 @@ namespace GameAdmin {
 			}
 
 			UI::updateUI(data);
-			MovementSystem::updateMovement(data);
 			UI::printUI(data);
 		}
-		
 	}
+
+
 
 	void TanksScene::clientLogin()
 	{
 		initUISystem();
-		initNetworkSystem(data.isServer, 1);
+		initNetworkSystem(!data.isServer, 1);
 		initIDTranslationSystem(false); // TODO: change this 
-		initMovementSystem();
 
 		// Started up on socket, prompt the user to pass in a username
 		std::string uinput;
@@ -44,7 +44,7 @@ namespace GameAdmin {
 		std::cin >> uinput;
 
 		// create a new tank entity with that username, call network add entity and update entity (or put on update queue)
-		UI::addTank(data, uinput);
+		UI::addTank(data, uinput);		// TODO: CHANGE SO WERE NOT CALLING THIS, BUT THE SERVER IS
 	}
 
 	void TanksScene::serverLogin(uint32_t maxClients) {

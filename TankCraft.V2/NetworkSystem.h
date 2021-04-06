@@ -38,7 +38,7 @@ namespace NetworkSystem {
 	void clientDisconnect(RakNet::RakPeerInterface* peer, const char* hostAddress);
 
 	// add an entity to the server or client
-	void addEntity(GameData::GameData& data, RakNet::Packet* pack, bool isServer, bool responding);
+	entt::entity addEntity(GameData::GameData& data, RakNet::Packet* pack, bool isServer, bool responding);
 
 	void removeEntity(GameData::GameData& data, RakNet::Packet* pack, networkID remID, bool isServer, bool responding);
 
@@ -61,4 +61,7 @@ namespace NetworkSystem {
 
 	// send a control packet to the server
 	void sendControl(GameData::GameData& data, ComponentView::userInput& usrInput, networkID netid);
+
+	// Handle an incoming game update packet
+	void handleGameUpdate(GameData::GameData& data, RakNet::Packet* pack);
 }

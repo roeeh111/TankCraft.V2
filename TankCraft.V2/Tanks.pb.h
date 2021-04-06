@@ -46,7 +46,7 @@ struct TableStruct_Tanks_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[9]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[10]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -69,6 +69,9 @@ extern ControlMessageDefaultTypeInternal _ControlMessage_default_instance_;
 class HealthComponent;
 class HealthComponentDefaultTypeInternal;
 extern HealthComponentDefaultTypeInternal _HealthComponent_default_instance_;
+class LoginMessage;
+class LoginMessageDefaultTypeInternal;
+extern LoginMessageDefaultTypeInternal _LoginMessage_default_instance_;
 class MapObjectComponent;
 class MapObjectComponentDefaultTypeInternal;
 extern MapObjectComponentDefaultTypeInternal _MapObjectComponent_default_instance_;
@@ -88,6 +91,7 @@ template<> ::ProtoMessaging::ClientNameComponent* Arena::CreateMaybeMessage<::Pr
 template<> ::ProtoMessaging::ControlComponent* Arena::CreateMaybeMessage<::ProtoMessaging::ControlComponent>(Arena*);
 template<> ::ProtoMessaging::ControlMessage* Arena::CreateMaybeMessage<::ProtoMessaging::ControlMessage>(Arena*);
 template<> ::ProtoMessaging::HealthComponent* Arena::CreateMaybeMessage<::ProtoMessaging::HealthComponent>(Arena*);
+template<> ::ProtoMessaging::LoginMessage* Arena::CreateMaybeMessage<::ProtoMessaging::LoginMessage>(Arena*);
 template<> ::ProtoMessaging::MapObjectComponent* Arena::CreateMaybeMessage<::ProtoMessaging::MapObjectComponent>(Arena*);
 template<> ::ProtoMessaging::PositionComponent* Arena::CreateMaybeMessage<::ProtoMessaging::PositionComponent>(Arena*);
 template<> ::ProtoMessaging::ScoreComponent* Arena::CreateMaybeMessage<::ProtoMessaging::ScoreComponent>(Arena*);
@@ -1650,6 +1654,149 @@ class UpdateEntityMessage PROTOBUF_FINAL :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Tanks_2eproto;
 };
+// -------------------------------------------------------------------
+
+class LoginMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ProtoMessaging.LoginMessage) */ {
+ public:
+  inline LoginMessage() : LoginMessage(nullptr) {}
+  virtual ~LoginMessage();
+
+  LoginMessage(const LoginMessage& from);
+  LoginMessage(LoginMessage&& from) noexcept
+    : LoginMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline LoginMessage& operator=(const LoginMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline LoginMessage& operator=(LoginMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const LoginMessage& default_instance();
+
+  static inline const LoginMessage* internal_default_instance() {
+    return reinterpret_cast<const LoginMessage*>(
+               &_LoginMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    9;
+
+  friend void swap(LoginMessage& a, LoginMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(LoginMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(LoginMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline LoginMessage* New() const final {
+    return CreateMaybeMessage<LoginMessage>(nullptr);
+  }
+
+  LoginMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<LoginMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const LoginMessage& from);
+  void MergeFrom(const LoginMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(LoginMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ProtoMessaging.LoginMessage";
+  }
+  protected:
+  explicit LoginMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_Tanks_2eproto);
+    return ::descriptor_table_Tanks_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kNameFieldNumber = 1,
+  };
+  // string name = 1;
+  void clear_name();
+  const std::string& name() const;
+  void set_name(const std::string& value);
+  void set_name(std::string&& value);
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  std::string* mutable_name();
+  std::string* release_name();
+  void set_allocated_name(std::string* name);
+  private:
+  const std::string& _internal_name() const;
+  void _internal_set_name(const std::string& value);
+  std::string* _internal_mutable_name();
+  public:
+
+  // @@protoc_insertion_point(class_scope:ProtoMessaging.LoginMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Tanks_2eproto;
+};
 // ===================================================================
 
 
@@ -2676,9 +2823,76 @@ UpdateEntityMessage::healthcomps() const {
   return healthcomps_;
 }
 
+// -------------------------------------------------------------------
+
+// LoginMessage
+
+// string name = 1;
+inline void LoginMessage::clear_name() {
+  name_.ClearToEmpty();
+}
+inline const std::string& LoginMessage::name() const {
+  // @@protoc_insertion_point(field_get:ProtoMessaging.LoginMessage.name)
+  return _internal_name();
+}
+inline void LoginMessage::set_name(const std::string& value) {
+  _internal_set_name(value);
+  // @@protoc_insertion_point(field_set:ProtoMessaging.LoginMessage.name)
+}
+inline std::string* LoginMessage::mutable_name() {
+  // @@protoc_insertion_point(field_mutable:ProtoMessaging.LoginMessage.name)
+  return _internal_mutable_name();
+}
+inline const std::string& LoginMessage::_internal_name() const {
+  return name_.Get();
+}
+inline void LoginMessage::_internal_set_name(const std::string& value) {
+  
+  name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArena());
+}
+inline void LoginMessage::set_name(std::string&& value) {
+  
+  name_.Set(
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:ProtoMessaging.LoginMessage.name)
+}
+inline void LoginMessage::set_name(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
+  // @@protoc_insertion_point(field_set_char:ProtoMessaging.LoginMessage.name)
+}
+inline void LoginMessage::set_name(const char* value,
+    size_t size) {
+  
+  name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:ProtoMessaging.LoginMessage.name)
+}
+inline std::string* LoginMessage::_internal_mutable_name() {
+  
+  return name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArena());
+}
+inline std::string* LoginMessage::release_name() {
+  // @@protoc_insertion_point(field_release:ProtoMessaging.LoginMessage.name)
+  return name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void LoginMessage::set_allocated_name(std::string* name) {
+  if (name != nullptr) {
+    
+  } else {
+    
+  }
+  name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), name,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:ProtoMessaging.LoginMessage.name)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

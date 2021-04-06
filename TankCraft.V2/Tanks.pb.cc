@@ -57,6 +57,10 @@ class UpdateEntityMessageDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<UpdateEntityMessage> _instance;
 } _UpdateEntityMessage_default_instance_;
+class LoginMessageDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<LoginMessage> _instance;
+} _LoginMessage_default_instance_;
 }  // namespace ProtoMessaging
 static void InitDefaultsscc_info_AddRemoveEntityMessage_Tanks_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -124,6 +128,19 @@ static void InitDefaultsscc_info_HealthComponent_Tanks_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_HealthComponent_Tanks_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_HealthComponent_Tanks_2eproto}, {}};
 
+static void InitDefaultsscc_info_LoginMessage_Tanks_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::ProtoMessaging::_LoginMessage_default_instance_;
+    new (ptr) ::ProtoMessaging::LoginMessage();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_LoginMessage_Tanks_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_LoginMessage_Tanks_2eproto}, {}};
+
 static void InitDefaultsscc_info_MapObjectComponent_Tanks_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -181,7 +198,7 @@ static void InitDefaultsscc_info_UpdateEntityMessage_Tanks_2eproto() {
       &scc_info_ClientNameComponent_Tanks_2eproto.base,
       &scc_info_HealthComponent_Tanks_2eproto.base,}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Tanks_2eproto[9];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Tanks_2eproto[10];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_Tanks_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_Tanks_2eproto = nullptr;
 
@@ -262,6 +279,12 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Tanks_2eproto::offsets[] PROTO
   PROTOBUF_FIELD_OFFSET(::ProtoMessaging::UpdateEntityMessage, scorecomps_),
   PROTOBUF_FIELD_OFFSET(::ProtoMessaging::UpdateEntityMessage, clientnamecomps_),
   PROTOBUF_FIELD_OFFSET(::ProtoMessaging::UpdateEntityMessage, healthcomps_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::ProtoMessaging::LoginMessage, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::ProtoMessaging::LoginMessage, name_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::ProtoMessaging::ControlComponent)},
@@ -273,6 +296,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 48, -1, sizeof(::ProtoMessaging::ControlMessage)},
   { 56, -1, sizeof(::ProtoMessaging::AddRemoveEntityMessage)},
   { 64, -1, sizeof(::ProtoMessaging::UpdateEntityMessage)},
+  { 76, -1, sizeof(::ProtoMessaging::LoginMessage)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -285,6 +309,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::ProtoMessaging::_ControlMessage_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::ProtoMessaging::_AddRemoveEntityMessage_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::ProtoMessaging::_UpdateEntityMessage_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::ProtoMessaging::_LoginMessage_default_instance_),
 };
 
 const char descriptor_table_protodef_Tanks_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -311,16 +336,18 @@ const char descriptor_table_protodef_Tanks_2eproto[] PROTOBUF_SECTION_VARIABLE(p
   "reComponent\022<\n\017clientNameComps\030\006 \003(\0132#.P"
   "rotoMessaging.ClientNameComponent\0224\n\013hea"
   "lthComps\030\007 \003(\0132\037.ProtoMessaging.HealthCo"
-  "mponentb\006proto3"
+  "mponent\"\034\n\014LoginMessage\022\014\n\004name\030\001 \001(\tb\006p"
+  "roto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Tanks_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Tanks_2eproto_sccs[9] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Tanks_2eproto_sccs[10] = {
   &scc_info_AddRemoveEntityMessage_Tanks_2eproto.base,
   &scc_info_ClientNameComponent_Tanks_2eproto.base,
   &scc_info_ControlComponent_Tanks_2eproto.base,
   &scc_info_ControlMessage_Tanks_2eproto.base,
   &scc_info_HealthComponent_Tanks_2eproto.base,
+  &scc_info_LoginMessage_Tanks_2eproto.base,
   &scc_info_MapObjectComponent_Tanks_2eproto.base,
   &scc_info_PositionComponent_Tanks_2eproto.base,
   &scc_info_ScoreComponent_Tanks_2eproto.base,
@@ -328,10 +355,10 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Tan
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Tanks_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Tanks_2eproto = {
-  false, false, descriptor_table_protodef_Tanks_2eproto, "Tanks.proto", 935,
-  &descriptor_table_Tanks_2eproto_once, descriptor_table_Tanks_2eproto_sccs, descriptor_table_Tanks_2eproto_deps, 9, 0,
+  false, false, descriptor_table_protodef_Tanks_2eproto, "Tanks.proto", 965,
+  &descriptor_table_Tanks_2eproto_once, descriptor_table_Tanks_2eproto_sccs, descriptor_table_Tanks_2eproto_deps, 10, 0,
   schemas, file_default_instances, TableStruct_Tanks_2eproto::offsets,
-  file_level_metadata_Tanks_2eproto, 9, file_level_enum_descriptors_Tanks_2eproto, file_level_service_descriptors_Tanks_2eproto,
+  file_level_metadata_Tanks_2eproto, 10, file_level_enum_descriptors_Tanks_2eproto, file_level_service_descriptors_Tanks_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -2772,6 +2799,212 @@ void UpdateEntityMessage::InternalSwap(UpdateEntityMessage* other) {
 }
 
 
+// ===================================================================
+
+class LoginMessage::_Internal {
+ public:
+};
+
+LoginMessage::LoginMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:ProtoMessaging.LoginMessage)
+}
+LoginMessage::LoginMessage(const LoginMessage& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_name().empty()) {
+    name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_name(), 
+      GetArena());
+  }
+  // @@protoc_insertion_point(copy_constructor:ProtoMessaging.LoginMessage)
+}
+
+void LoginMessage::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_LoginMessage_Tanks_2eproto.base);
+  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+LoginMessage::~LoginMessage() {
+  // @@protoc_insertion_point(destructor:ProtoMessaging.LoginMessage)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void LoginMessage::SharedDtor() {
+  GOOGLE_DCHECK(GetArena() == nullptr);
+  name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void LoginMessage::ArenaDtor(void* object) {
+  LoginMessage* _this = reinterpret_cast< LoginMessage* >(object);
+  (void)_this;
+}
+void LoginMessage::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void LoginMessage::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const LoginMessage& LoginMessage::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_LoginMessage_Tanks_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void LoginMessage::Clear() {
+// @@protoc_insertion_point(message_clear_start:ProtoMessaging.LoginMessage)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  name_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* LoginMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // string name = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_name();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "ProtoMessaging.LoginMessage.name"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* LoginMessage::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ProtoMessaging.LoginMessage)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string name = 1;
+  if (this->name().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_name().data(), static_cast<int>(this->_internal_name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "ProtoMessaging.LoginMessage.name");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_name(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ProtoMessaging.LoginMessage)
+  return target;
+}
+
+size_t LoginMessage::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ProtoMessaging.LoginMessage)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string name = 1;
+  if (this->name().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_name());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void LoginMessage::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:ProtoMessaging.LoginMessage)
+  GOOGLE_DCHECK_NE(&from, this);
+  const LoginMessage* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<LoginMessage>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ProtoMessaging.LoginMessage)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:ProtoMessaging.LoginMessage)
+    MergeFrom(*source);
+  }
+}
+
+void LoginMessage::MergeFrom(const LoginMessage& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ProtoMessaging.LoginMessage)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.name().size() > 0) {
+    _internal_set_name(from._internal_name());
+  }
+}
+
+void LoginMessage::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:ProtoMessaging.LoginMessage)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void LoginMessage::CopyFrom(const LoginMessage& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ProtoMessaging.LoginMessage)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool LoginMessage::IsInitialized() const {
+  return true;
+}
+
+void LoginMessage::InternalSwap(LoginMessage* other) {
+  using std::swap;
+  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  name_.Swap(&other->name_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata LoginMessage::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace ProtoMessaging
 PROTOBUF_NAMESPACE_OPEN
@@ -2801,6 +3034,9 @@ template<> PROTOBUF_NOINLINE ::ProtoMessaging::AddRemoveEntityMessage* Arena::Cr
 }
 template<> PROTOBUF_NOINLINE ::ProtoMessaging::UpdateEntityMessage* Arena::CreateMaybeMessage< ::ProtoMessaging::UpdateEntityMessage >(Arena* arena) {
   return Arena::CreateMessageInternal< ::ProtoMessaging::UpdateEntityMessage >(arena);
+}
+template<> PROTOBUF_NOINLINE ::ProtoMessaging::LoginMessage* Arena::CreateMaybeMessage< ::ProtoMessaging::LoginMessage >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::ProtoMessaging::LoginMessage >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 
