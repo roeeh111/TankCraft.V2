@@ -34,6 +34,9 @@
     <Filter Include="ENTT Wrappers">
       <UniqueIdentifier>{cd7c49bd-5079-40f2-9e5f-733eee5933a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game Level Headers">
+      <UniqueIdentifier>{c5dcce0c-13eb-4131-9efc-8a2b8b8860de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h">
@@ -498,9 +501,6 @@
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\XBox360Includes.h">
       <Filter>RakNet</Filter>
     </ClInclude>
-    <ClInclude Include="Packet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Components.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -528,12 +528,6 @@
     <ClInclude Include="MessagingSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="GameAdmin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RegWrappers.h">
       <Filter>ENTT Wrappers</Filter>
     </ClInclude>
@@ -542,6 +536,15 @@
     </ClInclude>
     <ClInclude Include="Tanks.pb.h">
       <Filter>Header Files\ProtoSchemas</Filter>
+    </ClInclude>
+    <ClInclude Include="GameAdmin.h">
+      <Filter>Header Files\Game Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameData.h">
+      <Filter>Header Files\Game Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet.h">
+      <Filter>Header Files\Game Level Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

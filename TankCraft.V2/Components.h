@@ -38,7 +38,7 @@ namespace ComponentView {
 		void setRight(bool set) { right_ = set; }
 
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
-		virtual void lock() { std::cout << "userinput lock " << std::endl; }; // no mutex yet, so doesnt do anything really
+		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 
 	} userInput;
@@ -75,7 +75,7 @@ namespace ComponentView {
 		void setCury(uint32_t set) { cury_ = set; }
 
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
-		virtual void lock() { std::cout << "position lock " << std::endl; }; // no mutex yet, so doesnt do anything really
+		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 	} position;
 
@@ -92,7 +92,7 @@ namespace ComponentView {
 		char mapChar() { return mapChar_; }
 		void setMapChar(char set) { mapChar_ = set; }
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
-		virtual void lock() { std::cout << "mapobject lock " << std::endl; }; // no mutex yet, so doesnt do anything really
+		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 	} mapObject;
 
@@ -116,7 +116,7 @@ namespace ComponentView {
 			return *this;
 		}
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
-		virtual void lock() { std::cout << "score lock " << std::endl; }; // no mutex yet, so doesnt do anything really
+		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 	} score;
 
@@ -131,7 +131,7 @@ namespace ComponentView {
 		std::string name() { return name_; }
 		void setName(std::string set) { name_ = set;}
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
-		virtual void lock() { std::cout << "name lock " << std::endl; }; // no mutex yet, so doesnt do anything really
+		virtual void lock() { }; // no mutex yet, so doesnt do anything really
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 	} clientName;
 
@@ -154,7 +154,7 @@ namespace ComponentView {
 		damageDone_(int32_t dm) { damage = dm; }
 		~damageDone_() = default;
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
-		virtual void lock() { std::cout << "damage lock " << std::endl; }; // no mutex yet, so doesnt do anything really
+		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 	} damageDone;
 
@@ -165,7 +165,7 @@ namespace ComponentView {
 		//long clientID;
 		//bool isNetwoked; // If the entity should be networked
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
-		virtual void lock() { std::cout << "networked lock " << std::endl; }; // no mutex yet, so doesnt do anything really
+		virtual void lock() { }; // no mutex yet, so doesnt do anything really
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 	} networked;
 }

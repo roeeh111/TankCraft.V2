@@ -71,7 +71,8 @@ namespace NetworkSystem {
 			{
 				std::string stream = std::string((char*)(pack->data + 1));
 				std::string loginName = MessagingSystem::readLogin(stream);
-				UI::addTank(data, loginName);
+				std::cout << "Adding tank for " << loginName << std::endl;
+				UI::addTank(data, loginName, pack);
 				break;
 			}
 			default:
@@ -93,20 +94,20 @@ namespace NetworkSystem {
 			{
 
 			case ID_CONNECTION_REQUEST_ACCEPTED:
-				data.message = "Connection established.\n";
+				std::cout <<"Connection established." << std::endl;
 				handleConnection(data, pack);
 				break;
 
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
-				data.message = "The server is full.\n";
+				std::cout << "The server is full." << std::endl;
 				break;
 
 			case ID_DISCONNECTION_NOTIFICATION:
-				data.message = "We have been disconnected.\n";
+				std::cout <<"We have been disconnected." << std::endl;
 				break;
 
 			case ID_CONNECTION_LOST:
-				data.message = "Connection lost.\n";
+				std::cout << "Connection lost." << std::endl;
 				break;
 
 			case ADD_ENTITY:
@@ -196,6 +197,10 @@ namespace NetworkSystem {
 		else {
 			printf("Connected to the server. Server address: %s \n", pack->systemAddress.ToString());
 			data.rakAddress = pack->systemAddress; // This step is redundant, as the address is hardcoded in the initialization rn
+
+			// now add add a tank!
+			std::cout << "in handle connection, sending login packet for " << data.userName << std::endl;
+			sendLoginPacket(data, data.userName);
 		}
 		
 	}
@@ -232,8 +237,12 @@ namespace NetworkSystem {
 
 			// Allocate a new netId for this entity
 			networkID netid = TranslationSystem::createMapping(data, newEntity);
-			std::cout << "Registered new entity " << netid << std::endl;
-			
+
+			// If the client map isnt constructed for this address, construct it
+			if (!data.clientAddressToEntities.count(pack->systemAddress)) {
+				data.clientAddressToEntities[pack->systemAddress] = std::list<networkID>();
+			}
+
 			// Append into the client entity map
 			data.clientAddressToEntities[pack->systemAddress].push_back(netid);
 
@@ -250,7 +259,6 @@ namespace NetworkSystem {
 				0, 
 				pack->systemAddress, 
 				true);
-			std::cout << "sent message" << std::endl;
 
 			return newEntity;
 			// TODO:			(also figure out how we want to packetize all of the components)
@@ -376,7 +384,7 @@ namespace NetworkSystem {
 		}
 	}
 
-	// 
+	// TODO!!!!!!
 	void sendClientInput(GameData::GameData& data, RakNet::Packet* pack) {
 		std::cout << "Sending out client input to the server" << std::endl;
 		RakNet::BitStream stream = RakNet::BitStream();
@@ -405,6 +413,7 @@ namespace NetworkSystem {
 
 	void sendLoginPacket(GameData::GameData& data, std::string& name)
 	{
+		std::cout << "Sending login packet for " << name << std::endl;
 		RakNet::BitStream stream = RakNet::BitStream();
 
 		MessagingSystem::writeLogin(stream, name);

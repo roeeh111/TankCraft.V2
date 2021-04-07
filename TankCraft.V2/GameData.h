@@ -64,11 +64,7 @@ namespace GameData {
 		// for debugging purposes
 		bool first;
 
-		// The message to be displayed at the bottom of the board
-		// For debug purposes and notifications
-		std::string message;
-
-
+		std::string userName;
 	};
 }
 

@@ -20,13 +20,13 @@ namespace GameAdmin {
 		}
 		else {
 			NetworkSystem::updateClient(data);
-			if (data.first) {
-				NetworkSystem::addEntity(data, nullptr, 0, 0);
-				data.first = false;
-			}
+		//	if (data.first) {
+		//		NetworkSystem::addEntity(data, nullptr, 0, 0);
+		//		data.first = false;
+		//	}
 
 			UI::updateUI(data);
-			UI::printUI(data);
+		//	UI::printUI(data);
 		}
 	}
 
@@ -39,16 +39,39 @@ namespace GameAdmin {
 		initIDTranslationSystem(false); // TODO: change this 
 
 		// Started up on socket, prompt the user to pass in a username
-		std::string username;
 		std::cout << "Please enter a username:" << std::endl;
-		std::cin >> username;
+		std::cin >> data.userName;
 
 		// create a new tank entity with that username, call network add entity and update entity (or put on update queue)
-		NetworkSystem::sendLoginPacket(data, username);
+
+		//NetworkSystem::sendLoginPacket(data, username);
 	}
 
 	void TanksScene::serverLogin(uint32_t maxClients) {
 		data.clientAddressToEntities = std::map<RakNet::SystemAddress, std::list<networkID>>();
+		// Debug:
+
+//		RakNet::SystemAddress addr1 = RakNet::SystemAddress("sand");
+//		std::cout << "Created client address map" << std::endl;
+		// add the entity with entity id given to the m_reg
+//		auto newEntity = RegWrapper::createEntity(data.m_reg, true);
+
+		// Allocate a new netId for this entity
+//		networkID netid = TranslationSystem::createMapping(data, newEntity);
+	//	std::cout << "Registered new entity " << netid << std::endl;
+	//	std::cout << "map size = " << data.clientAddressToEntities[addr1].size() << std::endl;	// OK this doesnt print anything and crashes
+																												// meaning the map isnt constructed....
+		// If the client map isnt constructed for this address, construct it
+	//	std::cout << "count  = " << data.clientAddressToEntities.count(pack->systemAddress) << std::endl;	// OK we break here, so the map isnt set??
+	//	if (!data.clientAddressToEntities.count(addr1)) {
+	//		std::cout << "Creating new list for this system address" << std::endl;
+	//		data.clientAddressToEntities[addr1] = std::list<networkID>();
+	//	}
+	//	std::cout << "Appending client entity" << std::endl;
+		// Append into the client entity map
+//		data.clientAddressToEntities[addr1].push_back(netid);			// TODO: the problem is that this fails
+
+		// Debug: (ok so this code now somehow runs.. (could be an issue with the system address??))
 		initNetworkSystem(data.isServer, maxClients);
 		initIDTranslationSystem(true); // TODO: change this 
 		initMovementSystem();
@@ -136,7 +159,7 @@ namespace GameAdmin {
 				std::cerr << "Failed to startup on socket!" << std::endl;
 			}
 			else {
-				data.message = "Client started\n";
+				std::cout << "Client started" << std::endl;
 				NetworkSystem::clientConnect(data.rpi, SERVER_PORT, "127.0.0.1");
 				data.rakAddress = RakNet::SystemAddress("127.0.0.1|"+ SERVER_PORT); // save the server address
 			}

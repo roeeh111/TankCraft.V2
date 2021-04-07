@@ -1,6 +1,7 @@
 #include <iostream>
 #include "GameAdmin.h"
 #include "ProtoTest.h"
+#include "MessagingSystem.h"
 
 
 #define MAX_CLIENTS 10
@@ -31,28 +32,14 @@ void testSerialization();
 
 int main(void)
 {
-    //playSingleClient();
-    //playMultiplyerClient();
-    testSerialization();
+   // RakNet::BitStream stream = RakNet::BitStream();
+   // std::string name = "sdfasdf";
+   // MessagingSystem::writeLogin(stream, name);
+    playMultiplyerClient();
     return 0;
 }
 
 
-void playSingleClient()
-{
-    // instantiate scene object
-    GameAdmin::TanksScene scene = GameAdmin::TanksScene(false, 1);
-
-    // add a single client
-    UI::addTank(scene.data, "Roee");
-
-   // scene.printUI();
-
-    // loop and update the game 
-    while (true) {
-        scene.update();
-    }
-}
 
 void playMultiplyerClient()
 {

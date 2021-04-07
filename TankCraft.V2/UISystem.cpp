@@ -23,14 +23,17 @@ namespace UI {
 
 	//TODO: Take out the registry wrting and call network system's add entity function
 	// Can make this a part of the login system!!!!
-	void addTank(GameData::GameData& data, std::string clientName_)
+	void addTank(GameData::GameData& data, std::string clientName_, RakNet::Packet* pack)
 	{
+		std::cout << "Calling addTank" << std::endl;
 
 		// This function should be only called by the server, so it will add an entity via the network
 		// and then emplace all these components. how are we putting the components on the update map?
 
 		//auto clientEntity = RegWrapper::createEntity(data.m_reg, true);	
-		auto clientEntity = NetworkSystem::addEntity(data, nullptr, true, false);	// first of all, add this entity over the network
+		auto clientEntity = NetworkSystem::addEntity(data, pack, true, false);	// PROBLEM! WERE TRYING TO ADD A NULL SYSTEM ADDRESS, NEED TO PASS
+																					// IN EITHER A SYSTEM ADDRESS OR A PACKET WITH THE SYSTEM ADDRESS
+		std::cout << "in addTank: addEntity complete" << std::endl;
 
 		// Add the components to the the registry
 		(data.m_reg.emplace<ComponentView::mapObject>(clientEntity)).unlock(data, clientEntity);
@@ -38,6 +41,7 @@ namespace UI {
 		(data.m_reg.emplace<ComponentView::score>(clientEntity)).unlock(data, clientEntity);
 		(data.m_reg.emplace<ComponentView::clientName>(clientEntity, clientName_)).unlock(data, clientEntity);
 		(data.m_reg.emplace<ComponentView::userInput>(clientEntity)).unlock(data, clientEntity);
+		std::cout << "Add tank complete" << std::endl;
 	}
 
 
@@ -97,7 +101,6 @@ namespace UI {
 		for (auto entity : view) {
 			std::cout << "Points for client " << view.get<ComponentView::clientName>(entity).name() << ": " << view.get<ComponentView::score>(entity).points() << std::endl;
 		}
-		std::cout << data.message << std::endl;
 	}
 
 	

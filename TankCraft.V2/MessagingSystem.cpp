@@ -6,9 +6,12 @@
 namespace MessagingSystem {
 
     // System flush
-    void MessagingSystem::FlushGameUpdate(GameData::GameData& data) {
+    void FlushGameUpdate(GameData::GameData& data) {
+        if (data.updateMap.size() <= 0)
+            return;
+        std::cout << "Flushing game update" << std::endl;
         RakNet::BitStream stream = RakNet::BitStream();
-        MessagingSystem::writeGameUpdate(stream, data.updateMap);
+        MessagingSystem::writeGameUpdate(stream, data.updateMap);   // TODO: MAKE SURE TO ONLY WRITE THE GAME UPDATE IF MAP SIZE IS >0
 
         // Broadcast the game update
         data.rpi->Send(&stream,
@@ -137,12 +140,34 @@ namespace MessagingSystem {
         RakNet::MessageID type = LOGIN;
         stream.Write((char*)&type, sizeof(RakNet::MessageID));
 
+        auto temp1 = (char*)stream.GetData();
+       // std::cout << temp1 << strlen(temp1) << std::endl;
+
         // Create a new message object with our fields
         auto msg = ProtoMessaging::LoginMessage();
         msg.set_name(name);
+        std::cout << "in writelogin, name = " << msg.name() << std::endl;
        
         // Write the packet to the stream
-        stream.Write(msg.SerializeAsString());
+       // auto serializedMsg = new std::string;
+        auto serializedMsg = msg.SerializeAsString();
+        stream.Write(serializedMsg.c_str(), serializedMsg.size());
+
+        // Debug:
+        // get a string representation of the string, skipping over the login enum
+
+        // deserialize and print what you get
+   //     auto temp = (char *) stream.GetData();
+    //    std::cout << temp << strlen(temp) << std::endl;
+     //   if ((unsigned char) temp[0] == LOGIN) {
+     //       std::cout << "Login packet type is correct" << std::endl;
+      //  }
+      //  else {
+      //      std::cout << "Login packet type is incorrect" << std::endl;
+      //  }
+      //  std::string stream2 = std::string((char*)(temp + 1));
+       // std::string loginName = MessagingSystem::readLogin(stream2);
+        //std::cout << "in writelogin, Adding tank for " << loginName << std::endl;
     }
 
     /*
@@ -252,7 +277,11 @@ namespace MessagingSystem {
     {
         auto msg = new ProtoMessaging::LoginMessage();
         msg->ParseFromString(stream);
-        return msg->name();
+        std::cout << "in read login: name = " << msg->name() << std::endl;
+        msg->PrintDebugString();
+        std::string res(msg->name());
+        delete msg;
+        return res;
     }
 
 

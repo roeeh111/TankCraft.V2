@@ -20,7 +20,7 @@ namespace UI {
 //		void getUserInput(entt::registry& m_reg, entt::entity& clientEntity); // Might need this later, but has been refactored into other methods
 
 	// Add a tank entity to the game
-	void addTank(GameData::GameData& data, std::string clientName_);
+	void addTank(GameData::GameData& data, std::string clientName_, RakNet::Packet* pack);
 
 	// Getting keyboard input
 	void getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity);
