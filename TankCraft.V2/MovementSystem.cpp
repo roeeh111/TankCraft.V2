@@ -3,14 +3,30 @@
 #include "UISystem.h"
 
 
+/*
+	TODO: loop over all entities with a position element
+		1) if that entity has a user input element and that user input element is dirty, call move entity
+		2) if that entity has a position element (and not a user input) and that position is dirty, call some function
+
+		TODO: write function to move something based on position
+		TODO: figure out how were going to do postions dirty 
+
+		NOTE: The server is the one calling updatemovement, so take that into account when designing
+*/
+
+
 namespace MovementSystem {
+	// NOTE: this only moves tanks now, genericize this so that it can move any entity that is dirty
 	void updateMovement(GameData::GameData& data)
 	{
 		// For now, loop over all entities with position and user input
 		// and call moveEntity
 		auto view = data.m_reg.view<ComponentView::userInput, ComponentView::position>();
 		for (auto &entity : view) {
-			moveEntity(data, entity, data.m_reg.get<ComponentView::userInput>(entity));
+			auto& uinput = data.m_reg.get<ComponentView::userInput>(entity);
+			if (uinput.dirty()) {
+				moveEntity(data, entity, data.m_reg.get<ComponentView::userInput>(entity));
+			}
 		}
 
 		// TODO:
@@ -65,7 +81,11 @@ namespace MovementSystem {
 
 		// Clear the input 
 		input.lock();
-		input.networked = 0; input.setLeft(0); input.setRight(0); input.setUp(0); input.setRight(0);
+		input.setLeft(0); input.setRight(0); input.setUp(0); input.setRight(0);
+		input.setDirty(false);
 		input.unlock(data, entity);
 	}
 }
+
+
+// TODO: MAKE SURE TO ONLY CALL UNLOCK ON A COMPONENT IF THAT COMPONENT IS NOW DIRTY (the points and the input above us are the culprits)

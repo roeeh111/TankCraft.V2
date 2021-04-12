@@ -67,4 +67,7 @@ namespace NetworkSystem {
 
 	// Send a login packet to the server with the given username
 	void sendLoginPacket(GameData::GameData& data, std::string& name);
+
+	// Handle getting a login packet
+	void handleLogin(GameData::GameData& data, RakNet::Packet* pack);
 }

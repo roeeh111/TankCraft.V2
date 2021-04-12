@@ -9,9 +9,9 @@ namespace MessagingSystem {
     void FlushGameUpdate(GameData::GameData& data) {
         if (data.updateMap.size() <= 0)
             return;
-        std::cout << "Flushing game update" << std::endl;
+        std::cout << "Flushing game update of size " << data.updateMap.size() << std::endl;
         RakNet::BitStream stream = RakNet::BitStream();
-        MessagingSystem::writeGameUpdate(stream, data.updateMap);   // TODO: MAKE SURE TO ONLY WRITE THE GAME UPDATE IF MAP SIZE IS >0
+        MessagingSystem::writeGameUpdate(stream, data.updateMap);  
 
         // Broadcast the game update
         data.rpi->Send(&stream,
@@ -80,15 +80,19 @@ namespace MessagingSystem {
         // our message
         auto message = ProtoMessaging::UpdateEntityMessage();
 
-        // Iterate through the map, writing to the message          TODO: if the map's second object is null == null component, call add entity
-        for (auto& myPair : updateMap) {                          //      Right now, we network the addition of entities on creation
+
+        // We only have 1 key in the update map, which is ok
+        // Iterate through the map, writing to the message          
+        for (auto& myPair : updateMap) {                            // PROBLEM: getting a read access violation when trying to iterate to the next element
+            std::cout << "Writegameupdate, found an element. Has "<< myPair.second.size() << " element id = " << myPair.first << std::endl;
             // If the pair is an actual game update
             for (auto& component: myPair.second) {
+                std::cout << "  Writegameupdate, writing a component " << component->CompId << std::endl;
                 component->write(message, myPair.first);
 
             }
-            updateMap.erase(myPair.first);
         }
+        updateMap.clear();
 
         // Set the timestamp
         message.set_timestamp(std::time(nullptr));

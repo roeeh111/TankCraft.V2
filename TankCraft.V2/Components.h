@@ -25,17 +25,19 @@ namespace ComponentView {
 
 	public:
 		bool dirty_;
-		userInput_() { up_ = false; down_ = false; left_ = false; right_ = false; dirty_ = false; CompId = ComponentID::input; }
+		userInput_() { up_ = false; down_ = false; left_ = false; right_ = false; dirty_ = false; networked = false;  CompId = ComponentID::input; }
+		userInput_(bool net) { up_ = false; down_ = false; left_ = false; right_ = false; dirty_ = false; networked = net; CompId = ComponentID::input; }
 		~userInput_() = default;
 		bool up() { return up_; }
 		bool down() { return down_; }
 		bool left() { return left_; }
 		bool right() { return right_; }
+		bool dirty() { return dirty_; }
 
-		void setUp(bool set) { up_ = set; }
-		void setDown(bool set) { down_ = set; }
-		void setLeft(bool set) { left_ = set; }
-		void setRight(bool set) { right_ = set; }
+		void setUp(bool set) { up_ = set; ; dirty_ = true; }
+		void setDown(bool set) { down_ = set; dirty_ = true; }
+		void setLeft(bool set) { left_ = set; dirty_ = true; }
+		void setRight(bool set) { right_ = set; dirty_ = true; }
 
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
@@ -52,9 +54,9 @@ namespace ComponentView {
 		uint32_t cury_;
 
 	public:
-		position_() { prevx_ = 0; prevy_ = 0; curx_ = 0; cury_ = 0; CompId = ComponentID::Position; }
+		position_() { prevx_ = 0; prevy_ = 0; curx_ = 0; cury_ = 0; networked = false;  CompId = ComponentID::Position; }
 		~position_() = default;
-		position_(bool spawn) {
+		position_(bool spawn, bool net) {
 			// set position at random value
 			srand(time(NULL));
 			curx_ = rand() % WIDTH;
@@ -62,6 +64,7 @@ namespace ComponentView {
 			prevx_ = 0;
 			prevy_ = 0;
 			CompId = ComponentID::Position;
+			networked = true;
 		}
 		
 		uint32_t prevx() { return prevx_; }
@@ -85,8 +88,10 @@ namespace ComponentView {
 		char mapChar_;
 
 	public:
-		mapObject_() { mapChar_ = 'X'; CompId = ComponentID::MapObject; }
-		mapObject_(char newChar) { mapChar_ = newChar; CompId = ComponentID::MapObject; }
+		mapObject_() { mapChar_ = 'X'; networked = false; CompId = ComponentID::MapObject; }
+		mapObject_(char newChar) { mapChar_ = newChar; networked = false;  CompId = ComponentID::MapObject; }
+		mapObject_(char newChar, bool net) { mapChar_ = newChar; networked = net;  CompId = ComponentID::MapObject; }
+		mapObject_(bool net) { mapChar_ = 'X'; networked = net;  CompId = ComponentID::MapObject; }
 		~mapObject_() = default;
 
 		char mapChar() { return mapChar_; }
@@ -101,7 +106,8 @@ namespace ComponentView {
 		uint32_t points_;
 
 	public:
-		score_() { points_ = 0; CompId = ComponentID::Score; }
+		score_() { points_ = 0; networked = false;  CompId = ComponentID::Score; }
+		score_(bool net) { points_ = 0; networked = true;  CompId = ComponentID::Score; }
 		~score_() = default;
 		uint32_t points() { return points_; }
 		void setPoints(uint32_t set) { points_ = set;}
@@ -125,8 +131,9 @@ namespace ComponentView {
 	private:
 		std::string name_;
 	public:
-		clientName_() { name_ = ""; CompId = ComponentID::ClientName; }
-		clientName_(std::string name_) { name_ = name_; CompId = ComponentID::ClientName; }
+		clientName_() { name_ = ""; networked = false;  CompId = ComponentID::ClientName; }
+		clientName_(std::string name_) { name_ = name_; networked = false;  CompId = ComponentID::ClientName; }
+		clientName_(std::string name_, bool net) { name_ = name_; networked = net;  CompId = ComponentID::ClientName; }
 		~clientName_() = default;
 		std::string name() { return name_; }
 		void setName(std::string set) { name_ = set;}
@@ -143,15 +150,16 @@ namespace ComponentView {
 	public:
 		int32_t hp() { return hp_; }
 		void setHp(int32_t set) { hp_ = set;}
-		health_() { hp_ = 100; CompId = ComponentID::Health; }
+		health_() { hp_ = 100; networked = false;  CompId = ComponentID::Health; }
+		health_(bool net) { hp_ = 100; networked = net;  CompId = ComponentID::Health; }
 		~health_() = default;
 	} health;
 
 	// TODO: implement getters and setters, havent done it yet since this might be phased out
 	typedef struct damageDone_ : baseComponent {
 		int32_t damage;
-		damageDone_() { damage = 0; CompId = ComponentID::DamageDone; }
-		damageDone_(int32_t dm) { damage = dm; }
+		damageDone_() { damage = 0; networked = false;  CompId = ComponentID::DamageDone; }
+		damageDone_(int32_t dm) { damage = dm; networked = false;  CompId = ComponentID::DamageDone;}
 		~damageDone_() = default;
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 		virtual void lock() {  }; // no mutex yet, so doesnt do anything really

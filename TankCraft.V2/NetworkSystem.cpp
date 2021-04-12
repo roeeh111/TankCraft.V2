@@ -51,7 +51,7 @@ namespace NetworkSystem {
 
 			case ADD_ENTITY:
 				printf("Received add entity packet from client.\n");
-				addEntity(data, pack, data.isServer, 0);
+				addEntity(data, pack, data.isServer, true);			// TODO: might need to change to false
 				break;
 
 			case REMOVE_ENTITY:
@@ -69,10 +69,8 @@ namespace NetworkSystem {
 
 			case LOGIN:
 			{
-				std::string stream = std::string((char*)(pack->data + 1));
-				std::string loginName = MessagingSystem::readLogin(stream);
-				std::cout << "Adding tank for " << loginName << std::endl;
-				UI::addTank(data, loginName, pack);
+
+				handleLogin(data, pack);
 				break;
 			}
 			default:
@@ -112,7 +110,7 @@ namespace NetworkSystem {
 
 			case ADD_ENTITY:
 				printf("Received add entity packet from server.\n");
-				addEntity(data, pack, data.isServer, 0);
+				addEntity(data, pack, false, false);
 				break;
 
 			case REMOVE_ENTITY:
@@ -233,7 +231,7 @@ namespace NetworkSystem {
 		if (isServer) {
 
 			// add the entity with entity id given to the m_reg
-			auto newEntity = RegWrapper::createEntity(data.m_reg, true);			
+			auto newEntity = RegWrapper::createEntity(data.m_reg, true);
 
 			// Allocate a new netId for this entity
 			networkID netid = TranslationSystem::createMapping(data, newEntity);
@@ -253,13 +251,24 @@ namespace NetworkSystem {
 
 			std::cout << "Registered entity from client " << pack->systemAddress.GetPort() << ", broadcasting..." << std::endl;
 			// broadcast to all clients to add a new entity with entity ID, and all components
-			data.rpi->Send(&stream, 
-				HIGH_PRIORITY, 
-				RELIABLE_ORDERED, 
-				0, 
-				pack->systemAddress, 
-				true);
 
+			if (responding) {
+				data.rpi->Send(&stream,
+					HIGH_PRIORITY,
+					RELIABLE_ORDERED,
+					0,
+					RakNet::UNASSIGNED_SYSTEM_ADDRESS, //				pack->systemAddress, 
+					true);
+			}
+			else {
+				data.rpi->Send(&stream,
+					HIGH_PRIORITY,
+					RELIABLE_ORDERED,
+					0,
+					pack->systemAddress, 
+					true);
+			}
+			std::cout << "Finished broadcasting" << std::endl;
 			return newEntity;
 			// TODO:			(also figure out how we want to packetize all of the components)
 			// add all components of the entity with the given values to the new entity
@@ -267,11 +276,11 @@ namespace NetworkSystem {
 		else {
 			// If is client:
 			// if were not requesting, but responding to a request
-			if (responding) {
+			if (!responding) {
 				std::cout << "Adding entity in client after receiving a packet" << std::endl;
 				auto newEntity = RegWrapper::createEntity(data.m_reg, true);
 
-				std::string str = std::string((char*) (pack->data + 1));							// TODO: this may cause a bug, skipping over the first character
+				std::string str = std::string((char*) (pack->data + 1));
 				ProtoMessaging::AddRemoveEntityMessage* msg = MessagingSystem::readAddRemoveEntity(str);
 
 				// when unpacking input packet, get the netID passed to us
@@ -300,7 +309,7 @@ namespace NetworkSystem {
 		}
 	}
 
-	// TODO:
+	// TODO:?????
 	void removeEntity(GameData::GameData& data, RakNet::Packet* pack, networkID remID, bool isServer, bool responding)
 	{
 		// If is Server:
@@ -425,5 +434,12 @@ namespace NetworkSystem {
 			data.rakAddress,
 			false);
 	}
-}
 
+	void handleLogin(GameData::GameData& data, RakNet::Packet* pack)
+	{
+		std::string stream = std::string((char*)(pack->data + 1));
+		std::string loginName = MessagingSystem::readLogin(stream);
+		std::cout << "Adding tank for " << loginName << std::endl;
+		UI::addTank(data, loginName, pack);
+	}
+}

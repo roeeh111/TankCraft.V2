@@ -3,6 +3,7 @@
 #include "IDTranslationSystem.h"
 #include "Components.h"
 #include "RegWrappers.h"
+#include "MessagingSystem.h"
 
 /*
 
@@ -21,8 +22,7 @@ Server responds with a position component for the entity, client sets the new po
 
 namespace UI {
 
-	//TODO: Take out the registry wrting and call network system's add entity function
-	// Can make this a part of the login system!!!!
+	// TODO: 
 	void addTank(GameData::GameData& data, std::string clientName_, RakNet::Packet* pack)
 	{
 		std::cout << "Calling addTank" << std::endl;
@@ -31,17 +31,19 @@ namespace UI {
 		// and then emplace all these components. how are we putting the components on the update map?
 
 		//auto clientEntity = RegWrapper::createEntity(data.m_reg, true);	
-		auto clientEntity = NetworkSystem::addEntity(data, pack, true, false);	// PROBLEM! WERE TRYING TO ADD A NULL SYSTEM ADDRESS, NEED TO PASS
-																					// IN EITHER A SYSTEM ADDRESS OR A PACKET WITH THE SYSTEM ADDRESS
+		auto clientEntity = NetworkSystem::addEntity(data, pack, true, true);	
 		std::cout << "in addTank: addEntity complete" << std::endl;
 
 		// Add the components to the the registry
-		(data.m_reg.emplace<ComponentView::mapObject>(clientEntity)).unlock(data, clientEntity);
-		(data.m_reg.emplace<ComponentView::position>(clientEntity, 1)).unlock(data, clientEntity);
-		(data.m_reg.emplace<ComponentView::score>(clientEntity)).unlock(data, clientEntity);
-		(data.m_reg.emplace<ComponentView::clientName>(clientEntity, clientName_)).unlock(data, clientEntity);
-		(data.m_reg.emplace<ComponentView::userInput>(clientEntity)).unlock(data, clientEntity);
-		std::cout << "Add tank complete" << std::endl;
+		(data.m_reg.emplace<ComponentView::mapObject>(clientEntity, true)).unlock(data, clientEntity);
+		(data.m_reg.emplace<ComponentView::position>(clientEntity, true, true)).unlock(data, clientEntity);
+		(data.m_reg.emplace<ComponentView::score>(clientEntity, true)).unlock(data, clientEntity);
+		(data.m_reg.emplace<ComponentView::clientName>(clientEntity, clientName_, true)).unlock(data, clientEntity);
+		(data.m_reg.emplace<ComponentView::userInput>(clientEntity, true)).unlock(data, clientEntity);
+
+		std::cout << "Add tank complete, update map size = " << data.updateMap.size() << std::endl;
+
+		// TODO: problem... were not actually adding things to the map, so! fix that
 	}
 
 
@@ -49,15 +51,19 @@ namespace UI {
 	{
 		if (!data.isServer) {
 			// get all elements that take user input
-			auto view = data.m_reg.view<ComponentView::userInput>();
+			auto view = data.m_reg.view<ComponentView::clientName, ComponentView::userInput>();
 			for (auto entity : view) {
-				// Get the user input for our object
-				getKeyBoardInput(data, entity);
+				// Compare clientname with our name
+				if (data.m_reg.get<ComponentView::clientName>(entity).name() == data.userName) {
+					// Get the user input for our object, only if the name matches our name
+					getKeyBoardInput(data, entity);				// NOTE: Currently not being called yet since the update packet isnt being sent back
+				}
 			}
 		}
 		
 		// update the map
 		updateMapPositions(data);
+		printUI(data);
 	}
 
 	void updateMapPositions(GameData::GameData& data) {
@@ -74,7 +80,9 @@ namespace UI {
 				if (data.m_reg.has<ComponentView::score>(entity)) {
 					// Get the entities score
 					auto& scr = data.m_reg.get<ComponentView::score>(entity);
+					scr.lock();
 					scr.setPoints(scr.points()+1);
+					scr.unlock(data, entity);
 				}
 			}
 			data.map[pos.prevy()][pos.prevx()] = '.';
@@ -85,7 +93,8 @@ namespace UI {
 	void printUI(GameData::GameData& data)
 	{
 		// Clear the current screen
-		//system("CLS");
+		/*
+		system("CLS");
 
 		// Print out whatever is in the map
 		std::cout << std::endl;
@@ -101,6 +110,7 @@ namespace UI {
 		for (auto entity : view) {
 			std::cout << "Points for client " << view.get<ComponentView::clientName>(entity).name() << ": " << view.get<ComponentView::score>(entity).points() << std::endl;
 		}
+		*/
 	}
 
 	
@@ -111,6 +121,7 @@ namespace UI {
 
 		// Get the userInput component for this entity
 		ComponentView::userInput& usrInput = data.m_reg.get<ComponentView::userInput>(clientEntity);
+		usrInput.lock();
 
 		usrInput.dirty_ = 1;
 		// set the user input values depending on what we got
@@ -129,6 +140,8 @@ namespace UI {
 		else {
 			usrInput.dirty_ = 0;
 		}
+
+		usrInput.unlock(data, clientEntity);
 
 		/* TODO:																		(need a map from entity->netid for this to be quick)
 		* For now, send the control to the user exactly as we inputed it.
@@ -195,4 +208,10 @@ void UISystem::getUserInput(entt::registry& m_reg, entt::entity& clientEntity)
 }
 */
 
+// NEW USER INPUT METHOD:
+// get all entities with a username
+// find the entity with the players username
+// call getkeyboard input on that entity
+// bobs your uncle
 
+// (change login to set the global username value)

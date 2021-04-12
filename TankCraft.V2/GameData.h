@@ -8,6 +8,7 @@
 
 namespace GameData { class GameData; };
 
+// TODO: unlock doesnt actually do anything right now..., so implement it
 // The base component, its here now because it bugged out when it was in its own header
 typedef struct baseComponent_ {
 	ComponentID::ComponentID CompId;
@@ -17,7 +18,7 @@ typedef struct baseComponent_ {
 	virtual ~baseComponent_() = default;
 	virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) { std::cout << "base write " << std::endl; }
 	virtual void lock() { std::cout << "base lock " << std::endl; };
-	void unlock(GameData::GameData& data, const entt::entity& entity);
+	void unlock(GameData::GameData& data, const entt::entity& entity) ; // { std::cout << " base unlock" << std::endl; }
 	bool isNetworked() { return networked; }
 
 	//virtual void read(ProtoMessaging::UpdateEntityMessage& message, networkID netid, int index) {}
@@ -59,7 +60,6 @@ namespace GameData {
 
 		// Whether this scene is the server or a client 
 		bool isServer;
-
 
 		// for debugging purposes
 		bool first;
