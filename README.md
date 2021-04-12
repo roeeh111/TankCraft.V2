@@ -1,6 +1,63 @@
 # TankCraft.V2
 This is a prototype application of a networked ECS system with EnTT and RakNet implementation.
 
+
+
+## Setup Instruction
+
+#### Dependencies with vcpkg
+
+We use [vcpkg](https://docs.microsoft.com/en-us/cpp/build/vcpkg?view=msvc-160) to install all dependencies so that we don't have different directory paths.
+
+[Install vcpkg](https://docs.microsoft.com/en-us/cpp/build/install-vcpkg?view=msvc-160&tabs=windows)
+
+[Integrate vcpkg to Visual Studio](https://docs.microsoft.com/en-us/cpp/build/integrate-vcpkg?view=msvc-160)
+
+In the project properties -> Configuration Properties -> vcpkg, we can choose to use the vcpkg.
+
+We will install EnTT and ProtoBuffer
+
+```
+vcpkg install entt
+vcpkg install protobuf protobuf:x64-windows
+vcpkg integrate install
+```
+
+It's known that at compilation, ProtoBuffer will throw lots of warnings and [2 errors regarding the constexpr](https://github.com/protocolbuffers/protobuf/issues/8268), but these don't affect the build.
+
+#### RakNet
+
+As for RakNet, we keep the source files in the same directory:
+
+`C:\RakNet\Source;`
+
+This directory needs to be added to  Configuration Properties -> C/C++ -> Additional Include Directories
+
+The RakNet source file also need to be manually added to that directory.
+
+If there are issues with RakNet compilation, please refer to http://www.jenkinssoftware.com/raknet/manual/tutorial.html.
+
+
+
+Since RakNet is local, we have a few Message identifiers that need to be manually added to `MessageIdentifiers.h` of the RakNet source.
+
+The file can be quick accessed by going to the `[NetworkSystem.cpp](https://github.com/roeeh111/TankCraft.V2/blob/master/TankCraft.V2/NetworkSystem.cpp)` and click on any message types.
+
+Starting at line 429 of `MessageIdentifiers.h` , replace:
+
+	// For the user to use.  Start your first enumeration at this value.
+	ADD_ENTITY,
+	REMOVE_ENTITY,
+	UPDATE_ENTITY,
+	CONTROL,
+	LOGIN,
+	ID_USER_PACKET_ENUM
+#### Other
+
+We are mostly using the local windows debugger to test.
+
+There might be other issues that we missed, please let us know.
+
 ## The Game
 
 The game is an executable file.
