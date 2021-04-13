@@ -33,13 +33,14 @@ namespace GameAdmin {
 		initNetworkSystem(!data.isServer, 1);
 		initIDTranslationSystem(false); // TODO: change this 
 
+		data.userName = new std::string();
 		// Started up on socket, prompt the user to pass in a username
 		std::cout << "Please enter a username:" << std::endl;
-		std::cin >> data.userName;
+		std::cin >> *data.userName;
 
 		// create a new tank entity with that username, call network add entity and update entity (or put on update queue)
 
-		NetworkSystem::sendLoginPacket(data, data.userName);
+		NetworkSystem::sendLoginPacket(data, *data.userName);
 	}
 
 	void TanksScene::serverLogin(uint32_t maxClients) {

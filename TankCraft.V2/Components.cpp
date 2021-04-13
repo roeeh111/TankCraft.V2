@@ -4,7 +4,13 @@ namespace ComponentView {
 
 	void userInput_::write(ProtoMessaging::UpdateEntityMessage& message, networkID netid)
 	{
-		// TODO: do i need this?
+		std::cout << "in userinput write" << std::endl;
+		ProtoMessaging::ControlComponent* comp = message.add_uinputcomps();
+		comp->set_down(down());
+		comp->set_left(left());
+		comp->set_right(right());
+		comp->set_up(up());
+		comp->set_netid(netid);
 	}
 
 
@@ -34,7 +40,7 @@ namespace ComponentView {
 	{
 		std::cout << "in clientname write" << std::endl;
 		ProtoMessaging::ClientNameComponent* comp = message.add_clientnamecomps();
-		comp->set_name((name()));
+		comp->set_name((name()));	std::cout << "		in clientname write. name = " << name() << std::endl; // NAME ISNT SET!
 		comp->set_netid(netid);
 	}
 

@@ -190,13 +190,14 @@ static void InitDefaultsscc_info_UpdateEntityMessage_Tanks_2eproto() {
   }
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<5> scc_info_UpdateEntityMessage_Tanks_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 5, 0, InitDefaultsscc_info_UpdateEntityMessage_Tanks_2eproto}, {
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<6> scc_info_UpdateEntityMessage_Tanks_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 6, 0, InitDefaultsscc_info_UpdateEntityMessage_Tanks_2eproto}, {
       &scc_info_PositionComponent_Tanks_2eproto.base,
       &scc_info_MapObjectComponent_Tanks_2eproto.base,
       &scc_info_ScoreComponent_Tanks_2eproto.base,
       &scc_info_ClientNameComponent_Tanks_2eproto.base,
-      &scc_info_HealthComponent_Tanks_2eproto.base,}};
+      &scc_info_HealthComponent_Tanks_2eproto.base,
+      &scc_info_ControlComponent_Tanks_2eproto.base,}};
 
 static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Tanks_2eproto[10];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_Tanks_2eproto = nullptr;
@@ -279,6 +280,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Tanks_2eproto::offsets[] PROTO
   PROTOBUF_FIELD_OFFSET(::ProtoMessaging::UpdateEntityMessage, scorecomps_),
   PROTOBUF_FIELD_OFFSET(::ProtoMessaging::UpdateEntityMessage, clientnamecomps_),
   PROTOBUF_FIELD_OFFSET(::ProtoMessaging::UpdateEntityMessage, healthcomps_),
+  PROTOBUF_FIELD_OFFSET(::ProtoMessaging::UpdateEntityMessage, uinputcomps_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ProtoMessaging::LoginMessage, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -296,7 +298,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 48, -1, sizeof(::ProtoMessaging::ControlMessage)},
   { 56, -1, sizeof(::ProtoMessaging::AddRemoveEntityMessage)},
   { 64, -1, sizeof(::ProtoMessaging::UpdateEntityMessage)},
-  { 76, -1, sizeof(::ProtoMessaging::LoginMessage)},
+  { 77, -1, sizeof(::ProtoMessaging::LoginMessage)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -327,7 +329,7 @@ const char descriptor_table_protodef_Tanks_2eproto[] PROTOBUF_SECTION_VARIABLE(p
   " \001(\014\022\021\n\ttimestamp\030\002 \001(\003\0221\n\007control\030\003 \001(\013"
   "2 .ProtoMessaging.ControlComponent\"F\n\026Ad"
   "dRemoveEntityMessage\022\n\n\002id\030\001 \001(\014\022\021\n\ttime"
-  "stamp\030\002 \001(\003\022\r\n\005netid\030\003 \001(\005\"\322\002\n\023UpdateEnt"
+  "stamp\030\002 \001(\003\022\r\n\005netid\030\003 \001(\005\"\211\003\n\023UpdateEnt"
   "ityMessage\022\n\n\002id\030\001 \001(\014\022\021\n\ttimestamp\030\002 \001("
   "\003\0228\n\rpositionComps\030\003 \003(\0132!.ProtoMessagin"
   "g.PositionComponent\022:\n\016mapObjectComps\030\004 "
@@ -336,8 +338,9 @@ const char descriptor_table_protodef_Tanks_2eproto[] PROTOBUF_SECTION_VARIABLE(p
   "reComponent\022<\n\017clientNameComps\030\006 \003(\0132#.P"
   "rotoMessaging.ClientNameComponent\0224\n\013hea"
   "lthComps\030\007 \003(\0132\037.ProtoMessaging.HealthCo"
-  "mponent\"\034\n\014LoginMessage\022\014\n\004name\030\001 \001(\tb\006p"
-  "roto3"
+  "mponent\0225\n\013uinputComps\030\010 \003(\0132 .ProtoMess"
+  "aging.ControlComponent\"\034\n\014LoginMessage\022\014"
+  "\n\004name\030\001 \001(\tb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Tanks_2eproto_deps[1] = {
 };
@@ -355,7 +358,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Tan
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Tanks_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Tanks_2eproto = {
-  false, false, descriptor_table_protodef_Tanks_2eproto, "Tanks.proto", 965,
+  false, false, descriptor_table_protodef_Tanks_2eproto, "Tanks.proto", 1020,
   &descriptor_table_Tanks_2eproto_once, descriptor_table_Tanks_2eproto_sccs, descriptor_table_Tanks_2eproto_deps, 10, 0,
   schemas, file_default_instances, TableStruct_Tanks_2eproto::offsets,
   file_level_metadata_Tanks_2eproto, 10, file_level_enum_descriptors_Tanks_2eproto, file_level_service_descriptors_Tanks_2eproto,
@@ -2423,7 +2426,8 @@ UpdateEntityMessage::UpdateEntityMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena)
   mapobjectcomps_(arena),
   scorecomps_(arena),
   clientnamecomps_(arena),
-  healthcomps_(arena) {
+  healthcomps_(arena),
+  uinputcomps_(arena) {
   SharedCtor();
   RegisterArenaDtor(arena);
   // @@protoc_insertion_point(arena_constructor:ProtoMessaging.UpdateEntityMessage)
@@ -2434,7 +2438,8 @@ UpdateEntityMessage::UpdateEntityMessage(const UpdateEntityMessage& from)
       mapobjectcomps_(from.mapobjectcomps_),
       scorecomps_(from.scorecomps_),
       clientnamecomps_(from.clientnamecomps_),
-      healthcomps_(from.healthcomps_) {
+      healthcomps_(from.healthcomps_),
+      uinputcomps_(from.uinputcomps_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (!from._internal_id().empty()) {
@@ -2488,6 +2493,7 @@ void UpdateEntityMessage::Clear() {
   scorecomps_.Clear();
   clientnamecomps_.Clear();
   healthcomps_.Clear();
+  uinputcomps_.Clear();
   id_.ClearToEmpty();
   timestamp_ = PROTOBUF_LONGLONG(0);
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
@@ -2575,6 +2581,18 @@ const char* UpdateEntityMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAME
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<58>(ptr));
         } else goto handle_unusual;
         continue;
+      // repeated .ProtoMessaging.ControlComponent uinputComps = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 66)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_uinputcomps(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<66>(ptr));
+        } else goto handle_unusual;
+        continue;
       default: {
       handle_unusual:
         if ((tag & 7) == 4 || tag == 0) {
@@ -2655,6 +2673,14 @@ failure:
       InternalWriteMessage(7, this->_internal_healthcomps(i), target, stream);
   }
 
+  // repeated .ProtoMessaging.ControlComponent uinputComps = 8;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->_internal_uinputcomps_size()); i < n; i++) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(8, this->_internal_uinputcomps(i), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -2702,6 +2728,13 @@ size_t UpdateEntityMessage::ByteSizeLong() const {
   // repeated .ProtoMessaging.HealthComponent healthComps = 7;
   total_size += 1UL * this->_internal_healthcomps_size();
   for (const auto& msg : this->healthcomps_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // repeated .ProtoMessaging.ControlComponent uinputComps = 8;
+  total_size += 1UL * this->_internal_uinputcomps_size();
+  for (const auto& msg : this->uinputcomps_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
@@ -2756,6 +2789,7 @@ void UpdateEntityMessage::MergeFrom(const UpdateEntityMessage& from) {
   scorecomps_.MergeFrom(from.scorecomps_);
   clientnamecomps_.MergeFrom(from.clientnamecomps_);
   healthcomps_.MergeFrom(from.healthcomps_);
+  uinputcomps_.MergeFrom(from.uinputcomps_);
   if (from.id().size() > 0) {
     _internal_set_id(from._internal_id());
   }
@@ -2790,6 +2824,7 @@ void UpdateEntityMessage::InternalSwap(UpdateEntityMessage* other) {
   scorecomps_.InternalSwap(&other->scorecomps_);
   clientnamecomps_.InternalSwap(&other->clientnamecomps_);
   healthcomps_.InternalSwap(&other->healthcomps_);
+  uinputcomps_.InternalSwap(&other->uinputcomps_);
   id_.Swap(&other->id_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
   swap(timestamp_, other->timestamp_);
 }

@@ -70,6 +70,7 @@ message UpdateEntityMessage {
   repeated ScoreComponent scoreComps = 5;
   repeated ClientNameComponent clientNameComps = 6;
   repeated HealthComponent healthComps = 7;
+  repeated ControlComponent uinputComps = 8;
 }
 
 message LoginMessage {

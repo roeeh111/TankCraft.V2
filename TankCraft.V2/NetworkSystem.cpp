@@ -153,7 +153,7 @@ namespace NetworkSystem {
 	void sendControl(GameData::GameData& data, ComponentView::userInput& usrInput, networkID netid) {
 		RakNet::BitStream stream = RakNet::BitStream();
 
-		MessagingSystem::writeControls(stream, usrInput, netid);
+		MessagingSystem::writeControls(stream, usrInput, netid);	// PROBLEM ON THIS LINE!!
 		data.rpi->Send(&stream,
 			HIGH_PRIORITY,
 			RELIABLE_ORDERED,
@@ -197,8 +197,8 @@ namespace NetworkSystem {
 			data.rakAddress = pack->systemAddress; // This step is redundant, as the address is hardcoded in the initialization rn
 
 			// now add add a tank!
-			std::cout << "in handle connection, sending login packet for " << data.userName << std::endl;
-			sendLoginPacket(data, data.userName);
+			std::cout << "in handle connection, sending login packet for " << *data.userName << std::endl;
+			sendLoginPacket(data, *data.userName);
 		}
 		
 	}

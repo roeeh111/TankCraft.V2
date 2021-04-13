@@ -75,6 +75,7 @@ namespace MessagingSystem {
 	void readPosComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index);
 	void readObjComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index);
 	void readNameComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index);
+	void readControlComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index);
 
 
 	// Debug only

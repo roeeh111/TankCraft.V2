@@ -1519,6 +1519,7 @@ class UpdateEntityMessage PROTOBUF_FINAL :
     kScoreCompsFieldNumber = 5,
     kClientNameCompsFieldNumber = 6,
     kHealthCompsFieldNumber = 7,
+    kUinputCompsFieldNumber = 8,
     kIdFieldNumber = 1,
     kTimestampFieldNumber = 2,
   };
@@ -1612,6 +1613,24 @@ class UpdateEntityMessage PROTOBUF_FINAL :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ProtoMessaging::HealthComponent >&
       healthcomps() const;
 
+  // repeated .ProtoMessaging.ControlComponent uinputComps = 8;
+  int uinputcomps_size() const;
+  private:
+  int _internal_uinputcomps_size() const;
+  public:
+  void clear_uinputcomps();
+  ::ProtoMessaging::ControlComponent* mutable_uinputcomps(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ProtoMessaging::ControlComponent >*
+      mutable_uinputcomps();
+  private:
+  const ::ProtoMessaging::ControlComponent& _internal_uinputcomps(int index) const;
+  ::ProtoMessaging::ControlComponent* _internal_add_uinputcomps();
+  public:
+  const ::ProtoMessaging::ControlComponent& uinputcomps(int index) const;
+  ::ProtoMessaging::ControlComponent* add_uinputcomps();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ProtoMessaging::ControlComponent >&
+      uinputcomps() const;
+
   // bytes id = 1;
   void clear_id();
   const std::string& id() const;
@@ -1649,6 +1668,7 @@ class UpdateEntityMessage PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ProtoMessaging::ScoreComponent > scorecomps_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ProtoMessaging::ClientNameComponent > clientnamecomps_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ProtoMessaging::HealthComponent > healthcomps_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ProtoMessaging::ControlComponent > uinputcomps_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr id_;
   ::PROTOBUF_NAMESPACE_ID::int64 timestamp_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -2821,6 +2841,45 @@ inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ProtoMessaging::Health
 UpdateEntityMessage::healthcomps() const {
   // @@protoc_insertion_point(field_list:ProtoMessaging.UpdateEntityMessage.healthComps)
   return healthcomps_;
+}
+
+// repeated .ProtoMessaging.ControlComponent uinputComps = 8;
+inline int UpdateEntityMessage::_internal_uinputcomps_size() const {
+  return uinputcomps_.size();
+}
+inline int UpdateEntityMessage::uinputcomps_size() const {
+  return _internal_uinputcomps_size();
+}
+inline void UpdateEntityMessage::clear_uinputcomps() {
+  uinputcomps_.Clear();
+}
+inline ::ProtoMessaging::ControlComponent* UpdateEntityMessage::mutable_uinputcomps(int index) {
+  // @@protoc_insertion_point(field_mutable:ProtoMessaging.UpdateEntityMessage.uinputComps)
+  return uinputcomps_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ProtoMessaging::ControlComponent >*
+UpdateEntityMessage::mutable_uinputcomps() {
+  // @@protoc_insertion_point(field_mutable_list:ProtoMessaging.UpdateEntityMessage.uinputComps)
+  return &uinputcomps_;
+}
+inline const ::ProtoMessaging::ControlComponent& UpdateEntityMessage::_internal_uinputcomps(int index) const {
+  return uinputcomps_.Get(index);
+}
+inline const ::ProtoMessaging::ControlComponent& UpdateEntityMessage::uinputcomps(int index) const {
+  // @@protoc_insertion_point(field_get:ProtoMessaging.UpdateEntityMessage.uinputComps)
+  return _internal_uinputcomps(index);
+}
+inline ::ProtoMessaging::ControlComponent* UpdateEntityMessage::_internal_add_uinputcomps() {
+  return uinputcomps_.Add();
+}
+inline ::ProtoMessaging::ControlComponent* UpdateEntityMessage::add_uinputcomps() {
+  // @@protoc_insertion_point(field_add:ProtoMessaging.UpdateEntityMessage.uinputComps)
+  return _internal_add_uinputcomps();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ProtoMessaging::ControlComponent >&
+UpdateEntityMessage::uinputcomps() const {
+  // @@protoc_insertion_point(field_list:ProtoMessaging.UpdateEntityMessage.uinputComps)
+  return uinputcomps_;
 }
 
 // -------------------------------------------------------------------

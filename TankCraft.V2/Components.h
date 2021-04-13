@@ -133,7 +133,7 @@ namespace ComponentView {
 	public:
 		clientName_() { name_ = ""; networked = false;  CompId = ComponentID::ClientName; }
 		clientName_(std::string name_) { name_ = name_; networked = false;  CompId = ComponentID::ClientName; }
-		clientName_(std::string name_, bool net) { name_ = name_; networked = net;  CompId = ComponentID::ClientName; }
+		clientName_(std::string name, bool net) { name_ = name; networked = net;  CompId = ComponentID::ClientName; }
 		~clientName_() = default;
 		std::string name() { return name_; }
 		void setName(std::string set) { name_ = set;}

@@ -14,6 +14,7 @@
 		NOTE: The server is the one calling updatemovement, so take that into account when designing
 */
 
+// Update movement should only be control based? 
 
 namespace MovementSystem {
 	// NOTE: this only moves tanks now, genericize this so that it can move any entity that is dirty
@@ -24,14 +25,12 @@ namespace MovementSystem {
 		auto view = data.m_reg.view<ComponentView::userInput, ComponentView::position>();
 		for (auto &entity : view) {
 			auto& uinput = data.m_reg.get<ComponentView::userInput>(entity);
-			if (uinput.dirty()) {
+
+			// We are guarenteed that any user input that needs to be updated will be set dirty=1
+			if (uinput.dirty()) {	
 				moveEntity(data, entity, data.m_reg.get<ComponentView::userInput>(entity));
 			}
 		}
-
-		// TODO:
-		// Networked version: if user input is dirty, signal networking system to send control packet
-		// The acutal update will happen from the network calling moveEntity
 	}
 
 	void moveEntity(GameData::GameData& data, const entt::entity &entity, ComponentView::userInput &input) {
@@ -80,12 +79,12 @@ namespace MovementSystem {
 		points.unlock(data, entity);
 
 		// Clear the input 
-		input.lock();
+	//	input.lock();
 		input.setLeft(0); input.setRight(0); input.setUp(0); input.setRight(0);
-		input.setDirty(false);
-		input.unlock(data, entity);
+		input.dirty_ = false;
+//		input.unlock(data, entity);		// NOTE: NOT UNLOCKING THE USERINPUT COMPONENT BECAUSE WE DONT WANT TO SEND IT BACK
 	}
 }
-
+ 
 
 // TODO: MAKE SURE TO ONLY CALL UNLOCK ON A COMPONENT IF THAT COMPONENT IS NOW DIRTY (the points and the input above us are the culprits)

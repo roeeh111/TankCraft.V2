@@ -64,7 +64,7 @@ namespace GameData {
 		// for debugging purposes
 		bool first;
 
-		std::string userName;
+		std::string *userName;
 	};
 }
 

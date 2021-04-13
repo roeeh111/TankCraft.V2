@@ -43,7 +43,6 @@ namespace UI {
 
 		std::cout << "Add tank complete, update map size = " << data.updateMap.size() << std::endl;
 
-		// TODO: problem... were not actually adding things to the map, so! fix that
 	}
 
 
@@ -52,18 +51,25 @@ namespace UI {
 		if (!data.isServer) {
 			// get all elements that take user input
 			auto view = data.m_reg.view<ComponentView::clientName, ComponentView::userInput>();
-			for (auto entity : view) {
+
+
+		//	std::cout << "elements in reg = " << data.m_reg.size() << std::endl;
+			int i = 1;
+			for (auto entity : view) {				// NOTOE: apparently there are no entities with these two components
+													//(we have a clientname, not a userinput. need to network the userinput)
 				// Compare clientname with our name
-				if (data.m_reg.get<ComponentView::clientName>(entity).name() == data.userName) {
+				std::cout << i << std::endl; i++;
+				if (data.m_reg.get<ComponentView::clientName>(entity).name() == *data.userName) {
+					std::cout << "Give me input: " << std::endl;
 					// Get the user input for our object, only if the name matches our name
 					getKeyBoardInput(data, entity);				// NOTE: Currently not being called yet since the update packet isnt being sent back
+					printUI(data);
 				}
 			}
 		}
 		
 		// update the map
 		updateMapPositions(data);
-		printUI(data);
 	}
 
 	void updateMapPositions(GameData::GameData& data) {
@@ -93,7 +99,7 @@ namespace UI {
 	void printUI(GameData::GameData& data)
 	{
 		// Clear the current screen
-		/*
+		
 		system("CLS");
 
 		// Print out whatever is in the map
@@ -110,7 +116,7 @@ namespace UI {
 		for (auto entity : view) {
 			std::cout << "Points for client " << view.get<ComponentView::clientName>(entity).name() << ": " << view.get<ComponentView::score>(entity).points() << std::endl;
 		}
-		*/
+		
 	}
 
 	
@@ -141,13 +147,13 @@ namespace UI {
 			usrInput.dirty_ = 0;
 		}
 
-		usrInput.unlock(data, clientEntity);
+		//usrInput.unlock(data, clientEntity);			// TODO: do i really need this???
 
 		/* TODO:																		(need a map from entity->netid for this to be quick)
 		* For now, send the control to the user exactly as we inputed it.
 		* For later versions, append it to a tochange queue
 		*/
-		//NetworkSystem::sendControl(data, usrInput, );
+		NetworkSystem::sendControl(data, usrInput, TranslationSystem::getNetId(data, clientEntity)); // TODO!!!! ERROR ON THIS LINE. CRASHING NULLPOINTER 
 
 	}
 
