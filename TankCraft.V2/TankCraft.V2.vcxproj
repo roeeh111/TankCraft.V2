@@ -305,6 +305,7 @@
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\WSAStartupSingleton.h" />
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\XBox360Includes.h" />
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h" />
+    <ClInclude Include="BaseSystem.h" />
     <ClInclude Include="ComponentID.h" />
     <ClInclude Include="RegWrappers.h" />
     <ClInclude Include="FreeListComponent.h" />
@@ -317,7 +318,6 @@
     <ClInclude Include="UISystem.h" />
     <ClInclude Include="IDTranslationSystem.h" />
     <ClInclude Include="NetworkSystem.h" />
-    <ClInclude Include="Packet.h" />
     <ClInclude Include="MessagingSystem.h" />
     <ClInclude Include="Components.h" />
   </ItemGroup>

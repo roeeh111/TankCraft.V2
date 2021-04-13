@@ -1,6 +1,5 @@
 #include <MessageIdentifiers.h>
 #include "NetworkSystem.h"
-#include "Packet.h"
 #include "IDTranslationSystem.h"
 #include "BitStream.h"
 #include "RegWrappers.h"
@@ -22,45 +21,28 @@ namespace NetworkSystem {
 				handleConnection(data, pack);
 				break;
 
-			case ID_DISCONNECTION_NOTIFICATION:
-				handleDisconnect(data, pack);
-				break;
-
 			case ID_CONNECTION_LOST:
 				handleLostConnection(data, pack);
 				break;
 
-			case ID_REMOTE_NEW_INCOMING_CONNECTION:
-				printf("Remote client has connected.\n");
-				handleConnection(data, pack);
-				break;
-
-			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
-				printf("Remote client has disconnected.\n");
-				handleDisconnect(data, pack);
-				break;
-
-			case ID_REMOTE_CONNECTION_LOST:
-				printf("Remote client has lost the connection.\n");
-				handleLostConnection(data, pack);
-				break;
-
-			case ID_NO_FREE_INCOMING_CONNECTIONS:
-				printf("The server is full.\n");
-				break;
-
+			// In an ideal server authoritative design, Clients shouldn't send this packet.
+			// This is for debug purposes
 			case ADD_ENTITY:
 				printf("Received add entity packet from client.\n");
-				addEntity(data, pack, data.isServer, true);			// TODO: might need to change to false
+				addEntity(data, pack, data.isServer, true);	
 				break;
 
+			// In an ideal server authoritative design, Clients shouldn't send this packet
+			// This is for debug purposes
 			case REMOVE_ENTITY:
 				printf("Received remove entity packet from client.\n");
 				removeEntity(data, pack, 0, true, false);
 				break;
 
+			// In an ideal server authoritative design, Clients shouldn't send this packet
+			// This is for debug purposes
 			case UPDATE_ENTITY:
-				break;						// TODO:: should i do something here? theoretically i shouldnt be getting any of these messages...
+				break;
 
 			case CONTROL:
 				printf("Received control packet from client, inputting controls.\n");
@@ -69,13 +51,13 @@ namespace NetworkSystem {
 
 			case LOGIN:
 			{
-
+				printf("Received log in packet.\n");
 				handleLogin(data, pack);
 				break;
 			}
 			default:
-				// Some unknown packet type, go to the next packet
-				printf("Unknown packet");
+				// Some unknown packet type, ignore
+				printf("Unknown packet, id: " + pack->data[0]);
 				break;
 			}
 		}
@@ -90,18 +72,9 @@ namespace NetworkSystem {
 		for (pack = data.rpi->Receive(); pack; data.rpi->DeallocatePacket(pack), pack = data.rpi->Receive()) {
 			switch (pack->data[0])
 			{
-
 			case ID_CONNECTION_REQUEST_ACCEPTED:
 				std::cout <<"Connection established." << std::endl;
 				handleConnection(data, pack);
-				break;
-
-			case ID_NO_FREE_INCOMING_CONNECTIONS:
-				std::cout << "The server is full." << std::endl;
-				break;
-
-			case ID_DISCONNECTION_NOTIFICATION:
-				std::cout <<"We have been disconnected." << std::endl;
 				break;
 
 			case ID_CONNECTION_LOST:
@@ -125,8 +98,6 @@ namespace NetworkSystem {
 				MessagingSystem::readGameUpdate(data, stream);
 				break;
 			}
-			case CONTROL:
-				break;
 
 			default:
 				// Some unknown packet type, go to the next packet

@@ -10,9 +10,8 @@
 
 namespace GameAdmin {
 
-	void TanksScene::update()
+	void MainScene::update()
 	{	
-
 		if (data.isServer) {
 			NetworkSystem::updateServer(data);
 			MovementSystem::updateMovement(data);
@@ -27,7 +26,7 @@ namespace GameAdmin {
 
 
 
-	void TanksScene::clientLogin()
+	void MainScene::clientLogin()
 	{
 		initUISystem();
 		initNetworkSystem(!data.isServer, 1);
@@ -43,14 +42,14 @@ namespace GameAdmin {
 		NetworkSystem::sendLoginPacket(data, *data.userName);
 	}
 
-	void TanksScene::serverLogin(uint32_t maxClients) {
+	void MainScene::serverLogin(uint32_t maxClients) {
 		data.clientAddressToEntities = std::map<RakNet::SystemAddress, std::list<networkID>>();
 		initNetworkSystem(data.isServer, maxClients);
 		initIDTranslationSystem(true); // TODO: change this 
 		initMovementSystem();
 	}
 
-	TanksScene::TanksScene(bool isServer_, uint32_t maxClients)
+	MainScene::MainScene(bool isServer_, uint32_t maxClients)
 	{
 		// Data
 		data = GameData::GameData();
@@ -74,15 +73,15 @@ namespace GameAdmin {
 		}
 	}
 
-	TanksScene::~TanksScene()
+	MainScene::~MainScene()
 	{
 		data.m_reg.clear();
 	//	netSystem.clientDisconnect(data.rpi, data.address);
 		RakNet::RakPeerInterface::DestroyInstance(data.rpi);
 	}
 
-
-	void TanksScene::initUISystem() {
+	// UI system initialization
+	void MainScene::initUISystem() {
 		// start by filling the matrix with blank dots
 		data.map = std::vector<std::vector<char>>();
 
@@ -110,7 +109,7 @@ namespace GameAdmin {
 	}
 
 
-	void TanksScene::initNetworkSystem(bool isServer_, uint32_t maxClients)
+	void MainScene::initNetworkSystem(bool isServer_, uint32_t maxClients)
 	{
 		// Instantiate the network instance for our peer interface
 		data.rpi = RakNet::RakPeerInterface::GetInstance();
@@ -138,7 +137,7 @@ namespace GameAdmin {
 		}
 	}
 
-	void TanksScene::initIDTranslationSystem(bool isServer) // right now, both the client and the server have a freelist entity, do they need that?
+	void MainScene::initIDTranslationSystem(bool isServer) // right now, both the client and the server have a freelist entity, do they need that?
 	{
 		// Initialize our translation system
 		data.netToEnttid = std::map<networkID, entt::entity>();
@@ -151,13 +150,13 @@ namespace GameAdmin {
 		data.m_reg.emplace<FreeListComponent::freelist> (freeListEntity);
 	}
 
-	void TanksScene::initMovementSystem()
+	void MainScene::initMovementSystem()
 	{
 		// Empty function, nothing to do yet
 	}
 
 	// Initialize the outgoing game update message
-	void TanksScene::initMessageSystem()
+	void MainScene::initMessageSystem()
 	{
 		// initialize the update map
 		data.updateMap = std::map<networkID, std::list<baseComponent*>>();

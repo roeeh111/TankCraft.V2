@@ -34,8 +34,11 @@
     <Filter Include="ENTT Wrappers">
       <UniqueIdentifier>{cd7c49bd-5079-40f2-9e5f-733eee5933a1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Game Level Headers">
+    <Filter Include="Header Files\Admin Level Headers">
       <UniqueIdentifier>{c5dcce0c-13eb-4131-9efc-8a2b8b8860de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{44a7b8ae-4343-4254-902c-b3431c84ea86}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -538,13 +541,13 @@
       <Filter>Header Files\ProtoSchemas</Filter>
     </ClInclude>
     <ClInclude Include="GameAdmin.h">
-      <Filter>Header Files\Game Level Headers</Filter>
+      <Filter>Header Files\Admin Level Headers</Filter>
     </ClInclude>
     <ClInclude Include="GameData.h">
-      <Filter>Header Files\Game Level Headers</Filter>
+      <Filter>Header Files\Admin Level Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Packet.h">
-      <Filter>Header Files\Game Level Headers</Filter>
+    <ClInclude Include="BaseSystem.h">
+      <Filter>Header Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -905,14 +908,14 @@
     <ClCompile Include="CreateEntity.cpp">
       <Filter>ENTT Wrappers</Filter>
     </ClCompile>
-    <ClCompile Include="Components.cpp">
-      <Filter>Header Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseComponent.cpp">
-      <Filter>Header Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Tanks.pb.cc">
       <Filter>Header Files\ProtoSchemas</Filter>
+    </ClCompile>
+    <ClCompile Include="Components.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseComponent.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

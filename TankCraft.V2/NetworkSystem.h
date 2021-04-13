@@ -1,25 +1,17 @@
 #pragma once
 #include <entt/entt.hpp>
 #include <RakPeerInterface.h>
-#include "Packet.h"
 #include <iostream>
 #include "GameData.h"
+#include "Components.h"
 #include "IDTranslationSystem.h"
 #include "IDTranslationComponent.h"
 #include "MovementSystem.h"
 
 // TODO: add multithreading to the server
 
-/*
-*  The networking system
-* 
-*  TODO: add implememt game update, control input.
-* 
-*/
-
 #define RELIABILITY RELIABLE_ORDERED
 #define SERVER_PORT 60000
-
 
 namespace NetworkSystem {
 	// TODO: may need a refrence to the m_reg if its not global
@@ -47,11 +39,11 @@ namespace NetworkSystem {
 	void handleConnection(GameData::GameData& data, RakNet::Packet* pack);
 
 	// Server handling a disconnecting client
-	// Delete entity from the registry and clean up metadata
+	// NOT USED right now
 	void handleDisconnect(GameData::GameData& data,  RakNet::Packet* pack);
 
 	// Server handling a lost client
-	// TODO: Figure out the behavior of this function
+	// TODO: Figure out the behavior of lost connection
 	void handleLostConnection(GameData::GameData& data, RakNet::Packet* pack);
 
 	void sendClientInput(GameData::GameData& data, RakNet::Packet* pack);
