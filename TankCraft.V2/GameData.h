@@ -17,7 +17,7 @@ typedef struct baseComponent_ {
 	baseComponent_() { CompId = ComponentID::Base; networked = false; }
 	virtual ~baseComponent_() = default;
 	virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) { std::cout << "base write " << std::endl; }
-	virtual void lock() { std::cout << "base lock " << std::endl; };
+	virtual void lock() {  };
 	void unlock(GameData::GameData& data, const entt::entity& entity) ; // { std::cout << " base unlock" << std::endl; }
 	bool isNetworked() { return networked; }
 

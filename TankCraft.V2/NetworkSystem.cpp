@@ -151,6 +151,7 @@ namespace NetworkSystem {
 	}
 
 	void sendControl(GameData::GameData& data, ComponentView::userInput& usrInput, networkID netid) {
+		std::cout << "Sending control input" << std::endl;
 		RakNet::BitStream stream = RakNet::BitStream();
 
 		MessagingSystem::writeControls(stream, usrInput, netid);	// PROBLEM ON THIS LINE!!
@@ -268,7 +269,7 @@ namespace NetworkSystem {
 					pack->systemAddress, 
 					true);
 			}
-			std::cout << "Finished broadcasting" << std::endl;
+		//	std::cout << "Finished broadcasting" << std::endl;
 			return newEntity;
 			// TODO:			(also figure out how we want to packetize all of the components)
 			// add all components of the entity with the given values to the new entity
@@ -350,7 +351,7 @@ namespace NetworkSystem {
 				0,
 				pack->systemAddress,
 				true);
-			std::cout << "sent message" << std::endl;
+		//	std::cout << "sent message" << std::endl;
 			delete msg;
 		}
 		else {

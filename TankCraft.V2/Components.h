@@ -38,6 +38,7 @@ namespace ComponentView {
 		void setDown(bool set) { down_ = set; dirty_ = true; }
 		void setLeft(bool set) { left_ = set; dirty_ = true; }
 		void setRight(bool set) { right_ = set; dirty_ = true; }
+		void clear();
 
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
@@ -61,10 +62,13 @@ namespace ComponentView {
 			srand(time(NULL));
 			curx_ = rand() % WIDTH;
 			cury_ = rand() % HEIGHT;
-			prevx_ = 0;
-			prevy_ = 0;
+		//	prevx_ = 0;
+		//	prevy_ = 0;
+			prevx_ = curx_;
+			prevy_ = cury_;
 			CompId = ComponentID::Position;
 			networked = true;
+			std::cout << "prevx = " << prevx_ << " prevy = " << prevy_ << " curx = " << curx_ << " cury = " << cury_ << std::endl;
 		}
 		
 		uint32_t prevx() { return prevx_; }

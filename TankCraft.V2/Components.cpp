@@ -1,10 +1,17 @@
 #include "Components.h"
 
 namespace ComponentView {
+	void userInput_::clear()
+	{
+		left_ = false;
+		right_ = false;
+		up_ = false;
+		down_ = false;
+	}
 
 	void userInput_::write(ProtoMessaging::UpdateEntityMessage& message, networkID netid)
 	{
-		std::cout << "in userinput write" << std::endl;
+	//	std::cout << "in userinput write" << std::endl;
 		ProtoMessaging::ControlComponent* comp = message.add_uinputcomps();
 		comp->set_down(down());
 		comp->set_left(left());
@@ -16,7 +23,7 @@ namespace ComponentView {
 
 	void position_::write(ProtoMessaging::UpdateEntityMessage& message, networkID netid)
 	{
-		std::cout << "in position write" << std::endl;
+	//	std::cout << "in position write" << std::endl;
 		ProtoMessaging::PositionComponent* comp = message.add_positioncomps();
 		comp->set_curx(curx());
 		comp->set_cury(cury());
@@ -27,7 +34,7 @@ namespace ComponentView {
 
 	void mapObject_::write(ProtoMessaging::UpdateEntityMessage& message, networkID netid)
 	{
-		std::cout << "in mapobj write" << std::endl;
+	//	std::cout << "in mapobj write" << std::endl;
 		ProtoMessaging::MapObjectComponent* comp = message.add_mapobjectcomps();
 		auto s = new std::string(1, mapChar());
 		comp->set_allocated_mapchar(s);
@@ -38,9 +45,9 @@ namespace ComponentView {
 
 	void clientName_::write(ProtoMessaging::UpdateEntityMessage& message, networkID netid)
 	{
-		std::cout << "in clientname write" << std::endl;
+	//	std::cout << "in clientname write" << std::endl;
 		ProtoMessaging::ClientNameComponent* comp = message.add_clientnamecomps();
-		comp->set_name((name()));	std::cout << "		in clientname write. name = " << name() << std::endl; // NAME ISNT SET!
+		comp->set_name((name()));
 		comp->set_netid(netid);
 	}
 

@@ -25,7 +25,7 @@ namespace UI {
 	// TODO: 
 	void addTank(GameData::GameData& data, std::string clientName_, RakNet::Packet* pack)
 	{
-		std::cout << "Calling addTank" << std::endl;
+		//std::cout << "Calling addTank" << std::endl;
 
 		// This function should be only called by the server, so it will add an entity via the network
 		// and then emplace all these components. how are we putting the components on the update map?
@@ -41,7 +41,7 @@ namespace UI {
 		(data.m_reg.emplace<ComponentView::clientName>(clientEntity, clientName_, true)).unlock(data, clientEntity);
 		(data.m_reg.emplace<ComponentView::userInput>(clientEntity, true)).unlock(data, clientEntity);
 
-		std::cout << "Add tank complete, update map size = " << data.updateMap.size() << std::endl;
+	//	std::cout << "Add tank complete, update map size = " << data.updateMap.size() << std::endl;
 
 	}
 
@@ -76,6 +76,7 @@ namespace UI {
 		// get all elements that have a mapObject and position, and then do the updates
 		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
 		for (auto entity : view) {
+			std::cout << "updatemappositions: updating an entity" << std::endl;
 
 			auto& pos = view.get<ComponentView::position>(entity);
 			auto& disp = view.get<ComponentView::mapObject>(entity);
@@ -92,7 +93,8 @@ namespace UI {
 				}
 			}
 			data.map[pos.prevy()][pos.prevx()] = '.';
-			disp.setMapChar(data.map[pos.cury()][pos.curx()]);
+			data.map[pos.cury()][pos.curx()] = disp.mapChar();
+		//	disp.setMapChar(data.map[pos.cury()][pos.curx()]);
 		}
 	}
 
@@ -127,7 +129,9 @@ namespace UI {
 
 		// Get the userInput component for this entity
 		ComponentView::userInput& usrInput = data.m_reg.get<ComponentView::userInput>(clientEntity);
-		usrInput.lock();
+		
+		// Clear the input
+		usrInput.clear();
 
 		usrInput.dirty_ = 1;
 		// set the user input values depending on what we got
@@ -146,6 +150,8 @@ namespace UI {
 		else {
 			usrInput.dirty_ = 0;
 		}
+		std::cout << "left = " << usrInput.left() << " right = " << usrInput.right() << " up = " << usrInput.up() << " down = " << usrInput.down() << std::endl;
+
 
 		//usrInput.unlock(data, clientEntity);			// TODO: do i really need this???
 

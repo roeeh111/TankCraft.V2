@@ -43,6 +43,7 @@ namespace MessagingSystem {
         stream.Write(msg.SerializeAsString());
     }
 
+    // TODO: I THINK THIS IS WRONG AND THATS WHY WERE ONLY GETTING ZEROS
     void writeControls(RakNet::BitStream& stream, ComponentView::userInput control, networkID netid)
     {
 
@@ -64,8 +65,13 @@ namespace MessagingSystem {
         msg.set_allocated_control(controlComp);
         msg.set_timestamp(std::time(nullptr));
 
+        std::cout << "In writecontrols: left = " << controlComp->left() << " right = " << controlComp->right() << " up = " << controlComp->up() << " down = " << controlComp->down() << std::endl;
+
+
         // Write the packet to the stream
-        stream.Write(msg.SerializeAsString());
+       // stream.Write(msg.SerializeAsString());
+        auto serializedMsg = msg.SerializeAsString();
+        stream.Write(serializedMsg.c_str(), serializedMsg.size());
 
       //  delete controlComp; // WE BREAK ON THIS LINE. SO MAYBE DONT DO THIS?? 
     }
@@ -84,10 +90,10 @@ namespace MessagingSystem {
         // We only have 1 key in the update map, which is ok
         // Iterate through the map, writing to the message          
         for (auto& myPair : updateMap) {                            // PROBLEM: getting a read access violation when trying to iterate to the next element
-            std::cout << "Writegameupdate, found an element. Has "<< myPair.second.size() << " element id = " << myPair.first << std::endl;
+         //   std::cout << "Writegameupdate, found an element. Has "<< myPair.second.size() << " element id = " << myPair.first << std::endl;
             // If the pair is an actual game update
             for (auto& component: myPair.second) {
-                std::cout << "  Writegameupdate, writing a component " << component->CompId << std::endl;
+          //      std::cout << "  Writegameupdate, writing a component " << component->CompId << std::endl;
                 component->write(message, myPair.first);
 
             }
@@ -167,7 +173,7 @@ namespace MessagingSystem {
     // 1) Look at debug string on flush call. 2) call readgameupdate inside flush call
     void readGameUpdate(GameData::GameData& data, std::string& stream)
     {
-        std::cout << "In read game update!" << std::endl;
+    //    std::cout << "In read game update!" << std::endl;
         // Parse the message from our string
         auto msg = ProtoMessaging::UpdateEntityMessage();
         msg.ParseFromString(stream);
@@ -178,14 +184,14 @@ namespace MessagingSystem {
         auto desc = msg.GetDescriptor();
         auto refl = msg.GetReflection();
         int fieldCount = desc->field_count();
-        std::cout << "  Found " << fieldCount << " Fields" << std::endl;
+   //     std::cout << "  Found " << fieldCount << " Fields" << std::endl;
 
         // loop over all of the fields, geting their descriptor
         for (int i = FIRST_COMPONENT_IN_UPDATE; i < fieldCount; i++)
         {
             // get the field from the descriptor
             auto field = desc->field(i);
-            std::cout << "field = " << i << " name = "<< field->name() << std::endl;
+        //    std::cout << "field = " << i << " name = "<< field->name() << std::endl;
             auto size = refl->FieldSize(msg, field);
             
             // FOR NOW, HARD CODE WHATS GETTING UPDATED, AND GENERICIZE LATER (bad looking code, but will be phased out later)
@@ -193,7 +199,7 @@ namespace MessagingSystem {
             // case statement of calling x function for x field
             switch (i) { 
                 case FIRST_COMPONENT_IN_UPDATE: {
-                    std::cout << "in position update case number of updates = " << msg.positioncomps_size() << std::endl;
+            //        std::cout << "in position update case number of updates = " << msg.positioncomps_size() << std::endl;
                     // updating positions, call readcomp for all positions
                     // for all repetitions in this field, call readcomps and cast this message
                     for (int j = 0; j < msg.positioncomps_size(); j++) {
@@ -202,7 +208,7 @@ namespace MessagingSystem {
                     break;
                 }
                 case (FIRST_COMPONENT_IN_UPDATE + 1): {
-                    std::cout << "in mapobj update case number of updates = " << msg.mapobjectcomps_size() << std::endl;
+            //        std::cout << "in mapobj update case number of updates = " << msg.mapobjectcomps_size() << std::endl;
                     for (int j = 0; j < msg.mapobjectcomps_size(); j++) {
                         readObjComp(data, msg, j);
                     }
@@ -215,7 +221,7 @@ namespace MessagingSystem {
                     break;
                 }
                 case (FIRST_COMPONENT_IN_UPDATE + 3) : {
-                    std::cout << "in clientname update case number of updates = " << msg.clientnamecomps_size() << std::endl;
+           //         std::cout << "in clientname update case number of updates = " << msg.clientnamecomps_size() << std::endl;
                     for (int j = 0; j < msg.clientnamecomps_size(); j++) {
                         readNameComp(data, msg, j);
                     }
@@ -229,7 +235,7 @@ namespace MessagingSystem {
                 }
 
                 case (FIRST_COMPONENT_IN_UPDATE + 5): {
-                    std::cout << "in userinput update case number of updates = " << msg.uinputcomps_size() << std::endl;
+           //         std::cout << "in userinput update case number of updates = " << msg.uinputcomps_size() << std::endl;
                        for (int j = 0; j < msg.uinputcomps_size(); j++) {
                            readControlComp(data, msg, j);
                        }
@@ -249,7 +255,7 @@ namespace MessagingSystem {
           //  }
             // TODO: update the actual component
         }
-        std::cout << "Exiting read update" << std::endl;
+     //   std::cout << "Exiting read update" << std::endl;
 
     }
 
@@ -317,26 +323,26 @@ namespace MessagingSystem {
         auto &pos = (data.m_reg.has<ComponentView::position>(entity)) ? data.m_reg.get<ComponentView::position>(entity) :
                                                                         data.m_reg.emplace<ComponentView::position>(entity, true, true);
 
-        std::cout << "Got position component" << std::endl;
+       // std::cout << "Got position component" << std::endl;
 
-        auto ref = comp.GetReflection();
+//        auto ref = comp.GetReflection();
 
-        const google::protobuf::Descriptor* positiondescriptor = comp.GetDescriptor();
-        const google::protobuf::FieldDescriptor* prevx_field = positiondescriptor->FindFieldByName("prevx");
-        const google::protobuf::FieldDescriptor* prevy_field = positiondescriptor->FindFieldByName("prevy");
-        const google::protobuf::FieldDescriptor* curx_field = positiondescriptor->FindFieldByName("curx");
-        const google::protobuf::FieldDescriptor* cury_field = positiondescriptor->FindFieldByName("cury");
+  //      const google::protobuf::Descriptor* positiondescriptor = comp.GetDescriptor();
+   //     const google::protobuf::FieldDescriptor* prevx_field = positiondescriptor->FindFieldByName("prevx");
+    //    const google::protobuf::FieldDescriptor* prevy_field = positiondescriptor->FindFieldByName("prevy");
+    //    const google::protobuf::FieldDescriptor* curx_field = positiondescriptor->FindFieldByName("curx");
+    //    const google::protobuf::FieldDescriptor* cury_field = positiondescriptor->FindFieldByName("cury");
 
         // TODO: what if i dont set some value?
 
         pos.setPrevx(comp.prevx());
-        std::cout << "prevx = " << comp.prevx() << std::endl;
+      //  std::cout << "prevx = " << comp.prevx() << std::endl;
         pos.setPrevy(comp.prevy());
-        std::cout << "prevy = " << comp.prevy() << std::endl;
+      //  std::cout << "prevy = " << comp.prevy() << std::endl;
         pos.setCurx(comp.curx());
-        std::cout << "curx = " << comp.curx() << std::endl;
+      //  std::cout << "curx = " << comp.curx() << std::endl;
         pos.setCury(comp.cury());
-        std::cout << "cury = " << comp.cury() << std::endl;
+       // std::cout << "cury = " << comp.cury() << std::endl;
 
         pos.networked = true;
     }
@@ -354,10 +360,10 @@ namespace MessagingSystem {
             data.m_reg.emplace<ComponentView::mapObject>(entity, true);
 
 
-        auto ref = comp.GetReflection();
-        const google::protobuf::Descriptor* objectdescriptor = comp.GetDescriptor();
-        const google::protobuf::FieldDescriptor* mapchar_field = objectdescriptor->FindFieldByName("mapChar");
-        std::cout << "comp = " << comp.mapchar()[0] << std::endl;
+     //   auto ref = comp.GetReflection();
+     //   const google::protobuf::Descriptor* objectdescriptor = comp.GetDescriptor();
+     //   const google::protobuf::FieldDescriptor* mapchar_field = objectdescriptor->FindFieldByName("mapChar");
+     //   std::cout << "comp = " << comp.mapchar()[0] << std::endl;
         obj.setMapChar(comp.mapchar()[0]);
 
         obj.networked = true;
@@ -369,15 +375,15 @@ namespace MessagingSystem {
         auto entity = TranslationSystem::getEntity(data, comp.netid());
 
         std::cout << "Reading name comp for entity " << comp.netid() << std::endl;
-        std::cout << "entity id = " << (int) entity << std::endl;
+      //  std::cout << "entity id = " << (int) entity << std::endl;
         // get the entity in the register, and swap over the values
         auto& name = (data.m_reg.has<ComponentView::clientName>(entity)) ? data.m_reg.get<ComponentView::clientName>(entity) :
             data.m_reg.emplace<ComponentView::clientName>(entity, comp.name(), true);
 
-        auto ref = comp.GetReflection();
-        const google::protobuf::Descriptor* namedescriptor = comp.GetDescriptor();
-        const google::protobuf::FieldDescriptor* name_field = namedescriptor->FindFieldByName("name");
-        std::cout << "name = " << comp.name() << std::endl;
+    //    auto ref = comp.GetReflection();
+      //  const google::protobuf::Descriptor* namedescriptor = comp.GetDescriptor();
+       // const google::protobuf::FieldDescriptor* name_field = namedescriptor->FindFieldByName("name");
+     //   std::cout << "name = " << comp.name() << std::endl;
         name.setName(comp.name());
 
         name.networked = true;
@@ -389,19 +395,19 @@ namespace MessagingSystem {
         auto entity = TranslationSystem::getEntity(data, comp.netid());
 
         std::cout << "Reading uinput comp for entity " << comp.netid() << std::endl;
-        std::cout << "entity id = " << (int)entity << std::endl;
+     //   std::cout << "entity id = " << (int)entity << std::endl;
 
         // If entity already has this component, get, if not, emplace
         auto& uin = (data.m_reg.has<ComponentView::userInput>(entity)) ? data.m_reg.get<ComponentView::userInput>(entity) :
             data.m_reg.emplace<ComponentView::userInput>(entity, true);
 
-        auto ref = comp.GetReflection();
+     //   auto ref = comp.GetReflection();
 
-        const google::protobuf::Descriptor* inputdescriptor = comp.GetDescriptor();
-        const google::protobuf::FieldDescriptor* up_field = inputdescriptor->FindFieldByName("up");
-        const google::protobuf::FieldDescriptor* down_field = inputdescriptor->FindFieldByName("down");
-        const google::protobuf::FieldDescriptor* left_field = inputdescriptor->FindFieldByName("left");
-        const google::protobuf::FieldDescriptor* right_field = inputdescriptor->FindFieldByName("right");
+    //    const google::protobuf::Descriptor* inputdescriptor = comp.GetDescriptor();
+    //    const google::protobuf::FieldDescriptor* up_field = inputdescriptor->FindFieldByName("up");
+    //    const google::protobuf::FieldDescriptor* down_field = inputdescriptor->FindFieldByName("down");
+    //    const google::protobuf::FieldDescriptor* left_field = inputdescriptor->FindFieldByName("left");
+    //    const google::protobuf::FieldDescriptor* right_field = inputdescriptor->FindFieldByName("right");
 
         uin.setLeft(comp.left());
         uin.setRight(comp.right());
