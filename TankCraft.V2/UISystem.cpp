@@ -124,8 +124,6 @@ namespace UI {
 	
 	void getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity)
 	{
-		char input;
-		std::cin >> input;
 
 		// Get the userInput component for this entity
 		ComponentView::userInput& usrInput = data.m_reg.get<ComponentView::userInput>(clientEntity);
@@ -134,6 +132,10 @@ namespace UI {
 		usrInput.clear();
 
 		usrInput.dirty_ = 1;
+
+		/*
+		char input;
+		std::cin >> input;
 		// set the user input values depending on what we got
 		if (input == 'a') {
 			usrInput.setLeft(true);
@@ -150,7 +152,23 @@ namespace UI {
 		else {
 			usrInput.dirty_ = 0;
 		}
-		std::cout << "left = " << usrInput.left() << " right = " << usrInput.right() << " up = " << usrInput.up() << " down = " << usrInput.down() << std::endl;
+		*/
+		if (GetAsyncKeyState(87)) {
+			usrInput.setUp(true);
+		}
+		else if (GetAsyncKeyState(65)) {
+			usrInput.setLeft(true);
+		}
+		else if (GetAsyncKeyState(83)) {
+			usrInput.setDown(true);
+		}
+		else if (GetAsyncKeyState(68)) {
+			usrInput.setRight(true);
+		}
+		else {
+			usrInput.dirty_ = 0;
+		}
+		//std::cout << "left = " << usrInput.left() << " right = " << usrInput.right() << " up = " << usrInput.up() << " down = " << usrInput.down() << std::endl;
 
 
 		//usrInput.unlock(data, clientEntity);			// TODO: do i really need this???
