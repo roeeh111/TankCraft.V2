@@ -305,8 +305,10 @@
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\WSAStartupSingleton.h" />
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\XBox360Includes.h" />
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h" />
-    <ClInclude Include="BaseSystem.h" />
+    <ClInclude Include="PrimarySystem.h" />
     <ClInclude Include="ComponentID.h" />
+    <ClInclude Include="ConnectionSystem.h" />
+    <ClInclude Include="NetworkUtilitySystem.h" />
     <ClInclude Include="RegWrappers.h" />
     <ClInclude Include="FreeListComponent.h" />
     <ClInclude Include="MovementSystem.h" />
@@ -317,7 +319,6 @@
     <ClInclude Include="Tanks.pb.h" />
     <ClInclude Include="UISystem.h" />
     <ClInclude Include="IDTranslationSystem.h" />
-    <ClInclude Include="NetworkSystem.h" />
     <ClInclude Include="MessagingSystem.h" />
     <ClInclude Include="Components.h" />
   </ItemGroup>
@@ -434,12 +435,13 @@
     <ClCompile Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.cpp" />
     <ClCompile Include="BaseComponent.cpp" />
     <ClCompile Include="Components.cpp" />
+    <ClCompile Include="ConnectionSystem.cpp" />
     <ClCompile Include="CreateEntity.cpp" />
     <ClCompile Include="IDTranslationSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MessagingSystem.cpp" />
     <ClCompile Include="MovementSystem.cpp" />
-    <ClCompile Include="NetworkSystem.cpp" />
+    <ClCompile Include="NetworkUtilitySystem.cpp" />
     <ClCompile Include="ProtoTest.cpp" />
     <ClCompile Include="GameAdmin.cpp" />
     <ClCompile Include="Tanks.pb.cc" />

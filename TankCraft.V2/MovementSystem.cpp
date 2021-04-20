@@ -18,7 +18,7 @@
 
 namespace MovementSystem {
 	// NOTE: this only moves tanks now, genericize this so that it can move any entity that is dirty
-	void updateMovement(GameData::GameData& data)
+	void MovementSystem::updateMovement(GameData::GameData& data)
 	{
 		// For now, loop over all entities with position and user input
 		// and call moveEntity
@@ -33,7 +33,7 @@ namespace MovementSystem {
 		}
 	}
 
-	void moveEntity(GameData::GameData& data, const entt::entity &entity, ComponentView::userInput &input) {
+	void MovementSystem::moveEntity(GameData::GameData& data, const entt::entity &entity, ComponentView::userInput &input) {
 		auto& points = data.m_reg.get<ComponentView::position>(entity);
 		points.lock(); // lock the component
 

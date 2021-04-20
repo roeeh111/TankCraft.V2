@@ -7,7 +7,7 @@
 #include "MovementSystem.h"
 
 namespace NetworkSystem {
-	void updateServer(GameData::GameData& data)
+	void NetworkSystem::updateServer(GameData::GameData& data)
 	{
 		RakNet::Packet* pack;
 
@@ -63,7 +63,7 @@ namespace NetworkSystem {
 		}
 	}
 
-	void updateClient(GameData::GameData& data)
+	void NetworkSystem::updateClient(GameData::GameData& data)
 	{
 		// Pointer to some network packet
 		RakNet::Packet* pack;
@@ -108,7 +108,7 @@ namespace NetworkSystem {
 	}
 
 
-	void handleControl(GameData::GameData& data, RakNet::Packet* pack)
+	void NetworkSystem::handleControl(GameData::GameData& data, RakNet::Packet* pack)
 	{
 		// given a packet, call readcontrol
 		ComponentView::userInput contrl;
@@ -121,7 +121,7 @@ namespace NetworkSystem {
 		}
 	}
 
-	void sendControl(GameData::GameData& data, ComponentView::userInput& usrInput, networkID netid) {
+	void NetworkSystem::sendControl(GameData::GameData& data, ComponentView::userInput& usrInput, networkID netid) {
 		RakNet::BitStream stream = RakNet::BitStream();
 
 		MessagingSystem::writeControls(stream, usrInput, netid);	// PROBLEM ON THIS LINE!!
@@ -134,9 +134,7 @@ namespace NetworkSystem {
 	}
 
 
-
-
-	bool clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress)
+	bool NetworkSystem::clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress)
 	{
 		if (!(peer->Connect(hostAddress, port, 0, 0) == RakNet::CONNECTION_ATTEMPT_STARTED)) {
 			std::cerr << "Connection attempt failed" << std::endl;
@@ -145,7 +143,7 @@ namespace NetworkSystem {
 		return true;
 	}
 
-	void clientDisconnect(RakNet::RakPeerInterface* peer, const char* hostAddress)
+	void NetworkSystem::clientDisconnect(RakNet::RakPeerInterface* peer, const char* hostAddress)
 	{
 		peer->CloseConnection(RakNet::SystemAddress(hostAddress), 1);
 		std::cout << "Closing connection to " << RakNet::SystemAddress(hostAddress).ToString() << std::endl;
@@ -154,7 +152,7 @@ namespace NetworkSystem {
 
 
 	// The server recognizes the connection from a client and creates an empty netID  map for that client
-	void handleConnection(GameData::GameData& data, RakNet::Packet* pack)
+	void NetworkSystem::handleConnection(GameData::GameData& data, RakNet::Packet* pack)
 	{
 		// If is a server, the rakAddress is not initialized
 		if (data.isServer) {
@@ -175,7 +173,7 @@ namespace NetworkSystem {
 	}
 
 	// The server recognizes the disconnection from a client and clears all entities related to that client
-	void handleDisconnect(GameData::GameData& data, RakNet::Packet* pack)
+	void NetworkSystem::handleDisconnect(GameData::GameData& data, RakNet::Packet* pack)
 	{
 		printf("A client has disconnected. Address: %s \n", pack->systemAddress.ToString());
 		for (auto const& netId : data.clientAddressToEntities[pack->systemAddress]) {
@@ -185,7 +183,7 @@ namespace NetworkSystem {
 
 	}
 
-	void handleLostConnection(GameData::GameData& data, RakNet::Packet* pack) {
+	void NetworkSystem::handleLostConnection(GameData::GameData& data, RakNet::Packet* pack) {
 		// Currently this had the same behavior as the way we handle disconnection. TBD
 		printf("A client lost the connection. Address: %s \n", pack->systemAddress.ToString());
 		printf("This client has %d entities.\n", data.clientAddressToEntities[pack->systemAddress].size());
@@ -196,7 +194,7 @@ namespace NetworkSystem {
 		}
 	}
 
-	entt::entity addEntity(GameData::GameData& data, RakNet::Packet* pack, bool isServer, bool responding)
+	entt::entity NetworkSystem::addEntity(GameData::GameData& data, RakNet::Packet* pack, bool isServer, bool responding)
 	{
 		// If is Server: (we dont need to examine the netid/timestamp of the incomming packet. So make a new message object and sendit)
 		if (isServer) {
@@ -281,7 +279,7 @@ namespace NetworkSystem {
 	}
 
 	// TODO:?????
-	void removeEntity(GameData::GameData& data, RakNet::Packet* pack, networkID remID, bool isServer, bool responding)
+	void NetworkSystem::removeEntity(GameData::GameData& data, RakNet::Packet* pack, networkID remID, bool isServer, bool responding)
 	{
 		// If is Server:
 		if (isServer) {
@@ -365,7 +363,7 @@ namespace NetworkSystem {
 	}
 
 	// TODO!!!!!!
-	void sendClientInput(GameData::GameData& data, RakNet::Packet* pack) {
+	void NetworkSystem::sendClientInput(GameData::GameData& data, RakNet::Packet* pack) {
 		std::cout << "Sending out client input to the server" << std::endl;
 		RakNet::BitStream stream = RakNet::BitStream();
 
@@ -382,7 +380,7 @@ namespace NetworkSystem {
 			false);
 	}
 
-	void handleGameUpdate(GameData::GameData& data, RakNet::Packet* pack)
+	void NetworkSystem::handleGameUpdate(GameData::GameData& data, RakNet::Packet* pack)
 	{
 		// Get the update packet
 		std::string str = std::string((char*)(pack->data + 1));
@@ -391,7 +389,7 @@ namespace NetworkSystem {
 		MessagingSystem::readGameUpdate(data, str);
 	}
 
-	void sendLoginPacket(GameData::GameData& data, std::string& name)
+	void NetworkSystem::sendLoginPacket(GameData::GameData& data, std::string& name)
 	{
 		std::cout << "Sending login packet for " << name << std::endl;
 		RakNet::BitStream stream = RakNet::BitStream();
@@ -406,7 +404,7 @@ namespace NetworkSystem {
 			false);
 	}
 
-	void handleLogin(GameData::GameData& data, RakNet::Packet* pack)
+	void NetworkSystem::handleLogin(GameData::GameData& data, RakNet::Packet* pack)
 	{
 		std::string stream = std::string((char*)(pack->data + 1));
 		std::string loginName = MessagingSystem::readLogin(stream);

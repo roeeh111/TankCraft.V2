@@ -6,7 +6,7 @@
 #include "GameData.h"
 #include "UISystem.h"
 #include "IDTranslationSystem.h"
-#include "NetworkSystem.h"
+#include "ConnectionSystem.h"
 #include "MovementSystem.h"
 
 
@@ -36,8 +36,18 @@ namespace GameAdmin {
 		// time stamp for testing purposes
 		std::chrono::seconds test; 
 
+		ConnectionSystem::ConnectionSystem connectionSystem;
+
+		//IDTranslationSystem::IDTranslationSystem translationSystem;
+
+		//UISystem::UISystem uiSystem;
+
+		MovementSystem::MovementSystem movementSystem;
+
+		//MessageSystem::MessageSystem messageSystem;
+
 	private:
-		void initNetworkSystem(bool isServer_, uint32_t maxClients);
+		void initConnectionSystem(bool isServer_, uint32_t maxClients);
 		void initIDTranslationSystem(bool isServer);
 		void initUISystem();
 		void initMovementSystem();

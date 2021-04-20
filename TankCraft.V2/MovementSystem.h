@@ -3,9 +3,12 @@
 #include "GameData.h"
 
 namespace MovementSystem {
-	void updateMovement(GameData::GameData& data);
+	class MovementSystem {
+	public:
+		void updateMovement(GameData::GameData& data);
 
-	void moveEntity(GameData::GameData& data, const entt::entity& entity, ComponentView::userInput& input);
+		void moveEntity(GameData::GameData& data, const entt::entity& entity, ComponentView::userInput& input);
+	};
 }
 
 /*

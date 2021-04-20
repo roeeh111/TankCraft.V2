@@ -13,12 +13,12 @@ namespace GameAdmin {
 	void MainScene::update()
 	{	
 		if (data.isServer) {
-			NetworkSystem::updateServer(data);
-			MovementSystem::updateMovement(data);
+			connectionSystem.updateServer(data);
+			movementSystem.updateMovement(data);
 			MessagingSystem::FlushGameUpdate(data);
 		}
 		else {
-			NetworkSystem::updateClient(data);
+			connectionSystem.updateClient(data);
 			UI::updateUI(data);
 		//	UI::printUI(data);
 		}
@@ -29,7 +29,7 @@ namespace GameAdmin {
 	void MainScene::clientLogin()
 	{
 		initUISystem();
-		initNetworkSystem(!data.isServer, 1);
+		initConnectionSystem(!data.isServer, 1);
 		initIDTranslationSystem(false); // TODO: change this 
 
 		data.userName = new std::string();
@@ -39,12 +39,12 @@ namespace GameAdmin {
 
 		// create a new tank entity with that username, call network add entity and update entity (or put on update queue)
 
-		NetworkSystem::sendLoginPacket(data, *data.userName);
+		connectionSystem.sendLoginPacket(data, *data.userName);
 	}
 
 	void MainScene::serverLogin(uint32_t maxClients) {
 		data.clientAddressToEntities = std::map<RakNet::SystemAddress, std::list<networkID>>();
-		initNetworkSystem(data.isServer, maxClients);
+		initConnectionSystem(data.isServer, maxClients);
 		initIDTranslationSystem(true); // TODO: change this 
 		initMovementSystem();
 	}
@@ -109,7 +109,7 @@ namespace GameAdmin {
 	}
 
 
-	void MainScene::initNetworkSystem(bool isServer_, uint32_t maxClients)
+	void MainScene::initConnectionSystem(bool isServer_, uint32_t maxClients)
 	{
 		// Instantiate the network instance for our peer interface
 		data.rpi = RakNet::RakPeerInterface::GetInstance();
@@ -131,7 +131,7 @@ namespace GameAdmin {
 			}
 			else {
 				std::cout << "Client started" << std::endl;
-				NetworkSystem::clientConnect(data.rpi, SERVER_PORT, "127.0.0.1");
+				connectionSystem.clientConnect(data.rpi, SERVER_PORT, "127.0.0.1");
 				data.rakAddress = RakNet::SystemAddress("127.0.0.1|"+ SERVER_PORT); // save the server address
 			}
 		}

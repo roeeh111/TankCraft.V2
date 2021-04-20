@@ -1,5 +1,5 @@
 #include "UISystem.h"
-#include "NetworkSystem.h"
+#include "NetworkUtilitySystem.h"
 #include "IDTranslationSystem.h"
 #include "Components.h"
 #include "RegWrappers.h"
@@ -31,7 +31,7 @@ namespace UI {
 		// and then emplace all these components. how are we putting the components on the update map?
 
 		//auto clientEntity = RegWrapper::createEntity(data.m_reg, true);	
-		auto clientEntity = NetworkSystem::addEntity(data, pack, true, true);	
+		auto clientEntity = NetworkUtilitySystem::addEntity(data, pack, true, true);
 		std::cout << "in addTank: addEntity complete" << std::endl;
 
 		// Add the components to the the registry
@@ -153,7 +153,7 @@ namespace UI {
 		* For now, send the control to the user exactly as we inputed it.
 		* For later versions, append it to a tochange queue
 		*/
-		NetworkSystem::sendControl(data, usrInput, TranslationSystem::getNetId(data, clientEntity)); // TODO!!!! ERROR ON THIS LINE. CRASHING NULLPOINTER 
+		NetworkUtilitySystem::sendControl(data, usrInput, TranslationSystem::getNetId(data, clientEntity)); // TODO!!!! ERROR ON THIS LINE. CRASHING NULLPOINTER 
 
 	}
 
