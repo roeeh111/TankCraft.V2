@@ -12,7 +12,7 @@ namespace GameAdmin {
 
 	void TanksScene::update()
 	{	
-
+		std::this_thread::sleep_for(std::chrono::milliseconds(16));
 		if (data.isServer) {
 			NetworkSystem::updateServer(data);
 			MovementSystem::updateMovement(data);
