@@ -15,12 +15,11 @@ namespace GameAdmin {
 		if (data.isServer) {
 			connectionSystem.updateServer(data);
 			movementSystem.updateMovement(data);
-			MessagingSystem::FlushGameUpdate(data);
+			messagingSystem.FlushGameUpdate(data);
 		}
 		else {
 			connectionSystem.updateClient(data);
-			UI::updateUI(data);
-		//	UI::printUI(data);
+			ui.updateUI(data);
 		}
 	}
 
@@ -105,7 +104,7 @@ namespace GameAdmin {
 			std::cout << std::endl;
 		}
 
-		UI::printUI(data);
+		ui.printUI(data);
 	}
 
 

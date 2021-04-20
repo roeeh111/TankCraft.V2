@@ -10,11 +10,12 @@ namespace NetworkUtilitySystem {
 
 	void handleControl(GameData::GameData& data, RakNet::Packet* pack)
 	{
+		MessagingSystem::MessagingSystem messagingSystem;
 		// given a packet, call readcontrol
 		ComponentView::userInput contrl;
 		std::string stream = std::string((char*)(pack->data + 1));
 
-		entt::entity ent = MessagingSystem::readControls(data, stream, &contrl);
+		entt::entity ent = messagingSystem.readControls(data, stream, &contrl);
 		if (!(ent == entt::null)) {
 			//	 if readcontrol returns not nullentitiy, call movementsystem.move(component) 
 			MovementSystem::MovementSystem movementSystem;
@@ -22,10 +23,12 @@ namespace NetworkUtilitySystem {
 		}
 	}
 
-	void sendControl(GameData::GameData& data, ComponentView::userInput& usrInput, networkID netid) {
+	void sendControl(GameData::GameData& data, ComponentView::userInput& usrInput, networkID netid)
+	{
+		MessagingSystem::MessagingSystem messagingSystem;
 		RakNet::BitStream stream = RakNet::BitStream();
 
-		MessagingSystem::writeControls(stream, usrInput, netid);	// PROBLEM ON THIS LINE!!
+		messagingSystem.writeControls(stream, usrInput, netid);	// PROBLEM ON THIS LINE!!
 		data.rpi->Send(&stream,
 			HIGH_PRIORITY,
 			RELIABLE_ORDERED,
@@ -36,6 +39,7 @@ namespace NetworkUtilitySystem {
 
 	entt::entity addEntity(GameData::GameData& data, RakNet::Packet* pack, bool isServer, bool responding)
 	{
+		MessagingSystem::MessagingSystem messagingSystem;
 		// If is Server: (we dont need to examine the netid/timestamp of the incomming packet. So make a new message object and sendit)
 		if (isServer) {
 
@@ -55,7 +59,7 @@ namespace NetworkUtilitySystem {
 
 			// create a new add entity packet
 			RakNet::BitStream stream = RakNet::BitStream();
-			MessagingSystem::writeAddEntity(stream, netid);
+			messagingSystem.writeAddEntity(stream, netid);
 
 
 			std::cout << "Registered entity from client " << pack->systemAddress.GetPort() << ", broadcasting..." << std::endl;
@@ -90,7 +94,7 @@ namespace NetworkUtilitySystem {
 				auto newEntity = RegWrapper::createEntity(data.m_reg, true);
 
 				std::string str = std::string((char*)(pack->data + 1));
-				ProtoMessaging::AddRemoveEntityMessage* msg = MessagingSystem::readAddRemoveEntity(str);
+				ProtoMessaging::AddRemoveEntityMessage* msg = messagingSystem.readAddRemoveEntity(str);
 
 				// when unpacking input packet, get the netID passed to us
 				// Create a new mapping of netID and entity
@@ -103,7 +107,7 @@ namespace NetworkUtilitySystem {
 				std::cout << "Sending out add entity request packet to server" << std::endl;
 				RakNet::BitStream stream = RakNet::BitStream();
 
-				MessagingSystem::writeAddEntity(stream, 0);
+				messagingSystem.writeAddEntity(stream, 0);
 
 
 				// Request an addition of a new entity
@@ -121,11 +125,13 @@ namespace NetworkUtilitySystem {
 	// TODO:?????
 	void removeEntity(GameData::GameData& data, RakNet::Packet* pack, networkID remID, bool isServer, bool responding)
 	{
+		MessagingSystem::MessagingSystem messagingSystem;
+
 		// If is Server:
 		if (isServer) {
 			// Get the remove packet
 			std::string str = std::string((char*)(pack->data + 1));
-			ProtoMessaging::AddRemoveEntityMessage* msg = MessagingSystem::readAddRemoveEntity(str);
+			ProtoMessaging::AddRemoveEntityMessage* msg = messagingSystem.readAddRemoveEntity(str);
 
 			std::cout << "Server removing entity " << msg->netid() << std::endl;
 
@@ -169,7 +175,7 @@ namespace NetworkUtilitySystem {
 				std::cout << "removing entity in client after receiving a packet" << std::endl;
 
 				std::string str = std::string((char*)(pack->data + 1));
-				ProtoMessaging::AddRemoveEntityMessage* msg = MessagingSystem::readAddRemoveEntity(str);
+				ProtoMessaging::AddRemoveEntityMessage* msg = messagingSystem.readAddRemoveEntity(str);
 
 				// Remove the given entity from the m_reg
 				if (TranslationSystem::hasMapping(data, msg->netid())) {
@@ -188,7 +194,7 @@ namespace NetworkUtilitySystem {
 				std::cout << "Sending out add entity request packet to server" << std::endl;
 				RakNet::BitStream stream = RakNet::BitStream();
 
-				MessagingSystem::writeRemoveEntity(stream, remID);
+				messagingSystem.writeRemoveEntity(stream, remID);
 
 
 				// Request an addition of a new entity

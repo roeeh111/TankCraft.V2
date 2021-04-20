@@ -7,6 +7,7 @@
 #include "UISystem.h"
 #include "IDTranslationSystem.h"
 #include "ConnectionSystem.h"
+#include "MessagingSystem.h"
 #include "MovementSystem.h"
 
 
@@ -40,11 +41,11 @@ namespace GameAdmin {
 
 		//IDTranslationSystem::IDTranslationSystem translationSystem;
 
-		//UISystem::UISystem uiSystem;
+		UI::UI ui;
 
 		MovementSystem::MovementSystem movementSystem;
 
-		//MessageSystem::MessageSystem messageSystem;
+		MessagingSystem::MessagingSystem messagingSystem;
 
 	private:
 		void initConnectionSystem(bool isServer_, uint32_t maxClients);

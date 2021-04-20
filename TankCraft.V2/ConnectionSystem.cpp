@@ -96,7 +96,8 @@ namespace ConnectionSystem{
 			{
 				printf("Received update entity packet from server.\n");
 				std::string stream = std::string((char*)(pack->data + 1));
-				MessagingSystem::readGameUpdate(data, stream);
+				MessagingSystem::MessagingSystem messagingSystem;
+				messagingSystem.readGameUpdate(data, stream);
 				break;
 			}
 
@@ -170,19 +171,21 @@ namespace ConnectionSystem{
 
 	void ConnectionSystem::handleGameUpdate(GameData::GameData& data, RakNet::Packet* pack)
 	{
+		MessagingSystem::MessagingSystem messagingSystem;
 		// Get the update packet
 		std::string str = std::string((char*)(pack->data + 1));
 
 		// Do the game update
-		MessagingSystem::readGameUpdate(data, str);
+		messagingSystem.readGameUpdate(data, str);
 	}
 
 	void ConnectionSystem::sendLoginPacket(GameData::GameData& data, std::string& name)
 	{
 		std::cout << "Sending login packet for " << name << std::endl;
+		MessagingSystem::MessagingSystem messagingSystem;
 		RakNet::BitStream stream = RakNet::BitStream();
 
-		MessagingSystem::writeLogin(stream, name);
+		messagingSystem.writeLogin(stream, name);
 
 		data.rpi->Send(&stream,
 			HIGH_PRIORITY,
@@ -194,9 +197,11 @@ namespace ConnectionSystem{
 
 	void ConnectionSystem::handleLogin(GameData::GameData& data, RakNet::Packet* pack)
 	{
+		MessagingSystem::MessagingSystem messagingSystem;
+		UI::UI ui;
 		std::string stream = std::string((char*)(pack->data + 1));
-		std::string loginName = MessagingSystem::readLogin(stream);
+		std::string loginName = messagingSystem.readLogin(stream);
 		std::cout << "Adding tank for " << loginName << std::endl;
-		UI::addTank(data, loginName, pack);
+		ui.addTank(data, loginName, pack);
 	}
 }

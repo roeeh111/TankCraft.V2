@@ -43,9 +43,10 @@ void startMultiplyerClient() {
 }
 
 void testLogin() {
+    MessagingSystem::MessagingSystem messagingSystem;
     RakNet::BitStream stream = RakNet::BitStream();
     std::string name = "test name";
-    MessagingSystem::writeLogin(stream, name);
+    messagingSystem.writeLogin(stream, name);
 }
 
 void testSerialization() {
