@@ -6,35 +6,30 @@
 #include "GameData.h"
 #include "UISystem.h"
 #include "IDTranslationSystem.h"
-#include "NetworkSystem.h"
+#include "ConnectionSystem.h"
+#include "MessagingSystem.h"
 #include "MovementSystem.h"
 
-/*
-*  The main "system" and data in our scene.
-* 
-*/
-
 
 /*
- To fix our lagging and waiting issue:
+Lagging and waiting issue in movement:
  -> first figure out whats buging with the controls
  -> multithread! let the movement system be its own thread, and the ui system be its own thread. that way, theres no blocking between them
 	- will need to lock the controls component and position component?
 */
-
 namespace GameAdmin {
 
-	// Tank scene is the scene for the tank game.
-	// All scenes are managed within the scene system
-	class TanksScene {
+	// The main scene handles the state change of the main game.
+	// We can possibly have "live scene", "replay scene", etc.
+	class MainScene {
 	public:
 		// Scan through each client, check if its dirty bit is set and change data if it is
 		void update();
 
 		// Constructor, starts up rackNet with inputted max clients
-		TanksScene(bool isServer_, uint32_t maxClients);
+		MainScene(bool isServer_, uint32_t maxClients);
 
-		~TanksScene();
+		~MainScene();
 
 		// Data is stored in the component
 		GameData::GameData data;
@@ -42,8 +37,18 @@ namespace GameAdmin {
 		// time stamp for testing purposes
 		std::chrono::seconds test; 
 
+		ConnectionSystem::ConnectionSystem connectionSystem;
+
+		//IDTranslationSystem::IDTranslationSystem translationSystem;
+
+		UI::UI ui;
+
+		MovementSystem::MovementSystem movementSystem;
+
+		MessagingSystem::MessagingSystem messagingSystem;
+
 	private:
-		void initNetworkSystem(bool isServer_, uint32_t maxClients);
+		void initConnectionSystem(bool isServer_, uint32_t maxClients);
 		void initIDTranslationSystem(bool isServer);
 		void initUISystem();
 		void initMovementSystem();

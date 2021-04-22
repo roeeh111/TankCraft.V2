@@ -18,7 +18,7 @@
 
 namespace MovementSystem {
 	// NOTE: this only moves tanks now, genericize this so that it can move any entity that is dirty
-	void updateMovement(GameData::GameData& data)
+	void MovementSystem::updateMovement(GameData::GameData& data)
 	{
 		// For now, loop over all entities with position and user input
 		// and call moveEntity

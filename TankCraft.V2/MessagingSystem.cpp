@@ -6,7 +6,7 @@
 namespace MessagingSystem {
 
     // System flush
-    void FlushGameUpdate(GameData::GameData& data) {
+    void MessagingSystem::FlushGameUpdate(GameData::GameData& data) {
         if (data.updateMap.size() <= 0)
             return;
         std::cout << "Flushing game update of size " << data.updateMap.size() << std::endl;
@@ -27,7 +27,7 @@ namespace MessagingSystem {
     * Write defenitions:
     */
 
-    void writeAddEntity(RakNet::BitStream& stream, networkID netid)
+    void MessagingSystem::writeAddEntity(RakNet::BitStream& stream, networkID netid)
     {
 
         // first, write the packet type to the bitsream
@@ -77,7 +77,7 @@ namespace MessagingSystem {
     }
     
     // Flush the update map
-    void writeGameUpdate(RakNet::BitStream& stream, std::map<networkID, std::list<baseComponent*>>& updateMap)
+    void MessagingSystem::writeGameUpdate(RakNet::BitStream& stream, std::map<networkID, std::list<baseComponent*>>& updateMap)
     {
         // write the packet type to the bitsream
         RakNet::MessageID type = UPDATE_ENTITY;
@@ -110,7 +110,7 @@ namespace MessagingSystem {
 
 
 
-    void writeRemoveEntity(RakNet::BitStream& stream, networkID netid)
+    void MessagingSystem::writeRemoveEntity(RakNet::BitStream& stream, networkID netid)
     {
         // first, write the packet type to the bitsream
         RakNet::MessageID type = REMOVE_ENTITY;
@@ -126,7 +126,7 @@ namespace MessagingSystem {
     }
 
     // DEBUG ONLY (doesnt write to bitstream)
-    std::string writeGameUpdate(std::map<networkID, std::list<baseComponent*>>& updateMap)
+    std::string MessagingSystem::writeGameUpdate(std::map<networkID, std::list<baseComponent*>>& updateMap)
     {
         // our message
         auto message = ProtoMessaging::UpdateEntityMessage();
@@ -147,7 +147,7 @@ namespace MessagingSystem {
         return message.SerializeAsString();
     }
 
-    void writeLogin(RakNet::BitStream& stream, std::string& name)
+    void MessagingSystem::writeLogin(RakNet::BitStream& stream, std::string& name)
     {
         // first, write the packet type to the bitsream
         RakNet::MessageID type = LOGIN;
@@ -171,7 +171,7 @@ namespace MessagingSystem {
 
     // TODO: PROBLEM: NOT CALLING THE READCOMP FUNCTIONS (because it shows that we have 0 elements in those fields)
     // 1) Look at debug string on flush call. 2) call readgameupdate inside flush call
-    void readGameUpdate(GameData::GameData& data, std::string& stream)
+    void MessagingSystem::readGameUpdate(GameData::GameData& data, std::string& stream)
     {
     //    std::cout << "In read game update!" << std::endl;
         // Parse the message from our string
@@ -259,7 +259,7 @@ namespace MessagingSystem {
 
     }
 
-    ProtoMessaging::AddRemoveEntityMessage* readAddRemoveEntity(std::string &stream)
+    ProtoMessaging::AddRemoveEntityMessage* MessagingSystem::readAddRemoveEntity(std::string &stream)
     {
         // Assume we got the first bit of the bitstream, so the bitstream only has our 
         auto msg = new ProtoMessaging::AddRemoveEntityMessage();
@@ -267,7 +267,7 @@ namespace MessagingSystem {
         return msg;
     }
 
-    entt::entity readControls(GameData::GameData& data, std::string& stream, ComponentView::userInput* ret)
+    entt::entity MessagingSystem::readControls(GameData::GameData& data, std::string& stream, ComponentView::userInput* ret)
     {
         entt::entity ent;
 
@@ -293,7 +293,7 @@ namespace MessagingSystem {
         return ent;
     }
 
-    std::string readLogin(std::string& stream)
+    std::string MessagingSystem::readLogin(std::string& stream)
     {
         auto msg = new ProtoMessaging::LoginMessage();
         msg->ParseFromString(stream);
@@ -310,7 +310,7 @@ namespace MessagingSystem {
     */
 
     
-    void readPosComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage &msg, int index)
+    void MessagingSystem::readPosComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage &msg, int index)
     {
 
         auto comp = msg.positioncomps().Get(index);
@@ -347,7 +347,7 @@ namespace MessagingSystem {
         pos.networked = true;
     }
 
-    void readObjComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index)
+    void MessagingSystem::readObjComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index)
     {
         auto comp = msg.mapobjectcomps().Get(index);
         // get the entity in the register, and swap over the values
@@ -369,7 +369,7 @@ namespace MessagingSystem {
         obj.networked = true;
     }
 
-    void readNameComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index)
+    void MessagingSystem::readNameComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index)
     {
         auto comp = msg.clientnamecomps().Get(index);
         auto entity = TranslationSystem::getEntity(data, comp.netid());
@@ -389,7 +389,7 @@ namespace MessagingSystem {
         name.networked = true;
     }
 
-    void readControlComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index)
+    void MessagingSystem::readControlComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index)
     {
         auto comp = msg.uinputcomps().Get(index);
         auto entity = TranslationSystem::getEntity(data, comp.netid());

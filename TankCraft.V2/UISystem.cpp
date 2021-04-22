@@ -1,5 +1,5 @@
 #include "UISystem.h"
-#include "NetworkSystem.h"
+#include "NetworkUtilitySystem.h"
 #include "IDTranslationSystem.h"
 #include "Components.h"
 #include "RegWrappers.h"
@@ -23,7 +23,7 @@ Server responds with a position component for the entity, client sets the new po
 namespace UI {
 
 	// TODO: 
-	void addTank(GameData::GameData& data, std::string clientName_, RakNet::Packet* pack)
+	void UI::addTank(GameData::GameData& data, std::string clientName_, RakNet::Packet* pack)
 	{
 		//std::cout << "Calling addTank" << std::endl;
 
@@ -31,7 +31,7 @@ namespace UI {
 		// and then emplace all these components. how are we putting the components on the update map?
 
 		//auto clientEntity = RegWrapper::createEntity(data.m_reg, true);	
-		auto clientEntity = NetworkSystem::addEntity(data, pack, true, true);	
+		auto clientEntity = NetworkUtilitySystem::addEntity(data, pack, true, true);
 		std::cout << "in addTank: addEntity complete" << std::endl;
 
 		// Add the components to the the registry
@@ -46,7 +46,7 @@ namespace UI {
 	}
 
 
-	void updateUI(GameData::GameData& data)
+	void UI::updateUI(GameData::GameData& data)
 	{
 		if (!data.isServer) {
 			// get all elements that take user input
@@ -72,7 +72,7 @@ namespace UI {
 		updateMapPositions(data);
 	}
 
-	void updateMapPositions(GameData::GameData& data) {
+	void UI::updateMapPositions(GameData::GameData& data) {
 		// get all elements that have a mapObject and position, and then do the updates
 		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
 		for (auto entity : view) {
@@ -98,7 +98,7 @@ namespace UI {
 		}
 	}
 
-	void printUI(GameData::GameData& data)
+	void UI::printUI(GameData::GameData& data)
 	{
 		// Clear the current screen
 		
@@ -122,7 +122,7 @@ namespace UI {
 	}
 
 	
-	void getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity)
+	void UI::getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity)
 	{
 
 		// Get the userInput component for this entity
@@ -177,7 +177,7 @@ namespace UI {
 		* For now, send the control to the user exactly as we inputed it.
 		* For later versions, append it to a tochange queue
 		*/
-		NetworkSystem::sendControl(data, usrInput, TranslationSystem::getNetId(data, clientEntity)); // TODO!!!! ERROR ON THIS LINE. CRASHING NULLPOINTER 
+		NetworkUtilitySystem::sendControl(data, usrInput, TranslationSystem::getNetId(data, clientEntity)); // TODO!!!! ERROR ON THIS LINE. CRASHING NULLPOINTER 
 
 	}
 
