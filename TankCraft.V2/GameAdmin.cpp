@@ -10,27 +10,26 @@
 
 namespace GameAdmin {
 
-	void TanksScene::update()
+	void MainScene::update()
 	{	
-
+		std::this_thread::sleep_for(std::chrono::milliseconds(16));
 		if (data.isServer) {
-			NetworkSystem::updateServer(data);
-			MovementSystem::updateMovement(data);
-			MessagingSystem::FlushGameUpdate(data);
+			connectionSystem.updateServer(data);
+			movementSystem.updateMovement(data);
+			messagingSystem.FlushGameUpdate(data);
 		}
 		else {
-			NetworkSystem::updateClient(data);
-			UI::updateUI(data);
-		//	UI::printUI(data);
+			connectionSystem.updateClient(data);
+			ui.updateUI(data);
 		}
 	}
 
 
 
-	void TanksScene::clientLogin()
+	void MainScene::clientLogin()
 	{
 		initUISystem();
-		initNetworkSystem(!data.isServer, 1);
+		initConnectionSystem(!data.isServer, 1);
 		initIDTranslationSystem(false); // TODO: change this 
 
 		data.userName = new std::string();
@@ -40,17 +39,17 @@ namespace GameAdmin {
 
 		// create a new tank entity with that username, call network add entity and update entity (or put on update queue)
 
-		NetworkSystem::sendLoginPacket(data, *data.userName);
+		connectionSystem.sendLoginPacket(data, *data.userName);
 	}
 
-	void TanksScene::serverLogin(uint32_t maxClients) {
+	void MainScene::serverLogin(uint32_t maxClients) {
 		data.clientAddressToEntities = std::map<RakNet::SystemAddress, std::list<networkID>>();
-		initNetworkSystem(data.isServer, maxClients);
+		initConnectionSystem(data.isServer, maxClients);
 		initIDTranslationSystem(true); // TODO: change this 
 		initMovementSystem();
 	}
 
-	TanksScene::TanksScene(bool isServer_, uint32_t maxClients)
+	MainScene::MainScene(bool isServer_, uint32_t maxClients)
 	{
 		// Data
 		data = GameData::GameData();
@@ -74,15 +73,15 @@ namespace GameAdmin {
 		}
 	}
 
-	TanksScene::~TanksScene()
+	MainScene::~MainScene()
 	{
 		data.m_reg.clear();
 	//	netSystem.clientDisconnect(data.rpi, data.address);
 		RakNet::RakPeerInterface::DestroyInstance(data.rpi);
 	}
 
-
-	void TanksScene::initUISystem() {
+	// UI system initialization
+	void MainScene::initUISystem() {
 		// start by filling the matrix with blank dots
 		data.map = std::vector<std::vector<char>>();
 
@@ -106,11 +105,11 @@ namespace GameAdmin {
 			std::cout << std::endl;
 		}
 
-		UI::printUI(data);
+		ui.printUI(data);
 	}
 
 
-	void TanksScene::initNetworkSystem(bool isServer_, uint32_t maxClients)
+	void MainScene::initConnectionSystem(bool isServer_, uint32_t maxClients)
 	{
 		// Instantiate the network instance for our peer interface
 		data.rpi = RakNet::RakPeerInterface::GetInstance();
@@ -132,13 +131,13 @@ namespace GameAdmin {
 			}
 			else {
 				std::cout << "Client started" << std::endl;
-				NetworkSystem::clientConnect(data.rpi, SERVER_PORT, "127.0.0.1");
+				connectionSystem.clientConnect(data.rpi, SERVER_PORT, "127.0.0.1");
 				data.rakAddress = RakNet::SystemAddress("127.0.0.1|"+ SERVER_PORT); // save the server address
 			}
 		}
 	}
 
-	void TanksScene::initIDTranslationSystem(bool isServer) // right now, both the client and the server have a freelist entity, do they need that?
+	void MainScene::initIDTranslationSystem(bool isServer) // right now, both the client and the server have a freelist entity, do they need that?
 	{
 		// Initialize our translation system
 		data.netToEnttid = std::map<networkID, entt::entity>();
@@ -151,13 +150,13 @@ namespace GameAdmin {
 		data.m_reg.emplace<FreeListComponent::freelist> (freeListEntity);
 	}
 
-	void TanksScene::initMovementSystem()
+	void MainScene::initMovementSystem()
 	{
 		// Empty function, nothing to do yet
 	}
 
 	// Initialize the outgoing game update message
-	void TanksScene::initMessageSystem()
+	void MainScene::initMessageSystem()
 	{
 		// initialize the update map
 		data.updateMap = std::map<networkID, std::list<baseComponent*>>();

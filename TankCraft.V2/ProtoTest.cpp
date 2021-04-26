@@ -161,6 +161,7 @@ namespace ProtoTests {
 
 
 	void testGameUpdate(GameData::GameData& data) {
+		MessagingSystem::MessagingSystem messagingSystem;
 		data.updateMap[0] =  std::list<baseComponent*>();
 
 		auto pos = new ComponentView::position();
@@ -172,13 +173,13 @@ namespace ProtoTests {
 		std::cout << "curx = 0, cury = 1, prevx = 2, prevy = 3" << std::endl;
 
 
-		std::string str = MessagingSystem::writeGameUpdate(data.updateMap);
-		MessagingSystem::readGameUpdate(data, str);
+		std::string str = messagingSystem.writeGameUpdate(data.updateMap);
+		messagingSystem.readGameUpdate(data, str);
 		delete pos;
 	}
 
-	void ProtoTests::testGameUpdate()
-	{
+	void ProtoTests::testGameUpdate() {
+		MessagingSystem::MessagingSystem messagingSystem;
 		GameData::GameData data = GameData::GameData();
 		data.updateMap[0] = std::list<baseComponent*>();
 
@@ -199,8 +200,8 @@ namespace ProtoTests {
 		std::cout << "curx = 4, cury = 5, prevx = 6, prevy = 7" << std::endl;
 
 
-		std::string str = MessagingSystem::writeGameUpdate(data.updateMap);
-		MessagingSystem::readGameUpdate(data, str);
+		std::string str = messagingSystem.writeGameUpdate(data.updateMap);
+		messagingSystem.readGameUpdate(data, str);
 
 		delete pos;
 		delete pos2;

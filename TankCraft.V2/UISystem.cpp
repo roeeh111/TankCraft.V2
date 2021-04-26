@@ -1,5 +1,5 @@
 #include "UISystem.h"
-#include "NetworkSystem.h"
+#include "NetworkUtilitySystem.h"
 #include "IDTranslationSystem.h"
 #include "Components.h"
 #include "RegWrappers.h"
@@ -23,7 +23,7 @@ Server responds with a position component for the entity, client sets the new po
 namespace UI {
 
 	// TODO: 
-	void addTank(GameData::GameData& data, std::string clientName_, RakNet::Packet* pack)
+	void UI::addTank(GameData::GameData& data, std::string clientName_, RakNet::Packet* pack)
 	{
 		//std::cout << "Calling addTank" << std::endl;
 
@@ -31,7 +31,7 @@ namespace UI {
 		// and then emplace all these components. how are we putting the components on the update map?
 
 		//auto clientEntity = RegWrapper::createEntity(data.m_reg, true);	
-		auto clientEntity = NetworkSystem::addEntity(data, pack, true, true);	
+		auto clientEntity = NetworkUtilitySystem::addEntity(data, pack, true, true);
 		std::cout << "in addTank: addEntity complete" << std::endl;
 
 		// Add the components to the the registry
@@ -46,7 +46,7 @@ namespace UI {
 	}
 
 
-	void updateUI(GameData::GameData& data)
+	void UI::updateUI(GameData::GameData& data)
 	{
 		if (!data.isServer) {
 			// get all elements that take user input
@@ -72,7 +72,7 @@ namespace UI {
 		updateMapPositions(data);
 	}
 
-	void updateMapPositions(GameData::GameData& data) {
+	void UI::updateMapPositions(GameData::GameData& data) {
 		// get all elements that have a mapObject and position, and then do the updates
 		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
 		for (auto entity : view) {
@@ -98,7 +98,7 @@ namespace UI {
 		}
 	}
 
-	void printUI(GameData::GameData& data)
+	void UI::printUI(GameData::GameData& data)
 	{
 		// Clear the current screen
 		
@@ -122,10 +122,8 @@ namespace UI {
 	}
 
 	
-	void getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity)
+	void UI::getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity)
 	{
-		char input;
-		std::cin >> input;
 
 		// Get the userInput component for this entity
 		ComponentView::userInput& usrInput = data.m_reg.get<ComponentView::userInput>(clientEntity);
@@ -134,6 +132,10 @@ namespace UI {
 		usrInput.clear();
 
 		usrInput.dirty_ = 1;
+
+		/*
+		char input;
+		std::cin >> input;
 		// set the user input values depending on what we got
 		if (input == 'a') {
 			usrInput.setLeft(true);
@@ -150,7 +152,23 @@ namespace UI {
 		else {
 			usrInput.dirty_ = 0;
 		}
-		std::cout << "left = " << usrInput.left() << " right = " << usrInput.right() << " up = " << usrInput.up() << " down = " << usrInput.down() << std::endl;
+		*/
+		if (GetAsyncKeyState(87)) {
+			usrInput.setUp(true);
+		}
+		else if (GetAsyncKeyState(65)) {
+			usrInput.setLeft(true);
+		}
+		else if (GetAsyncKeyState(83)) {
+			usrInput.setDown(true);
+		}
+		else if (GetAsyncKeyState(68)) {
+			usrInput.setRight(true);
+		}
+		else {
+			usrInput.dirty_ = 0;
+		}
+		//std::cout << "left = " << usrInput.left() << " right = " << usrInput.right() << " up = " << usrInput.up() << " down = " << usrInput.down() << std::endl;
 
 
 		//usrInput.unlock(data, clientEntity);			// TODO: do i really need this???
@@ -159,7 +177,7 @@ namespace UI {
 		* For now, send the control to the user exactly as we inputed it.
 		* For later versions, append it to a tochange queue
 		*/
-		NetworkSystem::sendControl(data, usrInput, TranslationSystem::getNetId(data, clientEntity)); // TODO!!!! ERROR ON THIS LINE. CRASHING NULLPOINTER 
+		NetworkUtilitySystem::sendControl(data, usrInput, TranslationSystem::getNetId(data, clientEntity)); // TODO!!!! ERROR ON THIS LINE. CRASHING NULLPOINTER 
 
 	}
 
