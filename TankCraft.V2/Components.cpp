@@ -51,9 +51,6 @@ namespace ComponentView {
 		comp->set_netid(netid);
 	}
 
-	void damageDone_::write(ProtoMessaging::UpdateEntityMessage& message, networkID netid)
-	{
-	}
 
 	void networked_::write(ProtoMessaging::UpdateEntityMessage& message, networkID netid)
 	{

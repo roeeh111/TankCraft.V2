@@ -70,4 +70,7 @@ namespace NetworkSystem {
 
 	// Handle getting a login packet
 	void handleLogin(GameData::GameData& data, RakNet::Packet* pack);
+
+	void broadcast(GameData::GameData& data, const RakNet::BitStream* bitStream, PacketPriority priority, PacketReliability reliability, char orderingChannel);
+	
 }

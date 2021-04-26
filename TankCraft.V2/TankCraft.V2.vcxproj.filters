@@ -25,9 +25,6 @@
     <Filter Include="Source Files\Systems">
       <UniqueIdentifier>{076c3b71-730f-4d60-bc86-8988f5d4e3e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Tests">
-      <UniqueIdentifier>{9dae64cb-5208-4e6d-bd52-b0c71f5825f7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\ProtoSchemas">
       <UniqueIdentifier>{be47b12f-526c-4e8b-b428-4177624ed57f}</UniqueIdentifier>
     </Filter>
@@ -36,6 +33,9 @@
     </Filter>
     <Filter Include="Header Files\Game Level Headers">
       <UniqueIdentifier>{c5dcce0c-13eb-4131-9efc-8a2b8b8860de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{9dae64cb-5208-4e6d-bd52-b0c71f5825f7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -523,7 +523,7 @@
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
     <ClInclude Include="ProtoTest.h">
-      <Filter>Header Files\Tests</Filter>
+      <Filter>Tests</Filter>
     </ClInclude>
     <ClInclude Include="MessagingSystem.h">
       <Filter>Header Files\Systems</Filter>
@@ -545,6 +545,9 @@
     </ClInclude>
     <ClInclude Include="Packet.h">
       <Filter>Header Files\Game Level Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="LibNoTest.h">
+      <Filter>Tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -900,7 +903,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ProtoTest.cpp">
-      <Filter>Header Files\Tests</Filter>
+      <Filter>Tests</Filter>
     </ClCompile>
     <ClCompile Include="CreateEntity.cpp">
       <Filter>ENTT Wrappers</Filter>
@@ -913,6 +916,9 @@
     </ClCompile>
     <ClCompile Include="Tanks.pb.cc">
       <Filter>Header Files\ProtoSchemas</Filter>
+    </ClCompile>
+    <ClCompile Include="LibNoTest.cpp">
+      <Filter>Tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

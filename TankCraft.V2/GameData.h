@@ -21,6 +21,7 @@ typedef struct baseComponent_ {
 	void unlock(GameData::GameData& data, const entt::entity& entity) ; // { std::cout << " base unlock" << std::endl; }
 	bool isNetworked() { return networked; }
 
+	virtual int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool); }
 	//virtual void read(ProtoMessaging::UpdateEntityMessage& message, networkID netid, int index) {}
 } baseComponent;
 
@@ -51,12 +52,11 @@ namespace GameData {
 		std::map<RakNet::SystemAddress, std::list<networkID>> clientAddressToEntities;
 
 		// The map of entities to components to update
-		std::map<networkID, std::list<baseComponent*>> updateMap; // DO i need this???
+		std::map<networkID, std::list<baseComponent*>> updateMap; 
 
 		// the address were connected to
 	//	const char* address;
 		RakNet::SystemAddress rakAddress;
-
 
 		// Whether this scene is the server or a client 
 		bool isServer;

@@ -214,7 +214,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Tanks_2eproto::offsets[] PROTO
   PROTOBUF_FIELD_OFFSET(::ProtoMessaging::ControlComponent, left_),
   PROTOBUF_FIELD_OFFSET(::ProtoMessaging::ControlComponent, right_),
   PROTOBUF_FIELD_OFFSET(::ProtoMessaging::ControlComponent, netid_),
-  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::ProtoMessaging::PositionComponent, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::ProtoMessaging::PositionComponent, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -224,6 +224,11 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Tanks_2eproto::offsets[] PROTO
   PROTOBUF_FIELD_OFFSET(::ProtoMessaging::PositionComponent, curx_),
   PROTOBUF_FIELD_OFFSET(::ProtoMessaging::PositionComponent, cury_),
   PROTOBUF_FIELD_OFFSET(::ProtoMessaging::PositionComponent, netid_),
+  0,
+  1,
+  2,
+  3,
+  4,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ProtoMessaging::MapObjectComponent, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -290,15 +295,15 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Tanks_2eproto::offsets[] PROTO
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::ProtoMessaging::ControlComponent)},
-  { 10, -1, sizeof(::ProtoMessaging::PositionComponent)},
-  { 20, -1, sizeof(::ProtoMessaging::MapObjectComponent)},
-  { 27, -1, sizeof(::ProtoMessaging::ScoreComponent)},
-  { 34, -1, sizeof(::ProtoMessaging::ClientNameComponent)},
-  { 41, -1, sizeof(::ProtoMessaging::HealthComponent)},
-  { 48, -1, sizeof(::ProtoMessaging::ControlMessage)},
-  { 56, -1, sizeof(::ProtoMessaging::AddRemoveEntityMessage)},
-  { 64, -1, sizeof(::ProtoMessaging::UpdateEntityMessage)},
-  { 77, -1, sizeof(::ProtoMessaging::LoginMessage)},
+  { 10, 20, sizeof(::ProtoMessaging::PositionComponent)},
+  { 25, -1, sizeof(::ProtoMessaging::MapObjectComponent)},
+  { 32, -1, sizeof(::ProtoMessaging::ScoreComponent)},
+  { 39, -1, sizeof(::ProtoMessaging::ClientNameComponent)},
+  { 46, -1, sizeof(::ProtoMessaging::HealthComponent)},
+  { 53, -1, sizeof(::ProtoMessaging::ControlMessage)},
+  { 61, -1, sizeof(::ProtoMessaging::AddRemoveEntityMessage)},
+  { 69, -1, sizeof(::ProtoMessaging::UpdateEntityMessage)},
+  { 82, -1, sizeof(::ProtoMessaging::LoginMessage)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -318,29 +323,31 @@ const char descriptor_table_protodef_Tanks_2eproto[] PROTOBUF_SECTION_VARIABLE(p
   "\n\013Tanks.proto\022\016ProtoMessaging\"X\n\020Control"
   "Component\022\n\n\002up\030\001 \001(\010\022\014\n\004down\030\002 \001(\010\022\014\n\004l"
   "eft\030\003 \001(\010\022\r\n\005right\030\004 \001(\010\022\r\n\005netid\030\005 \001(\005\""
-  "\\\n\021PositionComponent\022\r\n\005prevx\030\001 \001(\005\022\r\n\005p"
-  "revy\030\002 \001(\005\022\014\n\004curx\030\003 \001(\005\022\014\n\004cury\030\004 \001(\005\022\r"
-  "\n\005netid\030\005 \001(\005\"4\n\022MapObjectComponent\022\017\n\007m"
-  "apChar\030\001 \001(\014\022\r\n\005netid\030\002 \001(\005\"/\n\016ScoreComp"
-  "onent\022\016\n\006points\030\001 \001(\005\022\r\n\005netid\030\002 \001(\005\"2\n\023"
-  "ClientNameComponent\022\014\n\004name\030\001 \001(\t\022\r\n\005net"
-  "id\030\002 \001(\005\",\n\017HealthComponent\022\n\n\002hp\030\001 \001(\005\022"
-  "\r\n\005netid\030\002 \001(\005\"b\n\016ControlMessage\022\n\n\002id\030\001"
-  " \001(\014\022\021\n\ttimestamp\030\002 \001(\003\0221\n\007control\030\003 \001(\013"
-  "2 .ProtoMessaging.ControlComponent\"F\n\026Ad"
-  "dRemoveEntityMessage\022\n\n\002id\030\001 \001(\014\022\021\n\ttime"
-  "stamp\030\002 \001(\003\022\r\n\005netid\030\003 \001(\005\"\211\003\n\023UpdateEnt"
-  "ityMessage\022\n\n\002id\030\001 \001(\014\022\021\n\ttimestamp\030\002 \001("
-  "\003\0228\n\rpositionComps\030\003 \003(\0132!.ProtoMessagin"
-  "g.PositionComponent\022:\n\016mapObjectComps\030\004 "
-  "\003(\0132\".ProtoMessaging.MapObjectComponent\022"
-  "2\n\nscoreComps\030\005 \003(\0132\036.ProtoMessaging.Sco"
-  "reComponent\022<\n\017clientNameComps\030\006 \003(\0132#.P"
-  "rotoMessaging.ClientNameComponent\0224\n\013hea"
-  "lthComps\030\007 \003(\0132\037.ProtoMessaging.HealthCo"
-  "mponent\0225\n\013uinputComps\030\010 \003(\0132 .ProtoMess"
-  "aging.ControlComponent\"\034\n\014LoginMessage\022\014"
-  "\n\004name\030\001 \001(\tb\006proto3"
+  "\245\001\n\021PositionComponent\022\022\n\005prevx\030\001 \001(\005H\000\210\001"
+  "\001\022\022\n\005prevy\030\002 \001(\005H\001\210\001\001\022\021\n\004curx\030\003 \001(\005H\002\210\001\001"
+  "\022\021\n\004cury\030\004 \001(\005H\003\210\001\001\022\022\n\005netid\030\005 \001(\005H\004\210\001\001B"
+  "\010\n\006_prevxB\010\n\006_prevyB\007\n\005_curxB\007\n\005_curyB\010\n"
+  "\006_netid\"4\n\022MapObjectComponent\022\017\n\007mapChar"
+  "\030\001 \001(\014\022\r\n\005netid\030\002 \001(\005\"/\n\016ScoreComponent\022"
+  "\016\n\006points\030\001 \001(\005\022\r\n\005netid\030\002 \001(\005\"2\n\023Client"
+  "NameComponent\022\014\n\004name\030\001 \001(\t\022\r\n\005netid\030\002 \001"
+  "(\005\",\n\017HealthComponent\022\n\n\002hp\030\001 \001(\005\022\r\n\005net"
+  "id\030\002 \001(\005\"b\n\016ControlMessage\022\n\n\002id\030\001 \001(\014\022\021"
+  "\n\ttimestamp\030\002 \001(\003\0221\n\007control\030\003 \001(\0132 .Pro"
+  "toMessaging.ControlComponent\"F\n\026AddRemov"
+  "eEntityMessage\022\n\n\002id\030\001 \001(\014\022\021\n\ttimestamp\030"
+  "\002 \001(\003\022\r\n\005netid\030\003 \001(\005\"\211\003\n\023UpdateEntityMes"
+  "sage\022\n\n\002id\030\001 \001(\014\022\021\n\ttimestamp\030\002 \001(\003\0228\n\rp"
+  "ositionComps\030\003 \003(\0132!.ProtoMessaging.Posi"
+  "tionComponent\022:\n\016mapObjectComps\030\004 \003(\0132\"."
+  "ProtoMessaging.MapObjectComponent\0222\n\nsco"
+  "reComps\030\005 \003(\0132\036.ProtoMessaging.ScoreComp"
+  "onent\022<\n\017clientNameComps\030\006 \003(\0132#.ProtoMe"
+  "ssaging.ClientNameComponent\0224\n\013healthCom"
+  "ps\030\007 \003(\0132\037.ProtoMessaging.HealthComponen"
+  "t\0225\n\013uinputComps\030\010 \003(\0132 .ProtoMessaging."
+  "ControlComponent\"\034\n\014LoginMessage\022\014\n\004name"
+  "\030\001 \001(\tb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Tanks_2eproto_deps[1] = {
 };
@@ -358,7 +365,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Tan
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Tanks_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Tanks_2eproto = {
-  false, false, descriptor_table_protodef_Tanks_2eproto, "Tanks.proto", 1020,
+  false, false, descriptor_table_protodef_Tanks_2eproto, "Tanks.proto", 1094,
   &descriptor_table_Tanks_2eproto_once, descriptor_table_Tanks_2eproto_sccs, descriptor_table_Tanks_2eproto_deps, 10, 0,
   schemas, file_default_instances, TableStruct_Tanks_2eproto::offsets,
   file_level_metadata_Tanks_2eproto, 10, file_level_enum_descriptors_Tanks_2eproto, file_level_service_descriptors_Tanks_2eproto,
@@ -662,6 +669,22 @@ void ControlComponent::InternalSwap(ControlComponent* other) {
 
 class PositionComponent::_Internal {
  public:
+  using HasBits = decltype(std::declval<PositionComponent>()._has_bits_);
+  static void set_has_prevx(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+  static void set_has_prevy(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
+  static void set_has_curx(HasBits* has_bits) {
+    (*has_bits)[0] |= 4u;
+  }
+  static void set_has_cury(HasBits* has_bits) {
+    (*has_bits)[0] |= 8u;
+  }
+  static void set_has_netid(HasBits* has_bits) {
+    (*has_bits)[0] |= 16u;
+  }
 };
 
 PositionComponent::PositionComponent(::PROTOBUF_NAMESPACE_ID::Arena* arena)
@@ -671,7 +694,8 @@ PositionComponent::PositionComponent(::PROTOBUF_NAMESPACE_ID::Arena* arena)
   // @@protoc_insertion_point(arena_constructor:ProtoMessaging.PositionComponent)
 }
 PositionComponent::PositionComponent(const PositionComponent& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::memcpy(&prevx_, &from.prevx_,
     static_cast<size_t>(reinterpret_cast<char*>(&netid_) -
@@ -717,14 +741,19 @@ void PositionComponent::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&prevx_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&netid_) -
-      reinterpret_cast<char*>(&prevx_)) + sizeof(netid_));
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x0000001fu) {
+    ::memset(&prevx_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&netid_) -
+        reinterpret_cast<char*>(&prevx_)) + sizeof(netid_));
+  }
+  _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 const char* PositionComponent::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -733,6 +762,7 @@ const char* PositionComponent::_InternalParse(const char* ptr, ::PROTOBUF_NAMESP
       // int32 prevx = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          _Internal::set_has_prevx(&has_bits);
           prevx_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
@@ -740,6 +770,7 @@ const char* PositionComponent::_InternalParse(const char* ptr, ::PROTOBUF_NAMESP
       // int32 prevy = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          _Internal::set_has_prevy(&has_bits);
           prevy_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
@@ -747,6 +778,7 @@ const char* PositionComponent::_InternalParse(const char* ptr, ::PROTOBUF_NAMESP
       // int32 curx = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          _Internal::set_has_curx(&has_bits);
           curx_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
@@ -754,6 +786,7 @@ const char* PositionComponent::_InternalParse(const char* ptr, ::PROTOBUF_NAMESP
       // int32 cury = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
+          _Internal::set_has_cury(&has_bits);
           cury_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
@@ -761,6 +794,7 @@ const char* PositionComponent::_InternalParse(const char* ptr, ::PROTOBUF_NAMESP
       // int32 netid = 5;
       case 5:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 40)) {
+          _Internal::set_has_netid(&has_bits);
           netid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
@@ -780,6 +814,7 @@ const char* PositionComponent::_InternalParse(const char* ptr, ::PROTOBUF_NAMESP
     }  // switch
   }  // while
 success:
+  _has_bits_.Or(has_bits);
   return ptr;
 failure:
   ptr = nullptr;
@@ -794,31 +829,31 @@ failure:
   (void) cached_has_bits;
 
   // int32 prevx = 1;
-  if (this->prevx() != 0) {
+  if (_internal_has_prevx()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_prevx(), target);
   }
 
   // int32 prevy = 2;
-  if (this->prevy() != 0) {
+  if (_internal_has_prevy()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_prevy(), target);
   }
 
   // int32 curx = 3;
-  if (this->curx() != 0) {
+  if (_internal_has_curx()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_curx(), target);
   }
 
   // int32 cury = 4;
-  if (this->cury() != 0) {
+  if (_internal_has_cury()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->_internal_cury(), target);
   }
 
   // int32 netid = 5;
-  if (this->netid() != 0) {
+  if (_internal_has_netid()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(5, this->_internal_netid(), target);
   }
@@ -839,41 +874,44 @@ size_t PositionComponent::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // int32 prevx = 1;
-  if (this->prevx() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_prevx());
-  }
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x0000001fu) {
+    // int32 prevx = 1;
+    if (cached_has_bits & 0x00000001u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_prevx());
+    }
 
-  // int32 prevy = 2;
-  if (this->prevy() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_prevy());
-  }
+    // int32 prevy = 2;
+    if (cached_has_bits & 0x00000002u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_prevy());
+    }
 
-  // int32 curx = 3;
-  if (this->curx() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_curx());
-  }
+    // int32 curx = 3;
+    if (cached_has_bits & 0x00000004u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_curx());
+    }
 
-  // int32 cury = 4;
-  if (this->cury() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_cury());
-  }
+    // int32 cury = 4;
+    if (cached_has_bits & 0x00000008u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_cury());
+    }
 
-  // int32 netid = 5;
-  if (this->netid() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_netid());
-  }
+    // int32 netid = 5;
+    if (cached_has_bits & 0x00000010u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+          this->_internal_netid());
+    }
 
+  }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -905,20 +943,24 @@ void PositionComponent::MergeFrom(const PositionComponent& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.prevx() != 0) {
-    _internal_set_prevx(from._internal_prevx());
-  }
-  if (from.prevy() != 0) {
-    _internal_set_prevy(from._internal_prevy());
-  }
-  if (from.curx() != 0) {
-    _internal_set_curx(from._internal_curx());
-  }
-  if (from.cury() != 0) {
-    _internal_set_cury(from._internal_cury());
-  }
-  if (from.netid() != 0) {
-    _internal_set_netid(from._internal_netid());
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 0x0000001fu) {
+    if (cached_has_bits & 0x00000001u) {
+      prevx_ = from.prevx_;
+    }
+    if (cached_has_bits & 0x00000002u) {
+      prevy_ = from.prevy_;
+    }
+    if (cached_has_bits & 0x00000004u) {
+      curx_ = from.curx_;
+    }
+    if (cached_has_bits & 0x00000008u) {
+      cury_ = from.cury_;
+    }
+    if (cached_has_bits & 0x00000010u) {
+      netid_ = from.netid_;
+    }
+    _has_bits_[0] |= cached_has_bits;
   }
 }
 
@@ -943,6 +985,7 @@ bool PositionComponent::IsInitialized() const {
 void PositionComponent::InternalSwap(PositionComponent* other) {
   using std::swap;
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(PositionComponent, netid_)
       + sizeof(PositionComponent::netid_)

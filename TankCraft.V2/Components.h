@@ -39,6 +39,8 @@ namespace ComponentView {
 		void setLeft(bool set) { left_ = set; dirty_ = true; }
 		void setRight(bool set) { right_ = set; dirty_ = true; }
 		void clear();
+		int size() { return sizeof(ComponentID::ComponentID) + 5*sizeof(bool); }
+
 
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
@@ -68,7 +70,7 @@ namespace ComponentView {
 			prevy_ = cury_;
 			CompId = ComponentID::Position;
 			networked = true;
-			std::cout << "prevx = " << prevx_ << " prevy = " << prevy_ << " curx = " << curx_ << " cury = " << cury_ << std::endl;
+			//std::cout << "prevx = " << prevx_ << " prevy = " << prevy_ << " curx = " << curx_ << " cury = " << cury_ << std::endl;
 		}
 		
 		uint32_t prevx() { return prevx_; }
@@ -80,6 +82,7 @@ namespace ComponentView {
 		void setPrevy(uint32_t set) { prevy_ = set; }
 		void setCurx(uint32_t set) { curx_ = set; }
 		void setCury(uint32_t set) { cury_ = set; }
+		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool) + 4* sizeof(uint32_t); }
 
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
@@ -102,6 +105,7 @@ namespace ComponentView {
 		void setMapChar(char set) { mapChar_ = set; }
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
+		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool) + sizeof(char); }
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 	} mapObject;
 
@@ -127,6 +131,7 @@ namespace ComponentView {
 		}
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
+		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool) + sizeof(uint32_t); }
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 	} score;
 
@@ -143,6 +148,7 @@ namespace ComponentView {
 		void setName(std::string set) { name_ = set;}
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 		virtual void lock() { }; // no mutex yet, so doesnt do anything really
+		virtual int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool); }
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 	} clientName;
 
@@ -157,6 +163,8 @@ namespace ComponentView {
 		health_() { hp_ = 100; networked = false;  CompId = ComponentID::Health; }
 		health_(bool net) { hp_ = 100; networked = net;  CompId = ComponentID::Health; }
 		~health_() = default;
+		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool) + sizeof(int32_t); }
+
 	} health;
 
 	// TODO: implement getters and setters, havent done it yet since this might be phased out
@@ -166,6 +174,7 @@ namespace ComponentView {
 		damageDone_(int32_t dm) { damage = dm; networked = false;  CompId = ComponentID::DamageDone;}
 		~damageDone_() = default;
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
+		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool); }
 		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 	} damageDone;
@@ -177,6 +186,7 @@ namespace ComponentView {
 		//long clientID;
 		//bool isNetwoked; // If the entity should be networked
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
+		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool); }
 		virtual void lock() { }; // no mutex yet, so doesnt do anything really
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 	} networked;

@@ -443,4 +443,20 @@ namespace NetworkSystem {
 		std::cout << "Adding tank for " << loginName << std::endl;
 		UI::addTank(data, loginName, pack);
 	}
+
+	void broadcast(GameData::GameData& data, const RakNet::BitStream* bitStream, PacketPriority priority, PacketReliability reliability, char orderingChannel)
+	{
+		// Loop through all connections in the connections map, and send the bitstream to those connections
+		for (auto& addr : data.clientAddressToEntities) {
+			data.rpi->Send(bitStream,
+				priority,
+				reliability,
+				orderingChannel,
+				addr.first,
+				false);
+		}
+
+	}
+
+
 }

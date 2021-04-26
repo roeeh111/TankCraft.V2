@@ -1,7 +1,164 @@
 #include "ProtoTest.h"
 #include "MessagingSystem.h"
+/*
+	Serializing a list of something in protobuf:
+	1) create a version of the "node" or "data" that is stored in the list object in proto file
+	2) create a message with a netid and a repeated field of that node.
+	3) write a wrapper to serialize/deserialize the list
+*/
+
+/*
+	Serializing a map of something in protobuf:
+	What is a map if not a list of pairs? - Roee Horowitz
+	1) create a version of the key component and of the value component
+	2) create a message with netid, and a repeated field that contains a single key and single value
+	3) write a wrapper to serialize/deserialize the map
+*/
+
+/*
+	Serializing an array of something in protubuf:
+	- look into how protobuf does it, may already have a protocol for doing so
+	- if not, its the same as a list, except the deserialize wrapper writes into an array rather than a list
+*/
 
 namespace ProtoTests {
+
+	void testOptionalFields()
+	{
+
+		auto comp = new ProtoMessaging::PositionComponent;
+
+		auto pos = new ComponentView::position();
+		//pos->setCurx(0);
+		//pos->setCury(1);
+		//pos->setPrevx(2);
+		//pos->setPrevy(3);
+		comp->set_curx(0);
+		comp->set_cury(1);
+		comp->set_prevx(2);
+		comp->set_prevy(3);
+		std::cout << "curx = " << comp->curx() << ", cury = " << comp->cury() << ", prevx = " << comp->prevx() << ", prevy = " << comp->prevy() << std::endl;
+
+		auto dstring = comp->SerializeAsString();
+		std::cout << "dstring size = " << dstring.size() << std::endl;
+		comp->ParseFromString(dstring);
+
+
+		if (comp->has_prevx()) {
+			std::cout << "has prevx" << std::endl;
+			pos->setPrevx(comp->prevx());
+		}
+		//  std::cout << "prevx = " << comp.prevx() << std::endl;
+		if (comp->has_prevy()) {
+			std::cout << "has prevy" << std::endl;
+			pos->setPrevy(comp->prevy());
+		}
+		//  std::cout << "prevy = " << comp.prevy() << std::endl;
+		if (comp->has_curx()) {
+			std::cout << "has curx" << std::endl;
+			pos->setCurx(comp->curx());
+		}
+		//  std::cout << "curx = " << comp.curx() << std::endl;
+		if (comp->has_cury()) {
+			std::cout << "has cury" << std::endl;
+			pos->setCury(comp->cury());
+		}
+		// std::cout << "cury = " << comp.cury() << std::endl;
+
+		std::cout << "curx = " << pos->curx() << ", cury = " << pos->cury() << ", prevx = " << pos->prevx() << ", prevy = " << pos->prevy() << std::endl;
+
+
+
+		auto comp2 = new ProtoMessaging::PositionComponent;
+		comp2->set_cury(1);
+		comp2->set_prevx(2);
+		std::cout << "curx = " << comp2->curx() << ", cury = " << comp2->cury() << ", prevx = " << comp2->prevx() << ", prevy = " << comp2->prevy() << std::endl;
+
+		auto dstring2 = comp2->SerializeAsString();
+		std::cout << "dstring2 size = " << dstring2.size() << std::endl;
+		comp2->ParseFromString(dstring2);
+
+
+		auto pos2 = new ComponentView::position();
+
+		if (comp2->has_prevx()) {
+			std::cout << "has prevx" << std::endl;
+			pos2->setPrevx(comp2->prevx());
+		}
+		//  std::cout << "prevx = " << comp.prevx() << std::endl;
+		if (comp2->has_prevy()) {
+			std::cout << "has prevy" << std::endl;
+			pos2->setPrevy(comp2->prevy());
+		}
+		//  std::cout << "prevy = " << comp.prevy() << std::endl;
+		if (comp2->has_curx()) {
+			std::cout << "has curx" << std::endl;
+			pos2->setCurx(comp2->curx());
+		}
+		//  std::cout << "curx = " << comp.curx() << std::endl;
+		if (comp2->has_cury()) {
+			std::cout << "has cury" << std::endl;
+			pos2->setCury(comp2->cury());
+		}
+		// std::cout << "cury = " << comp.cury() << std::endl;
+
+		std::cout << "curx = " << pos2->curx() << ", cury = " << pos2->cury() << ", prevx = " << pos2->prevx() << ", prevy = " << pos2->prevy() << std::endl;
+
+
+
+
+
+		delete comp;
+		delete pos;
+		delete comp2;
+		delete pos2;
+	}
+
+
+	void serializationOverheadTest()
+	{
+	}
+
+
+	void gameUpdateOverheadTest(int iterations) {
+		std::cout << "Testing addition of "<< iterations << " full component updates" << std::endl;
+		auto message = ProtoMessaging::UpdateEntityMessage();
+		int size = 0;
+		std::string n = "Josantonio Diaz";
+
+		for (int i = 0; i < iterations; i++) {
+			auto pos = new ComponentView::position(1, 1);
+			auto input = new ComponentView::userInput(); input->setDown(4); input->setLeft(3); input->setRight(2); input->setUp(1);
+			auto mapobj = new ComponentView::mapObject('x', 1);
+			auto name = new ComponentView::clientName(n, 1);
+
+			pos->write(message, 1);
+			input->write(message, 1);
+			mapobj->write(message, 1);
+			name->write(message, 1);
+
+			size += pos->size() + input->size() + mapobj->size() + name->size() + n.size();
+		}
+		auto srl = message.SerializeAsString().size();
+
+		std::cout << "Expected size = " << size << std::endl;
+		std::cout << "Serialized size = " << srl << std::endl;
+		std::cout << "Difference = " << size - srl << "\n" << std::endl;
+	}
+	
+	void testFlushRegistry(GameData::GameData& data) {
+	/*	entt::entity temp;
+		data.m_reg.data(); // How to get all entities in a registry
+
+		// iterate over all entities in a registry
+
+		data.m_reg.visit(temp, [&](const auto info) {
+			auto storage = data.m_reg.storage(info);
+			storage->emplace(data.m_reg, other, storage->get(entity));
+			});
+			*/
+	}
+
 
 	void testGameUpdate(GameData::GameData& data) {
 		data.updateMap[0] =  std::list<baseComponent*>();
@@ -12,7 +169,7 @@ namespace ProtoTests {
 		pos->setPrevx(2);
 		pos->setPrevy(3);
 		data.updateMap[0].push_back(pos);
-
+		std::cout << "curx = 0, cury = 1, prevx = 2, prevy = 3" << std::endl;
 
 
 		std::string str = MessagingSystem::writeGameUpdate(data.updateMap);
