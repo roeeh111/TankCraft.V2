@@ -86,7 +86,21 @@ namespace ComponentView {
 
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
-	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
+
+
+		//define how object should be serialized/deserialized
+		template <typename S>
+		void serialize(S& s, struct position_& o) {
+			s.value4b(o.prevx);
+			s.value4b(o.prevy);
+			s.value4b(o.curx);
+			s.value4b(o.cury);
+		}
+
+
+
+
+
 	} position;
 
 

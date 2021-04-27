@@ -52,6 +52,7 @@ namespace ConnectionSystem {
 
 		// Handle an incoming game update packet
 		void handleGameUpdate(GameData::GameData& data, RakNet::Packet* pack);
+
 	};
 
 }

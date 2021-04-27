@@ -10,7 +10,7 @@
 namespace LibNoTest {
 
 	void includeTest() {
-	/*	using Writer = nop::StreamWriter<std::stringstream>;
+/*	using Writer = nop::StreamWriter<std::stringstream>;
 		nop::Serializer<Writer> serializer;
 
 		serializer.Write(std::vector<int>{1, 2, 3, 4});

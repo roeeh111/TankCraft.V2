@@ -226,4 +226,20 @@ namespace NetworkUtilitySystem {
 			false);
 	}
 
+
+	void NetworkUtilitySystem::broadcast(GameData::GameData& data, const RakNet::BitStream* bitStream, PacketPriority priority, PacketReliability reliability, char orderingChannel)
+	{
+		for (auto& it : data.clientAddressToEntities) {
+			data.rpi->Send(bitStream,
+				priority,
+				reliability,
+				orderingChannel,
+				it.first,
+				false);
+		}
+
+	}
+
+
+
 }

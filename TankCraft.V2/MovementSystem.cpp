@@ -33,7 +33,7 @@ namespace MovementSystem {
 		}
 	}
 
-	void moveEntity(GameData::GameData& data, const entt::entity &entity, ComponentView::userInput &input) {
+	void MovementSystem::moveEntity(GameData::GameData& data, const entt::entity &entity, ComponentView::userInput &input) {
 		std::cout << "Moving entitiy:" << std::endl;
 		std::cout << "left = " << input.left() << " right = " << input.right() << " up = " << input.up() << " down = " << input.down() << std::endl;
 		auto& points = data.m_reg.get<ComponentView::position>(entity);

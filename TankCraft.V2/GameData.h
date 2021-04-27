@@ -6,6 +6,8 @@
 #include "Tanks.pb.h"
 #include "ComponentID.h"
 
+#include <msgpack.hpp>
+
 namespace GameData { class GameData; };
 
 // TODO: unlock doesnt actually do anything right now..., so implement it
@@ -20,6 +22,13 @@ typedef struct baseComponent_ {
 	virtual void lock() {  };
 	void unlock(GameData::GameData& data, const entt::entity& entity) ; // { std::cout << " base unlock" << std::endl; }
 	bool isNetworked() { return networked; }
+
+	// TEMPORARY EXPERIMENTAL::
+	void Serialize(msgpack::sbuffer& sbuf) {
+		msgpack::pack(sbuf, this);
+
+	}
+
 
 	virtual int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool); }
 	//virtual void read(ProtoMessaging::UpdateEntityMessage& message, networkID netid, int index) {}

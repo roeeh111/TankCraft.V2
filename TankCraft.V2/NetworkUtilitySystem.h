@@ -26,4 +26,7 @@ namespace NetworkUtilitySystem {
 
 	// send a control packet to the server
 	void sendControl(GameData::GameData& data, ComponentView::userInput& usrInput, networkID netid);
+
+	// Broadcast the contents of a bistream to all connections in the connections list
+	void broadcast(GameData::GameData& data, const RakNet::BitStream* bitStream, PacketPriority priority, PacketReliability reliability, char orderingChannel);
 }

@@ -2,7 +2,7 @@
 #include "MessagingSystem.h"
 #include <ctime>
 #include "IDTranslationSystem.h"
-#include "NetworkSystem.h"
+#include "NetworkUtilitySystem.h"
 
 namespace MessagingSystem {
 
@@ -15,14 +15,13 @@ namespace MessagingSystem {
         MessagingSystem::writeGameUpdate(stream, data.updateMap);  
 
         // Broadcast the game update     
-   //     data.rpi->Send(&stream,
+     //  data.rpi->Send(&stream,
     //        HIGH_PRIORITY,
      //       RELIABLE_ORDERED,
       //      0,
       //      RakNet::UNASSIGNED_SYSTEM_ADDRESS,
        //     true);
-
-        NetworkSystem::broadcast(data, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0);
+        NetworkUtilitySystem::broadcast(data, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0);
     }
 
 
@@ -47,7 +46,7 @@ namespace MessagingSystem {
     }
 
     // TODO: I THINK THIS IS WRONG AND THATS WHY WERE ONLY GETTING ZEROS
-    void writeControls(RakNet::BitStream& stream, ComponentView::userInput control, networkID netid)
+    void MessagingSystem::writeControls(RakNet::BitStream& stream, ComponentView::userInput control, networkID netid)
     {
 
         // write the packet type to the bitsream

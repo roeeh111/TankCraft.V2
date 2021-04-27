@@ -1,7 +1,8 @@
 #include <iostream>
 #include "GameAdmin.h"
 #include "ProtoTest.h"
-#include "LibNoTest.h"
+#include "bitseryTest.h"
+#include "MsgPackTest.h"
 #include "MessagingSystem.h"
 
 #define MAX_CLIENTS 10
@@ -25,7 +26,13 @@ void testSerialization();
 //        In the case that we want to change to another library.
 int main(void)
 {
-    startMultiplyerClient();
+    // Testing msgpack serialization scheme:
+    // make a scene, call all of the init functions
+    // add a bunch of components to the map, call flush
+    // call MakeGameUpdate on the serialized bunch
+
+
+
     return 0;
 }
 
