@@ -5,13 +5,13 @@
 
 namespace MessagingSystem {
 
-    // System flush
-    void MessagingSystem::FlushGameUpdate(GameData::GameData& data) {
+    // System flush game update
+    void MessagingSystem::update(GameData::GameData& data) {
         if (data.updateMap.size() <= 0)
             return;
         std::cout << "Flushing game update of size " << data.updateMap.size() << std::endl;
         RakNet::BitStream stream = RakNet::BitStream();
-        MessagingSystem::writeGameUpdate(stream, data.updateMap);  
+        MessagingSystem::writeGameUpdate(stream, data.updateMap);
 
         // Broadcast the game update
         data.rpi->Send(&stream,
@@ -20,6 +20,11 @@ namespace MessagingSystem {
             0,
             RakNet::UNASSIGNED_SYSTEM_ADDRESS,
             true);
+    }
+
+    void MessagingSystem::init(GameData::GameData& data) {
+        // initialize the update map
+        data.updateMap = std::map<networkID, std::list<baseComponent*>>();
     }
 
 
@@ -44,7 +49,7 @@ namespace MessagingSystem {
     }
 
     // TODO: I THINK THIS IS WRONG AND THATS WHY WERE ONLY GETTING ZEROS
-    void writeControls(RakNet::BitStream& stream, ComponentView::userInput control, networkID netid)
+    void MessagingSystem::writeControls(RakNet::BitStream& stream, ComponentView::userInput control, networkID netid)
     {
 
         // write the packet type to the bitsream

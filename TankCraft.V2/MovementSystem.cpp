@@ -17,8 +17,13 @@
 // Update movement should only be control based? 
 
 namespace MovementSystem {
+
+	void MovementSystem::init(GameData::GameData& data) {
+		// No init function
+	}
+
 	// NOTE: this only moves tanks now, genericize this so that it can move any entity that is dirty
-	void MovementSystem::updateMovement(GameData::GameData& data)
+	void MovementSystem::update(GameData::GameData& data)
 	{
 		// For now, loop over all entities with position and user input
 		// and call moveEntity
@@ -33,7 +38,7 @@ namespace MovementSystem {
 		}
 	}
 
-	void moveEntity(GameData::GameData& data, const entt::entity &entity, ComponentView::userInput &input) {
+	void MovementSystem::moveEntity(GameData::GameData& data, const entt::entity& entity, ComponentView::userInput& input) {
 		std::cout << "Moving entitiy:" << std::endl;
 		std::cout << "left = " << input.left() << " right = " << input.right() << " up = " << input.up() << " down = " << input.down() << std::endl;
 		auto& points = data.m_reg.get<ComponentView::position>(entity);

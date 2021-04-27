@@ -20,10 +20,37 @@ Server responds with a position component for the entity, client sets the new po
 
 */
 
-namespace UI {
+namespace UISystem {
 
-	// TODO: 
-	void UI::addTank(GameData::GameData& data, std::string clientName_, RakNet::Packet* pack)
+	void UISystem::init(GameData::GameData& data)
+	{
+		// Only display UI for client
+		if (!data.isServer) {
+			data.map = std::vector<std::vector<char>>();
+			//Grow rows by m
+			data.map.resize(HEIGHT);
+			for (int i = 0; i < HEIGHT; ++i)
+			{
+				//Grow Columns by n
+				data.map[i].resize(WIDTH);
+			}
+
+			for (int i = 0; i < HEIGHT; i++) {
+				for (int j = 0; j < WIDTH; j++) {
+					if ((i + j) % 8 == 4) {
+						data.map[i][j] = 'c';
+					}
+					else {
+						data.map[i][j] = '.';
+					}
+				}
+				std::cout << std::endl;
+			}
+			printUI(data);
+		}
+	}
+
+	void UISystem::addTank(GameData::GameData& data, std::string clientName_, RakNet::Packet* pack)
 	{
 		//std::cout << "Calling addTank" << std::endl;
 
@@ -45,9 +72,9 @@ namespace UI {
 
 	}
 
-
-	void UI::updateUI(GameData::GameData& data)
+	void UISystem::update(GameData::GameData& data)
 	{
+		// Only display UI for client
 		if (!data.isServer) {
 			// get all elements that take user input
 			auto view = data.m_reg.view<ComponentView::clientName, ComponentView::userInput>();
@@ -72,7 +99,7 @@ namespace UI {
 		updateMapPositions(data);
 	}
 
-	void UI::updateMapPositions(GameData::GameData& data) {
+	void UISystem::updateMapPositions(GameData::GameData& data) {
 		// get all elements that have a mapObject and position, and then do the updates
 		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
 		for (auto entity : view) {
@@ -98,7 +125,7 @@ namespace UI {
 		}
 	}
 
-	void UI::printUI(GameData::GameData& data)
+	void UISystem::printUI(GameData::GameData& data)
 	{
 		// Clear the current screen
 		
@@ -121,8 +148,7 @@ namespace UI {
 		
 	}
 
-	
-	void UI::getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity)
+	void UISystem::getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity)
 	{
 
 		// Get the userInput component for this entity
@@ -180,63 +206,7 @@ namespace UI {
 		NetworkUtilitySystem::sendControl(data, usrInput, TranslationSystem::getNetId(data, clientEntity)); // TODO!!!! ERROR ON THIS LINE. CRASHING NULLPOINTER 
 
 	}
-
 }
-
-
-
-
-
-
-
-/*
-void UISystem::getUserInput(entt::registry& m_reg, entt::entity& clientEntity)
-{
-
-	char input;
-	auto& points = m_reg.get<ComponentView::position>(clientEntity);
-
-
-	std::cin >> input;
-
-	points.prevx = points.curx;
-	points.prevy = points.cury;
-
-	if (input == 'a') {
-		if (points.curx == 0) {
-			points.curx = WIDTH - 1;
-		}
-		else {
-			points.curx--;
-		}
-	}
-	else if (input == 's') {
-		if (points.cury == HEIGHT - 1) {
-			points.cury = 0;
-		}
-		else {
-			points.cury++;
-		}
-	}
-	else if (input == 'd') {
-		if (points.curx == WIDTH - 1) {
-			points.curx = 0;
-		}
-		else {
-			points.curx++;
-		}
-	}
-	else if (input == 'w') {
-		if (points.cury == 0) {
-			points.cury = HEIGHT - 1;
-		}
-		else {
-			points.cury--;
-		}
-	}
-
-}
-*/
 
 // NEW USER INPUT METHOD:
 // get all entities with a username

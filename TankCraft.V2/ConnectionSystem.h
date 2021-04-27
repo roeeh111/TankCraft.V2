@@ -4,7 +4,6 @@
 #include <iostream>
 #include "GameData.h"
 #include "Components.h"
-#include "PrimarySystem.h"
 #include "IDTranslationSystem.h"
 #include "IDTranslationComponent.h"
 #include "MovementSystem.h"
@@ -15,8 +14,12 @@
 #define SERVER_PORT 60000
 
 namespace ConnectionSystem {
-	class ConnectionSystem {
+	class ConnectionSystem : public PrimarySystem::PrimarySystem {
 	public:
+
+		void init(GameData::GameData& data);
+
+		void update(GameData::GameData& data);
 		// TODO: may need a refrence to the m_reg if its not global
 		// Go through all incoming packets to the server, and dispatch game changes accordingly
 		// Broadcast the results to all clients

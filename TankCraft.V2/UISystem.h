@@ -10,10 +10,13 @@
 * 
 */
 
-namespace UI {
-	class UI {
+namespace UISystem {
+	class UISystem : public PrimarySystem::PrimarySystem {
 	public:
-		void updateUI(GameData::GameData& data);
+
+		void init(GameData::GameData& data);
+
+		void update(GameData::GameData& data);
 
 		// print out the current game map to console
 		void printUI(GameData::GameData& data);
