@@ -23,12 +23,7 @@ typedef struct baseComponent_ {
 	void unlock(GameData::GameData& data, const entt::entity& entity) ; // { std::cout << " base unlock" << std::endl; }
 	bool isNetworked() { return networked; }
 
-	// TEMPORARY EXPERIMENTAL::
-	void Serialize(msgpack::sbuffer& sbuf) {
-		msgpack::pack(sbuf, this);
-
-	}
-
+	virtual void Serialize(msgpack::sbuffer& sbuf) {};
 
 	virtual int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool); }
 	//virtual void read(ProtoMessaging::UpdateEntityMessage& message, networkID netid, int index) {}

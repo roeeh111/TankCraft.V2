@@ -4,6 +4,7 @@
 #include "bitseryTest.h"
 #include "MsgPackTest.h"
 #include "MessagingSystem.h"
+#include "ReflectionSystem.h"
 
 #define MAX_CLIENTS 10
 
@@ -30,9 +31,19 @@ int main(void)
     // make a scene, call all of the init functions
     // add a bunch of components to the map, call flush
     // call MakeGameUpdate on the serialized bunch
+    GameAdmin::MainScene scene = GameAdmin::MainScene(true, 1);
+    auto pos = new ComponentView::position(1, 0);
+    pos->setCurx(6);
+    pos->setCury(7);
+    scene.data.updateMap[0] = {pos, new ComponentView::mapObject()};
 
+    ReflectionSystem::UpdatePacket pack(0);
+    std::cout << "Calling serialize" << std::endl;
+    msgpack::sbuffer &stream = pack.Serialize(scene.data.updateMap[0]);
+    std::cout << "serialized the message, now calling game update" << std::endl;
 
-
+    ReflectionSystem::MakeGameUpdate(scene.data, stream);           // Getting error on this line, when trying to deserialize the packet header
+    delete pos;
     return 0;
 }
 

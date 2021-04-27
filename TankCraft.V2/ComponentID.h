@@ -1,4 +1,5 @@
 #pragma once
+#include <msgpack.hpp>
 
 
 // An enumeration for the component type
@@ -16,3 +17,5 @@ namespace ComponentID {
 		input
 	} ComponentID;
 };
+MSGPACK_ADD_ENUM(ComponentID::ComponentID);
+

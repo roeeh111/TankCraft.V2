@@ -45,6 +45,15 @@ namespace ComponentView {
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
+		MSGPACK_DEFINE(up_, down_, left_, right_);
+
+
+		void Serialize(msgpack::sbuffer& sbuf) {
+			msgpack::pack(sbuf, *this);
+
+		}
+
+
 
 	} userInput;
 
@@ -86,20 +95,14 @@ namespace ComponentView {
 
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
+		MSGPACK_DEFINE(prevx_, prevy_, curx_, cury_);
 
+		void Serialize(msgpack::sbuffer& sbuf) {
+			msgpack::pack(sbuf, *this);
 
-		//define how object should be serialized/deserialized
-		template <typename S>
-		void serialize(S& s, struct position_& o) {
-			s.value4b(o.prevx);
-			s.value4b(o.prevy);
-			s.value4b(o.curx);
-			s.value4b(o.cury);
 		}
 
-
-
-
+		void print() { std::cout << prevx_ << " " << prevy_ << " " << curx_ << " " << cury_ << std::endl; }
 
 	} position;
 
@@ -121,6 +124,14 @@ namespace ComponentView {
 		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
 		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool) + sizeof(char); }
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
+		MSGPACK_DEFINE(mapChar_);
+
+		void Serialize(msgpack::sbuffer& sbuf) {
+			msgpack::pack(sbuf, *this);
+
+		}
+		void print() { std::cout << mapChar_ << std::endl; }
+
 	} mapObject;
 
 	typedef struct score_ : baseComponent {
@@ -147,6 +158,13 @@ namespace ComponentView {
 		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
 		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool) + sizeof(uint32_t); }
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
+		MSGPACK_DEFINE(points_);
+
+		void Serialize(msgpack::sbuffer& sbuf) {
+			msgpack::pack(sbuf, *this);
+
+		}
+
 	} score;
 
 	typedef struct clientName_ : baseComponent 
@@ -164,6 +182,13 @@ namespace ComponentView {
 		virtual void lock() { }; // no mutex yet, so doesnt do anything really
 		virtual int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool); }
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
+		MSGPACK_DEFINE(name_);
+
+		void Serialize(msgpack::sbuffer& sbuf) {
+			msgpack::pack(sbuf, *this);
+
+		}
+
 	} clientName;
 
 
@@ -178,6 +203,12 @@ namespace ComponentView {
 		health_(bool net) { hp_ = 100; networked = net;  CompId = ComponentID::Health; }
 		~health_() = default;
 		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool) + sizeof(int32_t); }
+		MSGPACK_DEFINE(hp_);
+
+		void Serialize(msgpack::sbuffer& sbuf) {
+			msgpack::pack(sbuf, *this);
+
+		}
 
 	} health;
 
@@ -190,6 +221,7 @@ namespace ComponentView {
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool); }
 		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
+		void Serialize(msgpack::sbuffer& sbuf) {};
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 	} damageDone;
 
@@ -202,6 +234,7 @@ namespace ComponentView {
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override;
 		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool); }
 		virtual void lock() { }; // no mutex yet, so doesnt do anything really
+		void Serialize(msgpack::sbuffer& sbuf) {};
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 	} networked;
 }

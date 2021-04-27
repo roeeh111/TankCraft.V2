@@ -17,8 +17,8 @@ namespace ReflectionSystem {
 	public:
 		std::vector<ComponentID::ComponentID> ids; // The array of component ids
 		networkID netid;						   // The netid attached to these components
-
 		MSGPACK_DEFINE(netid, ids);
+
 		UpdatePacketHeader(networkID netid_) {
 			ids = std::vector<ComponentID::ComponentID>();
 			netid = netid_;
@@ -37,27 +37,28 @@ namespace ReflectionSystem {
 
 		UpdatePacket(networkID netid_) {
 			header = UpdatePacketHeader(netid_);
-			headerWritten = false;
 			pk = new msgpack::packer<msgpack::sbuffer>(&sbuf);
 		}
 		
 		~UpdatePacket() { delete pk; };
 		
-		// Write all component id's into the header
-		void writeHeader(std::list<baseComponent*> components);
 
-		// Serialize all components into the packet, only if weve already written the header, return true if wrote, false otherwise.
-		bool writeComponents(std::list<baseComponent*> components);
+		msgpack::sbuffer& Serialize(std::list<baseComponent*> components);
 
 		// Serialize a component into theclass buffer
 	private:
 		msgpack::sbuffer sbuf;
 		msgpack::packer<msgpack::sbuffer>* pk;
 		UpdatePacketHeader header;
-		bool headerWritten;
 
-		template <typename T>
-		void Serialize(T& component) {
+		// Write all component id's into the header
+		void writeHeader(std::list<baseComponent*> components);
+
+		// Serialize all components into the packet, only if weve already written the header, return true if wrote, false otherwise.
+		void writeComponents(std::list<baseComponent*> components);
+
+		template <typename Type>
+		void Serialize(Type& component) {
 			pk->pack(component);
 		}
 	};
@@ -65,20 +66,22 @@ namespace ReflectionSystem {
 
 	// Given a stream representing a serialized game update message, write all of the game updates to the game registry
 	void MakeGameUpdate(GameData::GameData& data, std::string& stream);
+	void MakeGameUpdate(GameData::GameData& data, msgpack::sbuffer& stream);
+	void MakeGameUpdateHelper(GameData::GameData& data, const msgpack::object& obj, ComponentID::ComponentID id, entt::entity& enttid);
 
-	template <typename T>
-	void writeComponent(GameData::GameData& data, const msgpack::object& obj, networkID netid)
-	{
-		 
+
+
+	//						PROBLEM!!! COMPILER ERROR HERE!, I GUESS WE CANT TEMPLATE THIS, SO WELL NEED TO GENERATE THE CODE USING A PYTHON SCRIPT
+	template <typename Type>
+	void writeComponent(GameData::GameData& data, const msgpack::object& obj, entt::entity &enttid)
+	{		 
 		// Check if component exists already in the registry, if yes, fill it with the values in the msgpack object
-		entt::entity enttid = TranslationSystem::getEntity(data, netid);
-
-		if (!data.m_reg.has<T>(enttid)) {
-			auto enttobj = data.m_reg.emplace<T>(enttid);
+		if (!data.m_reg.has<Type>(enttid)) {
+			auto enttobj = data.m_reg.emplace<Type>(enttid);
 			obj.convert(enttobj);
 		}
 		else {
-			auto enttobj = data.m_reg.get<T>(enttid);
+			auto enttobj = data.m_reg.get<Type>(enttid);
 			obj.convert(enttobj);
 		}
 	}

@@ -15,11 +15,11 @@ namespace msgpackTest{
 		position_() = default;
 	} position;
 
-	position* getAllocatedPosition() {
+	/*position* getAllocatedPosition() {
 		std::cout << "got a position!" << std::endl;
 		return new position();
 	}
-
+	*/
 	typedef struct fltposition_ {
 		float x;
 		float y;
@@ -32,19 +32,19 @@ namespace msgpackTest{
 
 
 	// Serialize a component into the buffer
-	template <typename T>
-	void Serialize(msgpack::sbuffer &sbuf, T component) {
-		msgpack::pack(component);
-	}
+//	template <typename T>
+//	void Serialize(msgpack::sbuffer &sbuf, T component) {
+//		msgpack::pack(component);
+//	}
 
 	void singleStructTest();
-
+	void singleStructStreamTest();
 	void multiStructStreamTest();
 
 
 
 
-
+	/*
 	template <typename T>
 	void templateStructTest() {
 		auto dat = position();
@@ -73,7 +73,7 @@ namespace msgpackTest{
 		std::cout << res.x << res.y << res.z << std::endl;
 		std::cout << obj << std::endl;
 		std::cout << obj.type << std::endl;
-	}
+	}*/
 
 	// HMM, but we would need to know the type of struct before we call this function......
 /*	template <typename T>
