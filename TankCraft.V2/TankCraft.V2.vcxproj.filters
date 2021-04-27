@@ -25,9 +25,6 @@
     <Filter Include="Source Files\Systems">
       <UniqueIdentifier>{076c3b71-730f-4d60-bc86-8988f5d4e3e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Tests">
-      <UniqueIdentifier>{9dae64cb-5208-4e6d-bd52-b0c71f5825f7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\ProtoSchemas">
       <UniqueIdentifier>{be47b12f-526c-4e8b-b428-4177624ed57f}</UniqueIdentifier>
     </Filter>
@@ -39,6 +36,9 @@
     </Filter>
     <Filter Include="Source Files\Components">
       <UniqueIdentifier>{44a7b8ae-4343-4254-902c-b3431c84ea86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{740ccbb6-e58a-45ad-97c0-7280c669044a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -522,9 +522,6 @@
     <ClInclude Include="UISystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="ProtoTest.h">
-      <Filter>Header Files\Tests</Filter>
-    </ClInclude>
     <ClInclude Include="MessagingSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
@@ -547,6 +544,18 @@
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
     <ClInclude Include="ConnectionSystem.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtoTest.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="bitseryTest.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="MsgPackTest.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="ReflectionSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>
@@ -899,9 +908,6 @@
     <ClCompile Include="GameAdmin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ProtoTest.cpp">
-      <Filter>Header Files\Tests</Filter>
-    </ClCompile>
     <ClCompile Include="CreateEntity.cpp">
       <Filter>ENTT Wrappers</Filter>
     </ClCompile>
@@ -917,8 +923,23 @@
     <ClCompile Include="NetworkUtilitySystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="ConnectionSystem.cpp">
+    <ClCompile Include="ProtoTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="LibNoTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="bitseryTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="MsgPackTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="ReflectionSystem.cpp">
       <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="ConnectionSystem.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

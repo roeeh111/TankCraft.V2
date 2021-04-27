@@ -17,11 +17,11 @@ message ControlComponent {
 
 // position component
 message PositionComponent {
-  int32 prevx = 1;
-  int32 prevy = 2;
-  int32 curx = 3;
-  int32 cury = 4;
-  int32 netid = 5;
+  optional int32 prevx = 1;
+  optional int32 prevy = 2;
+  optional int32 curx = 3;
+  optional int32 cury = 4;
+  optional int32 netid = 5;
 }
 
 // map ui component

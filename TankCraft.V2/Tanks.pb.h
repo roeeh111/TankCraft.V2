@@ -400,6 +400,10 @@ class PositionComponent PROTOBUF_FINAL :
     kNetidFieldNumber = 5,
   };
   // int32 prevx = 1;
+  bool has_prevx() const;
+  private:
+  bool _internal_has_prevx() const;
+  public:
   void clear_prevx();
   ::PROTOBUF_NAMESPACE_ID::int32 prevx() const;
   void set_prevx(::PROTOBUF_NAMESPACE_ID::int32 value);
@@ -409,6 +413,10 @@ class PositionComponent PROTOBUF_FINAL :
   public:
 
   // int32 prevy = 2;
+  bool has_prevy() const;
+  private:
+  bool _internal_has_prevy() const;
+  public:
   void clear_prevy();
   ::PROTOBUF_NAMESPACE_ID::int32 prevy() const;
   void set_prevy(::PROTOBUF_NAMESPACE_ID::int32 value);
@@ -418,6 +426,10 @@ class PositionComponent PROTOBUF_FINAL :
   public:
 
   // int32 curx = 3;
+  bool has_curx() const;
+  private:
+  bool _internal_has_curx() const;
+  public:
   void clear_curx();
   ::PROTOBUF_NAMESPACE_ID::int32 curx() const;
   void set_curx(::PROTOBUF_NAMESPACE_ID::int32 value);
@@ -427,6 +439,10 @@ class PositionComponent PROTOBUF_FINAL :
   public:
 
   // int32 cury = 4;
+  bool has_cury() const;
+  private:
+  bool _internal_has_cury() const;
+  public:
   void clear_cury();
   ::PROTOBUF_NAMESPACE_ID::int32 cury() const;
   void set_cury(::PROTOBUF_NAMESPACE_ID::int32 value);
@@ -436,6 +452,10 @@ class PositionComponent PROTOBUF_FINAL :
   public:
 
   // int32 netid = 5;
+  bool has_netid() const;
+  private:
+  bool _internal_has_netid() const;
+  public:
   void clear_netid();
   ::PROTOBUF_NAMESPACE_ID::int32 netid() const;
   void set_netid(::PROTOBUF_NAMESPACE_ID::int32 value);
@@ -451,12 +471,13 @@ class PositionComponent PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::int32 prevx_;
   ::PROTOBUF_NAMESPACE_ID::int32 prevy_;
   ::PROTOBUF_NAMESPACE_ID::int32 curx_;
   ::PROTOBUF_NAMESPACE_ID::int32 cury_;
   ::PROTOBUF_NAMESPACE_ID::int32 netid_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Tanks_2eproto;
 };
 // -------------------------------------------------------------------
@@ -1933,8 +1954,16 @@ inline void ControlComponent::set_netid(::PROTOBUF_NAMESPACE_ID::int32 value) {
 // PositionComponent
 
 // int32 prevx = 1;
+inline bool PositionComponent::_internal_has_prevx() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool PositionComponent::has_prevx() const {
+  return _internal_has_prevx();
+}
 inline void PositionComponent::clear_prevx() {
   prevx_ = 0;
+  _has_bits_[0] &= ~0x00000001u;
 }
 inline ::PROTOBUF_NAMESPACE_ID::int32 PositionComponent::_internal_prevx() const {
   return prevx_;
@@ -1944,7 +1973,7 @@ inline ::PROTOBUF_NAMESPACE_ID::int32 PositionComponent::prevx() const {
   return _internal_prevx();
 }
 inline void PositionComponent::_internal_set_prevx(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  
+  _has_bits_[0] |= 0x00000001u;
   prevx_ = value;
 }
 inline void PositionComponent::set_prevx(::PROTOBUF_NAMESPACE_ID::int32 value) {
@@ -1953,8 +1982,16 @@ inline void PositionComponent::set_prevx(::PROTOBUF_NAMESPACE_ID::int32 value) {
 }
 
 // int32 prevy = 2;
+inline bool PositionComponent::_internal_has_prevy() const {
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline bool PositionComponent::has_prevy() const {
+  return _internal_has_prevy();
+}
 inline void PositionComponent::clear_prevy() {
   prevy_ = 0;
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline ::PROTOBUF_NAMESPACE_ID::int32 PositionComponent::_internal_prevy() const {
   return prevy_;
@@ -1964,7 +2001,7 @@ inline ::PROTOBUF_NAMESPACE_ID::int32 PositionComponent::prevy() const {
   return _internal_prevy();
 }
 inline void PositionComponent::_internal_set_prevy(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  
+  _has_bits_[0] |= 0x00000002u;
   prevy_ = value;
 }
 inline void PositionComponent::set_prevy(::PROTOBUF_NAMESPACE_ID::int32 value) {
@@ -1973,8 +2010,16 @@ inline void PositionComponent::set_prevy(::PROTOBUF_NAMESPACE_ID::int32 value) {
 }
 
 // int32 curx = 3;
+inline bool PositionComponent::_internal_has_curx() const {
+  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline bool PositionComponent::has_curx() const {
+  return _internal_has_curx();
+}
 inline void PositionComponent::clear_curx() {
   curx_ = 0;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline ::PROTOBUF_NAMESPACE_ID::int32 PositionComponent::_internal_curx() const {
   return curx_;
@@ -1984,7 +2029,7 @@ inline ::PROTOBUF_NAMESPACE_ID::int32 PositionComponent::curx() const {
   return _internal_curx();
 }
 inline void PositionComponent::_internal_set_curx(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  
+  _has_bits_[0] |= 0x00000004u;
   curx_ = value;
 }
 inline void PositionComponent::set_curx(::PROTOBUF_NAMESPACE_ID::int32 value) {
@@ -1993,8 +2038,16 @@ inline void PositionComponent::set_curx(::PROTOBUF_NAMESPACE_ID::int32 value) {
 }
 
 // int32 cury = 4;
+inline bool PositionComponent::_internal_has_cury() const {
+  bool value = (_has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline bool PositionComponent::has_cury() const {
+  return _internal_has_cury();
+}
 inline void PositionComponent::clear_cury() {
   cury_ = 0;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline ::PROTOBUF_NAMESPACE_ID::int32 PositionComponent::_internal_cury() const {
   return cury_;
@@ -2004,7 +2057,7 @@ inline ::PROTOBUF_NAMESPACE_ID::int32 PositionComponent::cury() const {
   return _internal_cury();
 }
 inline void PositionComponent::_internal_set_cury(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  
+  _has_bits_[0] |= 0x00000008u;
   cury_ = value;
 }
 inline void PositionComponent::set_cury(::PROTOBUF_NAMESPACE_ID::int32 value) {
@@ -2013,8 +2066,16 @@ inline void PositionComponent::set_cury(::PROTOBUF_NAMESPACE_ID::int32 value) {
 }
 
 // int32 netid = 5;
+inline bool PositionComponent::_internal_has_netid() const {
+  bool value = (_has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline bool PositionComponent::has_netid() const {
+  return _internal_has_netid();
+}
 inline void PositionComponent::clear_netid() {
   netid_ = 0;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline ::PROTOBUF_NAMESPACE_ID::int32 PositionComponent::_internal_netid() const {
   return netid_;
@@ -2024,7 +2085,7 @@ inline ::PROTOBUF_NAMESPACE_ID::int32 PositionComponent::netid() const {
   return _internal_netid();
 }
 inline void PositionComponent::_internal_set_netid(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  
+  _has_bits_[0] |= 0x00000010u;
   netid_ = value;
 }
 inline void PositionComponent::set_netid(::PROTOBUF_NAMESPACE_ID::int32 value) {

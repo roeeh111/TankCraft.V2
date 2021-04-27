@@ -2,6 +2,7 @@
 #include "MessagingSystem.h"
 #include <ctime>
 #include "IDTranslationSystem.h"
+#include "NetworkUtilitySystem.h"
 
 namespace MessagingSystem {
 
@@ -13,13 +14,14 @@ namespace MessagingSystem {
         RakNet::BitStream stream = RakNet::BitStream();
         MessagingSystem::writeGameUpdate(stream, data.updateMap);
 
-        // Broadcast the game update
-        data.rpi->Send(&stream,
-            HIGH_PRIORITY,
-            RELIABLE_ORDERED,
-            0,
-            RakNet::UNASSIGNED_SYSTEM_ADDRESS,
-            true);
+        // Broadcast the game update     
+     //  data.rpi->Send(&stream,
+    //        HIGH_PRIORITY,
+     //       RELIABLE_ORDERED,
+      //      0,
+      //      RakNet::UNASSIGNED_SYSTEM_ADDRESS,
+       //     true);
+        NetworkUtilitySystem::broadcast(data, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0);
     }
 
     void MessagingSystem::init(GameData::GameData& data) {
@@ -340,14 +342,25 @@ namespace MessagingSystem {
 
         // TODO: what if i dont set some value?
 
-        pos.setPrevx(comp.prevx());
+        if (comp.has_prevx()) {
+            pos.setPrevx(comp.prevx());
+        }
       //  std::cout << "prevx = " << comp.prevx() << std::endl;
-        pos.setPrevy(comp.prevy());
+        if (comp.has_prevy()) {
+            pos.setPrevy(comp.prevy());
+        }
       //  std::cout << "prevy = " << comp.prevy() << std::endl;
-        pos.setCurx(comp.curx());
+        if (comp.has_curx()) {
+            pos.setCurx(comp.curx());
+        }
       //  std::cout << "curx = " << comp.curx() << std::endl;
-        pos.setCury(comp.cury());
+        if (comp.has_cury()) {
+            pos.setCury(comp.cury());
+        }
        // std::cout << "cury = " << comp.cury() << std::endl;
+
+        std::cout << "curx = " << pos.curx() << ", cury = "<< pos.cury() << ", prevx = " << pos.prevx() << ", prevy = " << pos.prevy() << std::endl;
+
 
         pos.networked = true;
     }

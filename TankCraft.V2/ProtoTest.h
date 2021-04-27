@@ -9,4 +9,8 @@ namespace ProtoTests {
 	void testGameUpdate(GameData::GameData& data);
 	void testGameUpdate();
 
+	void serializationOverheadTest();
+	void gameUpdateOverheadTest(int iterations);
+
+	void testOptionalFields();
 }

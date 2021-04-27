@@ -89,7 +89,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\RakNet\Source;C:\Users\roeeh\Desktop\Engine Capstone\TanksProtobuf;;C:\Users\roeeh\Desktop\protobuf-3.15.3\examples;C:\Users\roeeh\Desktop\Engine_Capstone\TanksProtobuf</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\RakNet\Source;C:\Users\roeeh\Desktop\Engine Capstone\TanksProtobuf;;C:\Users\roeeh\Desktop\protobuf-3.15.3\examples;C:\Users\roeeh\Desktop\Engine_Capstone\TanksProtobuf;C:\libnop;C:\libnop\include;C:\bitsery\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -106,7 +106,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\RakNet\Source;;C:\Users\roeeh\Desktop\protobuf-3.15.3\examples;C:\Users\roeeh\Desktop\Engine_Capstone\TanksProtobuf</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\RakNet\Source;;C:\Users\roeeh\Desktop\protobuf-3.15.3\examples;C:\Users\roeeh\Desktop\Engine_Capstone\TanksProtobuf;C:\libnop;C:\libnop\include;C:\bitsery\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -305,9 +305,12 @@
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\WSAStartupSingleton.h" />
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\XBox360Includes.h" />
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h" />
+    <ClInclude Include="bitseryTest.h" />
+    <ClInclude Include="MsgPackTest.h" />
     <ClInclude Include="ComponentID.h" />
     <ClInclude Include="ConnectionSystem.h" />
     <ClInclude Include="NetworkUtilitySystem.h" />
+    <ClInclude Include="ReflectionSystem.h" />
     <ClInclude Include="RegWrappers.h" />
     <ClInclude Include="FreeListComponent.h" />
     <ClInclude Include="MovementSystem.h" />
@@ -433,16 +436,20 @@
     <ClCompile Include="..\..\..\..\..\..\RakNet\Source\WSAStartupSingleton.cpp" />
     <ClCompile Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.cpp" />
     <ClCompile Include="BaseComponent.cpp" />
+    <ClCompile Include="bitseryTest.cpp" />
     <ClCompile Include="Components.cpp" />
     <ClCompile Include="ConnectionSystem.cpp" />
     <ClCompile Include="CreateEntity.cpp" />
     <ClCompile Include="IDTranslationSystem.cpp" />
+    <ClCompile Include="LibNoTest.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MessagingSystem.cpp" />
     <ClCompile Include="MovementSystem.cpp" />
+    <ClCompile Include="MsgPackTest.cpp" />
     <ClCompile Include="NetworkUtilitySystem.cpp" />
     <ClCompile Include="ProtoTest.cpp" />
     <ClCompile Include="GameAdmin.cpp" />
+    <ClCompile Include="ReflectionSystem.cpp" />
     <ClCompile Include="Tanks.pb.cc" />
     <ClCompile Include="UISystem.cpp" />
   </ItemGroup>
