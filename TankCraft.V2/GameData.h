@@ -32,9 +32,9 @@ typedef struct baseComponent_ {
 namespace PrimarySystem {
 	class PrimarySystem {
 	public:
-		void init(GameData::GameData& data);
+		virtual void init(GameData::GameData& data) {};
 
-		void update(GameData::GameData& data);
+		virtual void update(GameData::GameData& data) {};
 
 		PrimarySystem() = default;
 
