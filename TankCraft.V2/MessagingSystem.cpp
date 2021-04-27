@@ -6,13 +6,13 @@
 
 namespace MessagingSystem {
 
-    // System flush
-    void MessagingSystem::FlushGameUpdate(GameData::GameData& data) {
+    // System flush game update
+    void MessagingSystem::update(GameData::GameData& data) {
         if (data.updateMap.size() <= 0)
             return;
         std::cout << "Flushing game update of size " << data.updateMap.size() << std::endl;
         RakNet::BitStream stream = RakNet::BitStream();
-        MessagingSystem::writeGameUpdate(stream, data.updateMap);  
+        MessagingSystem::writeGameUpdate(stream, data.updateMap);
 
         // Broadcast the game update     
      //  data.rpi->Send(&stream,
@@ -22,6 +22,11 @@ namespace MessagingSystem {
       //      RakNet::UNASSIGNED_SYSTEM_ADDRESS,
        //     true);
         NetworkUtilitySystem::broadcast(data, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0);
+    }
+
+    void MessagingSystem::init(GameData::GameData& data) {
+        // initialize the update map
+        data.updateMap = std::map<networkID, std::list<baseComponent*>>();
     }
 
 

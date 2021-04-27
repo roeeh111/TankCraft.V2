@@ -307,7 +307,6 @@
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h" />
     <ClInclude Include="bitseryTest.h" />
     <ClInclude Include="MsgPackTest.h" />
-    <ClInclude Include="PrimarySystem.h" />
     <ClInclude Include="ComponentID.h" />
     <ClInclude Include="ConnectionSystem.h" />
     <ClInclude Include="NetworkUtilitySystem.h" />

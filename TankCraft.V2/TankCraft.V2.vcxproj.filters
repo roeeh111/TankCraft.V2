@@ -546,9 +546,6 @@
     <ClInclude Include="ConnectionSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="PrimarySystem.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="ProtoTest.h">
       <Filter>Tests</Filter>
     </ClInclude>

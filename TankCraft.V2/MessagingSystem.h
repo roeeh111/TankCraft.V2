@@ -37,8 +37,13 @@ To pack and send data:
 
 // Doesnt hold any state data, so just a namespace for now
 namespace MessagingSystem {
-	class MessagingSystem {
+	class MessagingSystem : public PrimarySystem::PrimarySystem {
 	public:
+
+		void init(GameData::GameData& data);
+
+		void update(GameData::GameData& data);
+
 		// given a bitstream and the ToUpdate map, flush the map and write a gameupdate packet to the bitstream
 		void writeGameUpdate(RakNet::BitStream& stream, std::map<networkID, std::list<baseComponent*>>& updateMap);
 
@@ -67,8 +72,6 @@ namespace MessagingSystem {
 
 		// Given a bitstream, read it into a ControlsPacket, verify its integrity and execute the controls
 		entt::entity readControls(GameData::GameData& data, std::string& stream, ComponentView::userInput* ret);
-
-		void FlushGameUpdate(GameData::GameData& data);
 
 		/*
 		* Functions to read a protobuf component into a game component (TBH, WE CAN JUST USE PROTOBUF COMPONENTS IN THE GAME....)

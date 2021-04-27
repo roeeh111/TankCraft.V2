@@ -8,6 +8,44 @@
 #include "NetworkUtilitySystem.h"
 
 namespace ConnectionSystem{
+
+	void ConnectionSystem::init(GameData::GameData& data) {
+		// Instantiate the network instance for our peer interface
+		data.rpi = RakNet::RakPeerInterface::GetInstance();
+		if (data.isServer) {
+			// Local socket to use for communication
+			RakNet::SocketDescriptor sd(SERVER_PORT, 0);
+
+			// Startup the peer instance with our binded socket
+			if (!(data.rpi->Startup(data.maxClients, &sd, 1) == RakNet::RAKNET_STARTED)) {
+				std::cerr << "Failed to startup on socket!" << std::endl;
+			}
+			data.rpi->SetMaximumIncomingConnections(data.maxClients);
+			printf("server started\n");
+		}
+		else {
+			RakNet::SocketDescriptor sd;
+			if (!(data.rpi->Startup(1, &sd, 1) == RakNet::RAKNET_STARTED)) {
+				std::cerr << "Failed to startup on socket!" << std::endl;
+			}
+			else {
+				std::cout << "Client started" << std::endl;
+				clientConnect(data.rpi, SERVER_PORT, "127.0.0.1");
+				data.rakAddress = RakNet::SystemAddress("127.0.0.1|" + SERVER_PORT); // save the server address
+			}
+		}
+	}
+
+	void ConnectionSystem::update(GameData::GameData& data)
+	{
+		if (data.isServer) {
+			updateServer(data);
+		}
+		else {
+			updateClient(data);
+		}
+	}
+
 	void ConnectionSystem::updateServer(GameData::GameData& data)
 	{
 		RakNet::Packet* pack;
@@ -125,7 +163,6 @@ namespace ConnectionSystem{
 		//RakNet::AddressOrGUID(RakNet::SystemAddress(hostAddress));
 	}
 
-
 	// The server recognizes the connection from a client and creates an empty netID  map for that client
 	void ConnectionSystem::handleConnection(GameData::GameData& data, RakNet::Packet* pack)
 	{
@@ -198,7 +235,7 @@ namespace ConnectionSystem{
 	void ConnectionSystem::handleLogin(GameData::GameData& data, RakNet::Packet* pack)
 	{
 		MessagingSystem::MessagingSystem messagingSystem;
-		UI::UI ui;
+		UISystem::UISystem ui;
 		std::string stream = std::string((char*)(pack->data + 1));
 		std::string loginName = messagingSystem.readLogin(stream);
 		std::cout << "Adding tank for " << loginName << std::endl;

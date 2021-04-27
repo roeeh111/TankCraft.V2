@@ -41,18 +41,15 @@ namespace GameAdmin {
 
 		//IDTranslationSystem::IDTranslationSystem translationSystem;
 
-		UI::UI ui;
+		UISystem::UISystem ui;
 
 		MovementSystem::MovementSystem movementSystem;
 
 		MessagingSystem::MessagingSystem messagingSystem;
 
 	private:
-		void initConnectionSystem(bool isServer_, uint32_t maxClients);
 		void initIDTranslationSystem(bool isServer);
-		void initUISystem();
-		void initMovementSystem();
-		void initMessageSystem();
+
 
 		void clientLogin();
 		void serverLogin(uint32_t maxClients);

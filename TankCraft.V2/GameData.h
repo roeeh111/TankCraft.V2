@@ -19,7 +19,7 @@ typedef struct baseComponent_ {
 	baseComponent_() { CompId = ComponentID::Base; networked = false; }
 	virtual ~baseComponent_() = default;
 	virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) { std::cout << "base write " << std::endl; }
-	virtual void lock() {  };
+	virtual void lock() { std::cout << "base lock " << std::endl; };
 	void unlock(GameData::GameData& data, const entt::entity& entity) ; // { std::cout << " base unlock" << std::endl; }
 	bool isNetworked() { return networked; }
 
@@ -29,6 +29,18 @@ typedef struct baseComponent_ {
 	//virtual void read(ProtoMessaging::UpdateEntityMessage& message, networkID netid, int index) {}
 } baseComponent;
 
+namespace PrimarySystem {
+	class PrimarySystem {
+	public:
+		void init(GameData::GameData& data);
+
+		void update(GameData::GameData& data);
+
+		PrimarySystem() = default;
+
+		~PrimarySystem() = default;
+	};
+}
 
 /*
 *  Class containing all of the global data to the system.
@@ -62,8 +74,12 @@ namespace GameData {
 	//	const char* address;
 		RakNet::SystemAddress rakAddress;
 
+		std::list<PrimarySystem::PrimarySystem> primarySystemList;
+
 		// Whether this scene is the server or a client 
 		bool isServer;
+
+		int maxClients;
 
 		// for debugging purposes
 		bool first;
