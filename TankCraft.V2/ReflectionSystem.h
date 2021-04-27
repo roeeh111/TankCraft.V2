@@ -27,22 +27,18 @@ namespace ReflectionSystem {
 			ids = std::vector<ComponentID::ComponentID>();
 			netid = 0;
 		}
-
 		~UpdatePacketHeader() = default;
 	};
 
 	class UpdatePacket {
-
 	public:
 
 		UpdatePacket(networkID netid_) {
 			header = UpdatePacketHeader(netid_);
 			pk = new msgpack::packer<msgpack::sbuffer>(&sbuf);
 		}
-		
 		~UpdatePacket() { delete pk; };
 		
-
 		msgpack::sbuffer& Serialize(std::list<baseComponent*> components);
 
 		// Serialize a component into theclass buffer
@@ -69,9 +65,10 @@ namespace ReflectionSystem {
 	void MakeGameUpdate(GameData::GameData& data, msgpack::sbuffer& stream);
 	void MakeGameUpdateHelper(GameData::GameData& data, const msgpack::object& obj, ComponentID::ComponentID id, entt::entity& enttid);
 
+	// Given the gamedata, flush the update map and broadcast game updates to all users
+	void FlushGameUpdate(GameData::GameData& data);
 
 
-	//						PROBLEM!!! COMPILER ERROR HERE!, I GUESS WE CANT TEMPLATE THIS, SO WELL NEED TO GENERATE THE CODE USING A PYTHON SCRIPT
 	template <typename Type>
 	void writeComponent(GameData::GameData& data, const msgpack::object& obj, entt::entity &enttid)
 	{		 

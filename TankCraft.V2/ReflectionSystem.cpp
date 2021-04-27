@@ -1,4 +1,8 @@
 #include "ReflectionSystem.h"
+#include "NetworkUtilitySystem.h"
+#include <RakNetTypes.h>
+#include <BitStream.h>
+#include <MessageIdentifiers.h>
 
 namespace  ReflectionSystem {
 
@@ -15,12 +19,10 @@ namespace  ReflectionSystem {
 	}
 
 
-	// TODO::::!!!!!!	HOW ARE WE WRITING THE COMPONENTS!!!!!!!!!!!
 	void UpdatePacket::writeComponents(std::list<baseComponent*> components)
 	{
 		for (auto& comp : components) {
-			comp->Serialize(sbuf);				//// THIS IS GONNA SERIALIZE A BASE COMPONENT??????..... SO FIGURE OUT HOW WE WANT TO SPECIFY COMPONENTS!!
-											//		(can have each decleration of msgpackdefine create a serialization function via autogeneration)
+			comp->Serialize(sbuf);	
 		}
 	}
 
@@ -32,7 +34,6 @@ namespace  ReflectionSystem {
 	}
 
 
-	// TODO::: NEED TO MAKE CHANGES TO REFLECT WHAT THE DEBUG FUNCTION LOOKS LIKE!
 	void ReflectionSystem::MakeGameUpdate(GameData::GameData& data, std::string& stream)
 	{
 		// deserialize these objects using msgpack::unpacker.
@@ -43,35 +44,37 @@ namespace  ReflectionSystem {
 		memcpy(pac.buffer(), stream.data(), stream.size());
 		pac.buffer_consumed(stream.size());
 
-
-
 		// now starts streaming deserialization.
 		msgpack::object_handle oh;
-		msgpack::object obj;
 
 		// The first element will always be the header, so get it
 		UpdatePacketHeader header;
-		pac.next(oh);
 
-		// check if the entity with netid exists in the game, if not, add it to the registry (if we do this, then this is essentially an add entity packet....)
-		if (!TranslationSystem::hasMapping(data, header.netid)) {
-			networkID setMapping(GameData::GameData & data, networkID netId, entt::entity entityId);
-		}
+		// The entity id inside the header.
+		entt::entity enttid;
 
-		auto enttid = TranslationSystem::getEntity(data, header.netid);
-
-
-		int i = 0;
+		// Begin i at -1, so we can read from the header and not have to offset indexing into the header's component ids
+		int i = -1;
 		while (pac.next(oh)) {
 			// Call component write function based on the switch statement
+			if (i == -1) {
+				oh.get().convert(header);
 
-			MakeGameUpdateHelper(data, oh.get(), header.ids[i], enttid);
+				// check if the entity with netid exists in the game, if not, add it to the registry (if we do this, then this is essentially an add entity packet....)
+				if (!TranslationSystem::hasMapping(data, header.netid)) {
+					networkID setMapping(GameData::GameData & data, networkID netId, entt::entity entityId);
+				}
+
+				enttid = TranslationSystem::getEntity(data, header.netid);
+			}
+			else {
+				MakeGameUpdateHelper(data, oh.get(), header.ids[i], enttid);
+			}
 			i++;
 		}
 	}
 
 
-	//							TODO: PASS IN THE ENTT ID OF THE ENTITY, NOT THE NETIDS
 	// given an object and it component id find the appropriate type of object, and write it to the register
 	void ReflectionSystem::MakeGameUpdateHelper(GameData::GameData& data, const msgpack::object& obj, ComponentID::ComponentID id, entt::entity& enttid)
 	{
@@ -103,6 +106,35 @@ namespace  ReflectionSystem {
 			break;
 		}
 	}
+
+	void ReflectionSystem::FlushGameUpdate(GameData::GameData& data)
+	{
+		if (data.updateMap.size() <= 0)
+			return;
+		std::cout << "Flushing game update of size " << data.updateMap.size() << std::endl;
+
+		// Loop over all mappings in the map, and write their serialized packets to the stream
+		for (auto& it : data.updateMap) {
+			RakNet::BitStream stream = RakNet::BitStream();
+
+			// write the packet type to the bitsream
+			RakNet::MessageID type = UPDATE_ENTITY;
+			stream.Write((char*)&type, sizeof(RakNet::MessageID));
+
+			// Serialize the game update
+			UpdatePacket gameUpdate(it.first);
+			msgpack::sbuffer& buf = gameUpdate.Serialize(it.second);
+
+			// Write the game update to the stream, and broadast it to all connections
+			stream.Write(buf.data(), buf.size());
+			NetworkUtilitySystem::broadcast(data, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0);
+		}
+
+		// Lastly, clear the update map now that weve done all of the updates
+		data.updateMap.clear();
+	}
+
+
 
 	// DEBUG ONLY
 	void ReflectionSystem::MakeGameUpdate(GameData::GameData& data, msgpack::sbuffer& stream)
@@ -144,26 +176,4 @@ namespace  ReflectionSystem {
 			i++;
 		}
 	}
-
-
-
-
-
-
-
 }
-
-/*
-// Check if component exists already in the registry, if yes, fill it with the values in the msgpack object
-entt::entity enttid = TranslationSystem::getEntity(data, netid);
-
-if (!data.m_reg.has<ComponentView::position>(enttid)) {
-	auto enttobj = data.m_reg.emplace<ComponentView::position>(enttid);
-	obj.convert(enttobj);
-}
-else {
-	auto enttobj = data.m_reg.get<ComponentView::position>(enttid);
-	obj.convert(enttobj);
-}
-
-*/

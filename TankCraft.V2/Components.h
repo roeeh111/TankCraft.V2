@@ -52,9 +52,6 @@ namespace ComponentView {
 			msgpack::pack(sbuf, *this);
 
 		}
-
-
-
 	} userInput;
 
 
