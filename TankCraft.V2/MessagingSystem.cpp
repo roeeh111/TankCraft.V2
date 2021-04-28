@@ -8,8 +8,9 @@ namespace MessagingSystem {
 
     // System flush game update
     void MessagingSystem::update(GameData::GameData& data) {
-        if (data.updateMap.size() <= 0)
-            return;
+        // Only handles messaging in server
+        if (!data.isServer) return;
+        if (data.updateMap.size() <= 0) return;
         std::cout << "Flushing game update of size " << data.updateMap.size() << std::endl;
         RakNet::BitStream stream = RakNet::BitStream();
         MessagingSystem::writeGameUpdate(stream, data.updateMap);

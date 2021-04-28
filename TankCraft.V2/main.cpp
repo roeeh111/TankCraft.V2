@@ -18,7 +18,7 @@ void simpleMsgPackUpdateTest();
 
 int main(void)
 {
-    BondTest::exampleBufferTest();
+    startMultiplyerClient();
 }
 
 void startMultiplyerClient() {

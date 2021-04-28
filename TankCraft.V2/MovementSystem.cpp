@@ -25,6 +25,8 @@ namespace MovementSystem {
 	// NOTE: this only moves tanks now, genericize this so that it can move any entity that is dirty
 	void MovementSystem::update(GameData::GameData& data)
 	{
+		// Only handles movement in server
+		if (!data.isServer) { return; }
 		// For now, loop over all entities with position and user input
 		// and call moveEntity
 		auto view = data.m_reg.view<ComponentView::userInput, ComponentView::position>();
