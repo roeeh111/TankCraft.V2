@@ -306,6 +306,10 @@
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\XBox360Includes.h" />
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h" />
     <ClInclude Include="bitseryTest.h" />
+    <ClInclude Include="BondTest.h" />
+    <ClInclude Include="example_apply.h" />
+    <ClInclude Include="example_reflection.h" />
+    <ClInclude Include="example_types.h" />
     <ClInclude Include="MsgPackTest.h" />
     <ClInclude Include="ComponentID.h" />
     <ClInclude Include="ConnectionSystem.h" />
@@ -437,9 +441,12 @@
     <ClCompile Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.cpp" />
     <ClCompile Include="BaseComponent.cpp" />
     <ClCompile Include="bitseryTest.cpp" />
+    <ClCompile Include="BondTest.cpp" />
     <ClCompile Include="Components.cpp" />
     <ClCompile Include="ConnectionSystem.cpp" />
     <ClCompile Include="CreateEntity.cpp" />
+    <ClCompile Include="example_apply.cpp" />
+    <ClCompile Include="example_types.cpp" />
     <ClCompile Include="IDTranslationSystem.cpp" />
     <ClCompile Include="LibNoTest.cpp" />
     <ClCompile Include="main.cpp" />
@@ -464,6 +471,7 @@
     <None Include="..\..\..\..\..\..\RakNet\Source\RakNet.vcproj" />
     <None Include="..\..\..\..\..\..\RakNet\Source\RakNet_vc8.vcproj" />
     <None Include="..\..\..\..\..\..\RakNet\Source\RakNet_vc9.vcproj" />
+    <None Include="example.bond" />
     <None Include="Tanks.proto" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

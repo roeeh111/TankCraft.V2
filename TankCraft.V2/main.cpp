@@ -3,8 +3,10 @@
 #include "ProtoTest.h"
 #include "bitseryTest.h"
 #include "MsgPackTest.h"
+#include "BondTest.h"
 #include "MessagingSystem.h"
 #include "ReflectionSystem.h"
+
 
 #define MAX_CLIENTS 10
 
@@ -16,7 +18,7 @@ void simpleMsgPackUpdateTest();
 
 int main(void)
 {
-
+    BondTest::exampleBufferTest();
 }
 
 void startMultiplyerClient() {
