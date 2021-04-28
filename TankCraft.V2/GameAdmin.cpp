@@ -43,6 +43,7 @@ namespace GameAdmin {
 		data.primarySystemList.push_back(movementSystem);
 		data.primarySystemList.push_back(messagingSystem);
 		data.primarySystemList.push_back(ui);
+		//data.primarySystemList.push_back(reflectionSystem);
 
 		//connectionSystem.init(data);
 		//movementSystem.init(data);

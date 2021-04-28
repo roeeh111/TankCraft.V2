@@ -107,7 +107,7 @@ namespace  ReflectionSystem {
 		}
 	}
 
-	void ReflectionSystem::FlushGameUpdate(GameData::GameData& data)
+	void ReflectionSystem::update(GameData::GameData& data)
 	{
 		if (data.updateMap.size() <= 0)
 			return;

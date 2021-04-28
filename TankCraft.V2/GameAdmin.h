@@ -9,6 +9,7 @@
 #include "ConnectionSystem.h"
 #include "MessagingSystem.h"
 #include "MovementSystem.h"
+#include "ReflectionSystem.h"
 
 
 /*
@@ -46,6 +47,8 @@ namespace GameAdmin {
 		MovementSystem::MovementSystem movementSystem;
 
 		MessagingSystem::MessagingSystem messagingSystem;
+
+		ReflectionSystem::ReflectionSystem reflectionSystem;
 
 	private:
 		void initIDTranslationSystem(bool isServer);

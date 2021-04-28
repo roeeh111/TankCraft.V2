@@ -133,9 +133,7 @@ namespace ConnectionSystem{
 			case UPDATE_ENTITY:
 			{
 				printf("Received update entity packet from server.\n");
-				std::string stream = std::string((char*)(pack->data + 1));
-				MessagingSystem::MessagingSystem messagingSystem;
-				messagingSystem.readGameUpdate(data, stream);
+				NetworkUtilitySystem::handleGameUpdate(data, pack);
 				break;
 			}
 
@@ -214,6 +212,7 @@ namespace ConnectionSystem{
 
 		// Do the game update
 		messagingSystem.readGameUpdate(data, str);
+		// reflectionsystem.MakeGameUpdate(data, str);
 	}
 
 	void ConnectionSystem::sendLoginPacket(GameData::GameData& data, std::string& name)
