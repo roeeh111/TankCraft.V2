@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 #include <map>
 #include <sstream>
@@ -10,7 +11,7 @@
 namespace LibNoTest {
 
 	void includeTest() {
-/*	using Writer = nop::StreamWriter<std::stringstream>;
+	using Writer = nop::StreamWriter<std::stringstream>;
 		nop::Serializer<Writer> serializer;
 
 		serializer.Write(std::vector<int>{1, 2, 3, 4});
@@ -23,8 +24,9 @@ namespace LibNoTest {
 
 		const std::string data = serializer.writer().stream().str();
 		std::cout << "Wrote " << data.size() << " bytes." << std::endl;
-		*/
+
 	}
 
 
 }
+*/

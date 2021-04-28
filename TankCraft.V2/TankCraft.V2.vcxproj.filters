@@ -40,6 +40,9 @@
     <Filter Include="Tests">
       <UniqueIdentifier>{740ccbb6-e58a-45ad-97c0-7280c669044a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\BondSchemas">
+      <UniqueIdentifier>{257cb6c0-5103-42de-af5e-2f7f7e17a0f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h">
@@ -558,6 +561,18 @@
     <ClInclude Include="ReflectionSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="BondTest.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="example_apply.h">
+      <Filter>Header Files\BondSchemas</Filter>
+    </ClInclude>
+    <ClInclude Include="example_reflection.h">
+      <Filter>Header Files\BondSchemas</Filter>
+    </ClInclude>
+    <ClInclude Include="example_types.h">
+      <Filter>Header Files\BondSchemas</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -939,7 +954,16 @@
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
     <ClCompile Include="ConnectionSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BondTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="example_apply.cpp">
+      <Filter>Header Files\BondSchemas</Filter>
+    </ClCompile>
+    <ClCompile Include="example_types.cpp">
+      <Filter>Header Files\BondSchemas</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -971,6 +995,9 @@
     </None>
     <None Include="Tanks.proto">
       <Filter>Header Files\ProtoSchemas</Filter>
+    </None>
+    <None Include="example.bond">
+      <Filter>Header Files\BondSchemas</Filter>
     </None>
   </ItemGroup>
 </Project>

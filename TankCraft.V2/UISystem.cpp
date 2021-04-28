@@ -25,29 +25,28 @@ namespace UISystem {
 	void UISystem::init(GameData::GameData& data)
 	{
 		// Only display UI for client
-		if (!data.isServer) {
-			data.map = std::vector<std::vector<char>>();
-			//Grow rows by m
-			data.map.resize(HEIGHT);
-			for (int i = 0; i < HEIGHT; ++i)
-			{
-				//Grow Columns by n
-				data.map[i].resize(WIDTH);
-			}
-
-			for (int i = 0; i < HEIGHT; i++) {
-				for (int j = 0; j < WIDTH; j++) {
-					if ((i + j) % 8 == 4) {
-						data.map[i][j] = 'c';
-					}
-					else {
-						data.map[i][j] = '.';
-					}
-				}
-				std::cout << std::endl;
-			}
-			printUI(data);
+		if (data.isServer) return;
+		data.map = std::vector<std::vector<char>>();
+		//Grow rows by m
+		data.map.resize(HEIGHT);
+		for (int i = 0; i < HEIGHT; ++i)
+		{
+			//Grow Columns by n
+			data.map[i].resize(WIDTH);
 		}
+
+		for (int i = 0; i < HEIGHT; i++) {
+			for (int j = 0; j < WIDTH; j++) {
+				if ((i + j) % 8 == 4) {
+					data.map[i][j] = 'c';
+				}
+				else {
+					data.map[i][j] = '.';
+				}
+			}
+			std::cout << std::endl;
+		}
+		printUI(data);
 	}
 
 	void UISystem::addTank(GameData::GameData& data, std::string clientName_, RakNet::Packet* pack)
@@ -75,26 +74,26 @@ namespace UISystem {
 	void UISystem::update(GameData::GameData& data)
 	{
 		// Only display UI for client
-		if (!data.isServer) {
-			// get all elements that take user input
-			auto view = data.m_reg.view<ComponentView::clientName, ComponentView::userInput>();
+		if (data.isServer) { return; }
+		// get all elements that take user input
+		auto view = data.m_reg.view<ComponentView::clientName, ComponentView::userInput>();
 
 
 		//	std::cout << "elements in reg = " << data.m_reg.size() << std::endl;
-			int i = 1;
-			for (auto entity : view) {				// NOTOE: apparently there are no entities with these two components
-													//(we have a clientname, not a userinput. need to network the userinput)
-				// Compare clientname with our name
-				std::cout << i << std::endl; i++;
-				if (data.m_reg.get<ComponentView::clientName>(entity).name() == *data.userName) {
-					std::cout << "Give me input: " << std::endl;
-					// Get the user input for our object, only if the name matches our name
-					getKeyBoardInput(data, entity);				// NOTE: Currently not being called yet since the update packet isnt being sent back
-					printUI(data);
-				}
+		int i = 1;
+		std::cout << "size of view of user input: " << view.size_hint() << std::endl;
+		for (auto entity : view) {				// NOTOE: apparently there are no entities with these two components
+												//(we have a clientname, not a userinput. need to network the userinput)
+			// Compare clientname with our name
+			std::cout << i << std::endl; i++;
+			
+			if (data.m_reg.get<ComponentView::clientName>(entity).name() == *data.userName) {
+				std::cout << "Give me input: " << std::endl;
+				// Get the user input for our object, only if the name matches our name
+				getKeyBoardInput(data, entity);				// NOTE: Currently not being called yet since the update packet isnt being sent back
+				printUI(data);
 			}
 		}
-		
 		// update the map
 		updateMapPositions(data);
 	}
