@@ -1,4 +1,5 @@
 #pragma once
+/*
 namespace PrimarySystem {
 	class PrimarySystem {
 	public:
@@ -10,4 +11,4 @@ namespace PrimarySystem {
 
 		~PrimarySystem() = default;
 	};
-}
+}*/

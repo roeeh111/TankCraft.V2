@@ -76,7 +76,7 @@ namespace GameData {
 	//	const char* address;
 		RakNet::SystemAddress rakAddress;
 
-		std::list<PrimarySystem::PrimarySystem> primarySystemList;
+		std::list<PrimarySystem::PrimarySystem*> primarySystemList;
 
 		// Whether this scene is the server or a client 
 		bool isServer;

@@ -12,7 +12,7 @@
 //------------------------------------------------------------------------------
 
 #pragma once
-
+/*
 #include "example_types.h"
 #include <bond/core/bond.h>
 #include <bond/stream/output_buffer.h>
@@ -223,3 +223,4 @@ namespace bond
                const ::bond::bonded< ::example::Record,  ::bond::SimpleBinaryReader<::bond::InputBuffer>&>& value);
     
 } // namespace bond
+*/

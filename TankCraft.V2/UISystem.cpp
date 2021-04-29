@@ -81,14 +81,14 @@ namespace UISystem {
 
 		//	std::cout << "elements in reg = " << data.m_reg.size() << std::endl;
 		int i = 1;
-		std::cout << "size of view of user input: " << view.size_hint() << std::endl;
+		//std::cout << "size of view of user input: " << view.size_hint() << std::endl;
 		for (auto entity : view) {				// NOTOE: apparently there are no entities with these two components
 												//(we have a clientname, not a userinput. need to network the userinput)
 			// Compare clientname with our name
-			std::cout << i << std::endl; i++;
+			//std::cout << i << std::endl; i++;
 			
 			if (data.m_reg.get<ComponentView::clientName>(entity).name() == *data.userName) {
-				std::cout << "Give me input: " << std::endl;
+				//std::cout << "Give me input: " << std::endl;
 				// Get the user input for our object, only if the name matches our name
 				getKeyBoardInput(data, entity);				// NOTE: Currently not being called yet since the update packet isnt being sent back
 				printUI(data);
@@ -102,7 +102,7 @@ namespace UISystem {
 		// get all elements that have a mapObject and position, and then do the updates
 		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
 		for (auto entity : view) {
-			std::cout << "updatemappositions: updating an entity" << std::endl;
+			//std::cout << "updatemappositions: updating an entity" << std::endl;
 
 			auto& pos = view.get<ComponentView::position>(entity);
 			auto& disp = view.get<ComponentView::mapObject>(entity);

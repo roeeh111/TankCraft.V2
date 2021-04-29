@@ -12,7 +12,7 @@
 //------------------------------------------------------------------------------
 
 #pragma once
-
+/*
 #include "example_types.h"
 #include <bond/core/reflection.h>
 
@@ -71,3 +71,4 @@ namespace example
 
     
 } // namespace example
+*/

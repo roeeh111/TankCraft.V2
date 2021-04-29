@@ -17,7 +17,7 @@ namespace ConnectionSystem {
 	class ConnectionSystem : public PrimarySystem::PrimarySystem {
 	public:
 
-		void init(GameData::GameData& data);
+		void init(GameData::GameData& data) override;
 
 		void update(GameData::GameData& data);
 		// TODO: may need a refrence to the m_reg if its not global

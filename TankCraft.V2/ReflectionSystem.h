@@ -67,11 +67,12 @@ namespace ReflectionSystem {
 
 		void init(GameData::GameData& data) {}
 
+		void DebugDeserialize(GameData::GameData& data, msgpack::sbuffer& stream) { MakeGameUpdate(data, stream); };
+		void MakeGameUpdate(GameData::GameData& data, std::string& stream);
 
 	private:
 
 		// Given a stream representing a serialized game update message, write all of the game updates to the game registry
-		void MakeGameUpdate(GameData::GameData& data, std::string& stream);
 		void MakeGameUpdate(GameData::GameData& data, msgpack::sbuffer& stream);
 		void MakeGameUpdateHelper(GameData::GameData& data, const msgpack::object& obj, ComponentID::ComponentID id, entt::entity& enttid);
 
@@ -82,10 +83,12 @@ namespace ReflectionSystem {
 			// Check if component exists already in the registry, if yes, fill it with the values in the msgpack object
 			if (!data.m_reg.has<Type>(enttid)) {
 				auto enttobj = data.m_reg.emplace<Type>(enttid);
+				std::cout << obj << std::endl;
 				obj.convert(enttobj);
 			}
 			else {
 				auto enttobj = data.m_reg.get<Type>(enttid);
+				std::cout << obj << std::endl;
 				obj.convert(enttobj);
 			}
 		}

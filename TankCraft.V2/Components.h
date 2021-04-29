@@ -209,6 +209,29 @@ namespace ComponentView {
 
 	} health;
 
+
+	// Simply a component with a map of int to int in it
+	typedef struct MapComponent_ : baseComponent {
+
+	public:
+		std::map<int, int> mp;
+		MapComponent_() {
+			mp = std::map<int, int>();
+			CompId = ComponentID::MapComponent;
+		}
+		~MapComponent_() = default;
+
+		void Serialize(msgpack::sbuffer& sbuf) {
+			msgpack::pack(sbuf, *this);
+
+		}
+		MSGPACK_DEFINE(mp);
+	}MapComponent ;
+
+
+
+
+
 	// TODO: implement getters and setters, havent done it yet since this might be phased out
 	typedef struct damageDone_ : baseComponent {
 		int32_t damage;

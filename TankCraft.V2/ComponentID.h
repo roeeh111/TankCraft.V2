@@ -14,7 +14,8 @@ namespace ComponentID {
 		DirtyClient,
 		Health,
 		DamageDone,
-		input
+		input,
+		MapComponent
 	} ComponentID;
 };
 MSGPACK_ADD_ENUM(ComponentID::ComponentID);

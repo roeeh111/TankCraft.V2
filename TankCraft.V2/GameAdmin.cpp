@@ -15,14 +15,14 @@ namespace GameAdmin {
 	{	
 		std::this_thread::sleep_for(std::chrono::milliseconds(16));
 		//Please help me fix this linker error, or uncomment lines below to get things to work
-		//for (PrimarySystem::PrimarySystem& system : data.primarySystemList)
-		//{
-		//	system.update(data);
-		//}
-		connectionSystem.update(data);
-		movementSystem.update(data);
-		messagingSystem.update(data);
-		ui.update(data);
+		for (PrimarySystem::PrimarySystem* system : data.primarySystemList)
+		{
+			system->update(data);
+		}
+		//connectionSystem.update(data);
+		//movementSystem.update(data);
+		//messagingSystem.update(data);
+		//ui.update(data);
 	}
 
 	MainScene::MainScene(bool isServer_, uint32_t maxClients)
@@ -31,28 +31,28 @@ namespace GameAdmin {
 		data = GameData::GameData();
 		data.first = true;
 		data.isServer = isServer_;
-		data.maxClients = 10;
+		data.maxClients = maxClients;
 		// Initialize our translation system, 2 way id mapping
 		data.netToEnttid = std::map<networkID, entt::entity>();
 		data.enttToNetidid = std::map<entt::entity, networkID>();	
 		// Add the freeList component to an entity to make freeListEntity
 		data.m_reg.emplace<FreeListComponent::freelist>(RegWrapper::createEntity(data.m_reg, false));
 
-		data.primarySystemList = std::list<PrimarySystem::PrimarySystem>();
-		data.primarySystemList.push_back(connectionSystem);
-		data.primarySystemList.push_back(movementSystem);
-		data.primarySystemList.push_back(messagingSystem);
-		data.primarySystemList.push_back(ui);
-		//data.primarySystemList.push_back(reflectionSystem);
+		data.primarySystemList = std::list<PrimarySystem::PrimarySystem*>();
+		data.primarySystemList.push_back(&connectionSystem);
+		data.primarySystemList.push_back(&movementSystem);
+		//data.primarySystemList.push_back(&messagingSystem);
+		data.primarySystemList.push_back(&ui);
+		data.primarySystemList.push_back(&reflectionSystem);
 
-		connectionSystem.init(data);
-		movementSystem.init(data);
+		//connectionSystem.init(data);
+		//movementSystem.init(data);
 		//messagingSystem.init(data);
-		ui.init(data);
-		//for (PrimarySystem::PrimarySystem& system : data.primarySystemList)
-		//{
-		//	system.init(data);
-		//}
+		//ui.init(data);
+		for (PrimarySystem::PrimarySystem* system : data.primarySystemList)
+		{
+			system->init(data);
+		}
 
 		if (!isServer_) {
 			std::cout << "Starting client" << std::endl;
@@ -82,5 +82,6 @@ namespace GameAdmin {
 	{
 		data.m_reg.clear();
 		RakNet::RakPeerInterface::DestroyInstance(data.rpi);
+
 	}
 }

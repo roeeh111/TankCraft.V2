@@ -36,6 +36,7 @@ namespace  ReflectionSystem {
 
 	void ReflectionSystem::MakeGameUpdate(GameData::GameData& data, std::string& stream)
 	{
+	//	std::cout << "in reflection, making a game update, size of buffer =  " << stream.size() << std::endl;
 		// deserialize these objects using msgpack::unpacker.
 		msgpack::unpacker pac;
 
@@ -58,7 +59,10 @@ namespace  ReflectionSystem {
 		while (pac.next(oh)) {
 			// Call component write function based on the switch statement
 			if (i == -1) {
+		//		std::cout << "Converting header" << std::endl;
 				oh.get().convert(header);
+		//		std::cout << "header netid = " << header.netid << std::endl;
+		//		std::cout << "header # of updates = " << header.ids.size() <<  std::endl;
 
 				// check if the entity with netid exists in the game, if not, add it to the registry (if we do this, then this is essentially an add entity packet....)
 				if (!TranslationSystem::hasMapping(data, header.netid)) {
@@ -81,24 +85,30 @@ namespace  ReflectionSystem {
 		switch (id) {
 		case ComponentID::Position:
 			writeComponent<ComponentView::position>(data, obj, enttid);
-			std::cout << "writing a component!" << std::endl;
+		//	std::cout << "writing a component!" << std::endl;
 			break;
 		case ComponentID::MapObject:
 			writeComponent<ComponentView::mapObject>(data, obj, enttid);
-			std::cout << "writing a component!" << std::endl;
+		//	std::cout << "writing a component!" << std::endl;
 			break;
 		case ComponentID::Score:
 			//writeComponent<ComponentView::score>(data, obj, enttid);
-			std::cout << "writing a component!" << std::endl;
+		//	std::cout << "writing a component!" << std::endl;
 			break;
 		case ComponentID::ClientName:
-		//	writeComponent<ComponentView::clientName>(data, obj, enttid);
+			writeComponent<ComponentView::clientName>(data, obj, enttid);
+		//	std::cout << "writing a component!" << std::endl;
 			break;
 		case ComponentID::Health:
 		//	writeComponent<ComponentView::health>(data, obj, enttid);
 			break;
 		case ComponentID::input:
-		//	writeComponent<ComponentView::userInput>(data, obj, enttid);
+			writeComponent<ComponentView::userInput>(data, obj, enttid);
+		//	std::cout << "writing a component!" << std::endl;
+			break;
+		case ComponentID::MapComponent:
+		//	std::cout << "writing a component!" << std::endl;
+			writeComponent<ComponentView::MapComponent>(data, obj, enttid);
 			break;
 
 		default:
@@ -111,10 +121,11 @@ namespace  ReflectionSystem {
 	{
 		if (data.updateMap.size() <= 0)
 			return;
-		std::cout << "Flushing game update of size " << data.updateMap.size() << std::endl;
+		//std::cout << "Flushing game update of size " << data.updateMap.size() << std::endl;
 
 		// Loop over all mappings in the map, and write their serialized packets to the stream
 		for (auto& it : data.updateMap) {
+			std::cout << "flushing update for id " << it.first << std::endl;
 			RakNet::BitStream stream = RakNet::BitStream();
 
 			// write the packet type to the bitsream
@@ -125,9 +136,43 @@ namespace  ReflectionSystem {
 			UpdatePacket gameUpdate(it.first);
 			msgpack::sbuffer& buf = gameUpdate.Serialize(it.second);
 
+			std::cout << "buffer size for game update = " << buf.size() << std::endl;
+
 			// Write the game update to the stream, and broadast it to all connections
 			stream.Write(buf.data(), buf.size());
-			NetworkUtilitySystem::broadcast(data, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0);
+
+		//	NetworkUtilitySystem::broadcast(data, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0);
+
+			data.rpi->Send(&stream,
+				HIGH_PRIORITY,
+				RELIABLE_ORDERED,
+				0,
+				RakNet::UNASSIGNED_SYSTEM_ADDRESS,
+				true);
+
+			// DEBUG:
+		/*	msgpack::unpacker pac;
+
+			// feed the buffer.
+			pac.reserve_buffer(buf.size());
+			memcpy(pac.buffer(), buf.data(), buf.size());
+			pac.buffer_consumed(buf.size());
+
+			// now starts streaming deserialization.
+			msgpack::object_handle oh;
+
+			// The first element will always be the header, so get it
+
+			// The entity id inside the header.
+
+			int i = -1;
+			std::cout << "DEBUG REFLECTION UPDATE: PRINTING THE UPDATE:" << std::endl;
+			while (pac.next(oh)) {
+				// Call component write function based on the switch statement
+				std::cout << oh.get() << std::endl;
+			}
+			*/
+
 		}
 
 		// Lastly, clear the update map now that weve done all of the updates

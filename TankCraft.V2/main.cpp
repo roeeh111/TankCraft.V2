@@ -44,13 +44,20 @@ void simpleMsgPackUpdateTest() {
     auto pos = new ComponentView::position(1, 0);
     pos->setCurx(6);
     pos->setCury(7);
-    scene.data.updateMap[0] = { pos, new ComponentView::mapObject() };
+
+    auto mp = new ComponentView::MapComponent();
+    mp->mp[0] = 60;
+    mp->mp[5] = 5;
+
+    scene.data.updateMap[0] = { pos, new ComponentView::mapObject(), mp};
 
     ReflectionSystem::UpdatePacket pack(0);
     msgpack::sbuffer& stream = pack.Serialize(scene.data.updateMap[0]);
 
-    //scene.reflectionSystem.update(scene.data, sam);
+    scene.reflectionSystem.DebugDeserialize(scene.data, stream);
+    //scene.reflectionSystem.update(scene.data);
     delete pos;
+    delete mp;
 }
 
 

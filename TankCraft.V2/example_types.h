@@ -12,7 +12,7 @@
 //------------------------------------------------------------------------------
 
 #pragma once
-
+/*
 #include <bond/core/bond_version.h>
 
 #if BOND_VERSION < 0x0902
@@ -83,3 +83,4 @@ namespace example
         left.swap(right);
     }
 } // namespace example
+*/

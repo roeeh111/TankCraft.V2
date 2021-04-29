@@ -16,13 +16,13 @@ namespace MessagingSystem {
         MessagingSystem::writeGameUpdate(stream, data.updateMap);
 
         // Broadcast the game update     
-     //  data.rpi->Send(&stream,
-    //        HIGH_PRIORITY,
-     //       RELIABLE_ORDERED,
-      //      0,
-      //      RakNet::UNASSIGNED_SYSTEM_ADDRESS,
-       //     true);
-        NetworkUtilitySystem::broadcast(data, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0);
+       data.rpi->Send(&stream,
+            HIGH_PRIORITY,
+            RELIABLE_ORDERED,
+            0,
+            RakNet::UNASSIGNED_SYSTEM_ADDRESS,
+            true);
+      //  NetworkUtilitySystem::broadcast(data, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0);
     }
 
     void MessagingSystem::init(GameData::GameData& data) {

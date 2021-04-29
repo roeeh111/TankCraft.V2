@@ -6,11 +6,13 @@
 #include "MessagingSystem.h"
 #include "MovementSystem.h"
 #include "NetworkUtilitySystem.h"
+#include "ReflectionSystem.h"
 
 namespace ConnectionSystem{
 
 	void ConnectionSystem::init(GameData::GameData& data) {
 		// Instantiate the network instance for our peer interface
+		std::cout << "initializing data.rpi" << std::endl;
 		data.rpi = RakNet::RakPeerInterface::GetInstance();
 		if (data.isServer) {
 			// Local socket to use for communication
@@ -133,7 +135,10 @@ namespace ConnectionSystem{
 			case UPDATE_ENTITY:
 			{
 				printf("Received update entity packet from server.\n");
-				NetworkUtilitySystem::handleGameUpdate(data, pack);
+				std::string str = std::string((char*)(pack->data + 1), pack->length - 1);
+
+				ReflectionSystem::ReflectionSystem reflectionSystem;
+				reflectionSystem.MakeGameUpdate(data, str);
 				break;
 			}
 
@@ -206,13 +211,14 @@ namespace ConnectionSystem{
 
 	void ConnectionSystem::handleGameUpdate(GameData::GameData& data, RakNet::Packet* pack)
 	{
-		MessagingSystem::MessagingSystem messagingSystem;
-		// Get the update packet
-		std::string str = std::string((char*)(pack->data + 1));
+		//	std::cout << "update entty packet size = " << pack->length << std::endl;
+		std::string str = std::string((char*)(pack->data + 1), pack->length - 1);
+		//	std::cout << "but the string of the data size = " << str.size() << std::endl;
 
-		// Do the game update
-		messagingSystem.readGameUpdate(data, str);
-		// reflectionsystem.MakeGameUpdate(data, str);
+		ReflectionSystem::ReflectionSystem reflectionSystem;
+		//	std::cout << "Calling make game update " << std::endl;
+		reflectionSystem.MakeGameUpdate(data, str);
+
 	}
 
 	void ConnectionSystem::sendLoginPacket(GameData::GameData& data, std::string& name)

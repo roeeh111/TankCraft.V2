@@ -1,8 +1,8 @@
-#include <bond/core/bond.h>
-#include <bond/stream/output_buffer.h>
+//#include <bond/core/bond.h>
+//#include <bond/stream/output_buffer.h>
 #include "BondTest.h"
 #include "example_reflection.h"
-
+/*
 namespace BondTest {
 
     int exampleBufferTest()
@@ -28,3 +28,4 @@ namespace BondTest {
         return 0;
     }
 }
+*/

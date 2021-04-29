@@ -953,9 +953,6 @@
     <ClCompile Include="ReflectionSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="ConnectionSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BondTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
@@ -964,6 +961,9 @@
     </ClCompile>
     <ClCompile Include="example_types.cpp">
       <Filter>Header Files\BondSchemas</Filter>
+    </ClCompile>
+    <ClCompile Include="ConnectionSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
