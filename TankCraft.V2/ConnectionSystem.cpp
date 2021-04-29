@@ -145,16 +145,6 @@ namespace ConnectionSystem {
 		}
 	}
 
-	// UNUSED: CLIENT reads info from the update packet from the message system
-	void ConnectionSystem::handleGameUpdate(GameData::GameData& data, RakNet::Packet* pack)
-	{
-		// Get the update packet
-		std::string str = std::string((char*)(pack->data + 1));
-
-		// Do the game update
-		MessagingSystem::readGameUpdate(data, str);
-	}
-
 	// CLIENT ONLY
 	bool ConnectionSystem::clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress)
 	{
@@ -217,14 +207,14 @@ namespace ConnectionSystem {
 		}
 	}
 
+	// CLIENT reads info from the update packet from the message system
 	void ConnectionSystem::handleGameUpdate(GameData::GameData& data, RakNet::Packet* pack)
 	{
-		MessagingSystem::MessagingSystem messagingSystem;
 		// Get the update packet
 		std::string str = std::string((char*)(pack->data + 1));
 
 		// Do the game update
-		messagingSystem.readGameUpdate(data, str);
+		MessagingSystem::readGameUpdate(data, str);
 		// reflectionsystem.MakeGameUpdate(data, str);
 	}
 
