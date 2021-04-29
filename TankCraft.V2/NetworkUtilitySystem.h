@@ -29,4 +29,7 @@ namespace NetworkUtilitySystem {
 
 	// Broadcast the contents of a bistream to all connections in the connections list
 	void broadcast(GameData::GameData& data, const RakNet::BitStream* bitStream, PacketPriority priority, PacketReliability reliability, char orderingChannel);
+
+	// Handle an incomming game update packet
+	void handleGameUpdate(GameData::GameData& data, RakNet::Packet* pack);
 }

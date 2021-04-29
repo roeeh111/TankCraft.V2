@@ -133,8 +133,7 @@ namespace ConnectionSystem {
 			case UPDATE_ENTITY:
 			{
 				printf("Received update entity packet from server.\n");
-				std::string stream = std::string((char*)(pack->data + 1));
-				MessagingSystem::readGameUpdate(data, stream);
+				NetworkUtilitySystem::handleGameUpdate(data, pack);
 				break;
 			}
 
@@ -218,7 +217,17 @@ namespace ConnectionSystem {
 		}
 	}
 
-	// CLIENT ONLY: sends login info to SERVER
+	void ConnectionSystem::handleGameUpdate(GameData::GameData& data, RakNet::Packet* pack)
+	{
+		MessagingSystem::MessagingSystem messagingSystem;
+		// Get the update packet
+		std::string str = std::string((char*)(pack->data + 1));
+
+		// Do the game update
+		messagingSystem.readGameUpdate(data, str);
+		// reflectionsystem.MakeGameUpdate(data, str);
+	}
+
 	void ConnectionSystem::sendLoginPacket(GameData::GameData& data, std::string& name)
 	{
 		std::cout << "Sending login packet for " << name << std::endl;

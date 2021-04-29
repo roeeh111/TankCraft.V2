@@ -235,6 +235,16 @@ namespace NetworkUtilitySystem {
 
 	}
 
+	void handleGameUpdate(GameData::GameData& data, RakNet::Packet* pack)
+	{
+		std::string stream = std::string((char*)(pack->data + 1));
+	
+ 		/* Protobuf method of doing it
+		MessagingSystem::MessagingSystem messagingSystem;
+		messagingSystem.readGameUpdate(data, stream);
+		*/
+	}
+
 
 
 }

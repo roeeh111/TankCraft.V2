@@ -48,7 +48,7 @@ void simpleMsgPackUpdateTest() {
     ReflectionSystem::UpdatePacket pack(0);
     msgpack::sbuffer& stream = pack.Serialize(scene.data.updateMap[0]);
 
-    ReflectionSystem::MakeGameUpdate(scene.data, stream);
+    //scene.reflectionSystem.update(scene.data, sam);
     delete pos;
 }
 

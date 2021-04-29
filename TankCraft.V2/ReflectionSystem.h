@@ -60,28 +60,36 @@ namespace ReflectionSystem {
 	};
 
 
-	// Given a stream representing a serialized game update message, write all of the game updates to the game registry
-	void MakeGameUpdate(GameData::GameData& data, std::string& stream);
-	void MakeGameUpdate(GameData::GameData& data, msgpack::sbuffer& stream);
-	void MakeGameUpdateHelper(GameData::GameData& data, const msgpack::object& obj, ComponentID::ComponentID id, entt::entity& enttid);
+	class ReflectionSystem : public PrimarySystem::PrimarySystem {
+	public:
+		// Given the gamedata, flush the update map and broadcast game updates to all users
+		void update(GameData::GameData& data);
 
-	// Given the gamedata, flush the update map and broadcast game updates to all users
-	void FlushGameUpdate(GameData::GameData& data);
+		void init(GameData::GameData& data) {}
 
 
-	template <typename Type>
-	void writeComponent(GameData::GameData& data, const msgpack::object& obj, entt::entity &enttid)
-	{		 
-		// Check if component exists already in the registry, if yes, fill it with the values in the msgpack object
-		if (!data.m_reg.has<Type>(enttid)) {
-			auto enttobj = data.m_reg.emplace<Type>(enttid);
-			obj.convert(enttobj);
+	private:
+
+		// Given a stream representing a serialized game update message, write all of the game updates to the game registry
+		void MakeGameUpdate(GameData::GameData& data, std::string& stream);
+		void MakeGameUpdate(GameData::GameData& data, msgpack::sbuffer& stream);
+		void MakeGameUpdateHelper(GameData::GameData& data, const msgpack::object& obj, ComponentID::ComponentID id, entt::entity& enttid);
+
+
+		template <typename Type>
+		void writeComponent(GameData::GameData& data, const msgpack::object& obj, entt::entity& enttid)
+		{
+			// Check if component exists already in the registry, if yes, fill it with the values in the msgpack object
+			if (!data.m_reg.has<Type>(enttid)) {
+				auto enttobj = data.m_reg.emplace<Type>(enttid);
+				obj.convert(enttobj);
+			}
+			else {
+				auto enttobj = data.m_reg.get<Type>(enttid);
+				obj.convert(enttobj);
+			}
 		}
-		else {
-			auto enttobj = data.m_reg.get<Type>(enttid);
-			obj.convert(enttobj);
-		}
-	}
+	};
 		
 
 }

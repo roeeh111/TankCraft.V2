@@ -39,10 +39,11 @@ namespace GameAdmin {
 		data.m_reg.emplace<FreeListComponent::freelist>(RegWrapper::createEntity(data.m_reg, false));
 
 		data.primarySystemList = std::list<PrimarySystem::PrimarySystem>();
-		//data.primarySystemList.push_back(connectionSystem);
-		//data.primarySystemList.push_back(movementSystem);
-		//data.primarySystemList.push_back(messagingSystem);
-		//data.primarySystemList.push_back(ui);
+		data.primarySystemList.push_back(connectionSystem);
+		data.primarySystemList.push_back(movementSystem);
+		data.primarySystemList.push_back(messagingSystem);
+		data.primarySystemList.push_back(ui);
+		//data.primarySystemList.push_back(reflectionSystem);
 
 		connectionSystem.init(data);
 		movementSystem.init(data);
