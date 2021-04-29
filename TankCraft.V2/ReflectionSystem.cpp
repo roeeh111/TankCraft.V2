@@ -85,6 +85,7 @@ namespace  ReflectionSystem {
 		switch (id) {
 		case ComponentID::Position:
 			writeComponent<ComponentView::position>(data, obj, enttid);
+			//std::cout << "After component is written" << std::endl;
 		//	std::cout << "writing a component!" << std::endl;
 			break;
 		case ComponentID::MapObject:

@@ -82,14 +82,16 @@ namespace ReflectionSystem {
 		{
 			// Check if component exists already in the registry, if yes, fill it with the values in the msgpack object
 			if (!data.m_reg.has<Type>(enttid)) {
-				auto enttobj = data.m_reg.emplace<Type>(enttid);
-				std::cout << obj << std::endl;
+				auto &enttobj = data.m_reg.emplace<Type>(enttid);
 				obj.convert(enttobj);
+				//std::cout << obj << std::endl;
+				//enttobj.print();
 			}
 			else {
-				auto enttobj = data.m_reg.get<Type>(enttid);
-				std::cout << obj << std::endl;
+				auto &enttobj = data.m_reg.get<Type>(enttid);
 				obj.convert(enttobj);
+				//std::cout << obj << std::endl;
+				//enttobj.print();
 			}
 		}
 	};

@@ -60,15 +60,10 @@ namespace UISystem {
 		//	std::cout << "elements in reg = " << data.m_reg.size() << std::endl;
 		int i = 1;
 		//std::cout << "size of view of user input: " << view.size_hint() << std::endl;
-		for (auto entity : view) {				// NOTOE: apparently there are no entities with these two components
-												//(we have a clientname, not a userinput. need to network the userinput)
-
-			// ERROR: OK, so we dont have a name for this entity,so we need to copy it over differently
-			std::cout << *data.userName << "  " << data.m_reg.get<ComponentView::clientName>(entity).name() << std::endl; i++;
-
+		for (auto entity : view) {	
 			// Compare clientname with our name
 			if (data.m_reg.get<ComponentView::clientName>(entity).name() == *data.userName) {
-				std::cout << "Give me input: " << std::endl;
+				//std::cout << "Give me input: " << std::endl;
 				// Get the user input for our object, only if the name matches our name
 				getKeyBoardInput(data, entity);				// NOTE: Currently not being called yet since the update packet isnt being sent back
 				printUI(data);

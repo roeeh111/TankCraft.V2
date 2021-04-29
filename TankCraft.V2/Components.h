@@ -46,6 +46,7 @@ namespace ComponentView {
 		virtual void lock() {  }; // no mutex yet, so doesnt do anything really
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 		MSGPACK_DEFINE(up_, down_, left_, right_);
+		void print() { std::cout << " " << std::endl; }
 
 
 		void Serialize(msgpack::sbuffer& sbuf) {
@@ -156,6 +157,8 @@ namespace ComponentView {
 		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool) + sizeof(uint32_t); }
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 		MSGPACK_DEFINE(points_);
+		void print() { std::cout << points_ << std::endl; }
+
 
 		void Serialize(msgpack::sbuffer& sbuf) {
 			msgpack::pack(sbuf, *this);
@@ -180,6 +183,7 @@ namespace ComponentView {
 		virtual int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool); }
 	//	virtual void unlock(std::map<networkID, std::list<baseComponent*>>& updateMap, entt::entity& entity) override;
 		MSGPACK_DEFINE(name_);
+		void print() { std::cout << "Clientname = " << name_ << std::endl; }
 
 		void Serialize(msgpack::sbuffer& sbuf) {
 			msgpack::pack(sbuf, *this);
@@ -226,6 +230,7 @@ namespace ComponentView {
 
 		}
 		MSGPACK_DEFINE(mp);
+		void print() { std::cout << "" << std::endl; }
 	}MapComponent ;
 
 
