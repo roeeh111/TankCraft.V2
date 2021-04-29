@@ -224,7 +224,7 @@ namespace ConnectionSystem {
 		reflectionSystem.MakeGameUpdate(data, str);
 
 		// Do the game update
-		messagingSystem.readGameUpdate(data, str);
+		MessagingSystem::readGameUpdate(data, str);
 		// reflectionsystem.MakeGameUpdate(data, str);
 	}
 
