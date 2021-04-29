@@ -555,12 +555,6 @@
     <ClInclude Include="bitseryTest.h">
       <Filter>Tests</Filter>
     </ClInclude>
-    <ClInclude Include="MsgPackTest.h">
-      <Filter>Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="ReflectionSystem.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="BondTest.h">
       <Filter>Tests</Filter>
     </ClInclude>
@@ -572,6 +566,12 @@
     </ClInclude>
     <ClInclude Include="example_types.h">
       <Filter>Header Files\BondSchemas</Filter>
+    </ClInclude>
+    <ClInclude Include="ReflectionSystem.h">
+      <Filter>Source Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="MsgPackTest.h">
+      <Filter>Tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -953,6 +953,9 @@
     <ClCompile Include="ReflectionSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="ConnectionSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="BondTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
@@ -961,9 +964,6 @@
     </ClCompile>
     <ClCompile Include="example_types.cpp">
       <Filter>Header Files\BondSchemas</Filter>
-    </ClCompile>
-    <ClCompile Include="ConnectionSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

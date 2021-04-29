@@ -8,7 +8,7 @@
 #include "NetworkUtilitySystem.h"
 #include "ReflectionSystem.h"
 
-namespace ConnectionSystem{
+namespace ConnectionSystem {
 
 	void ConnectionSystem::init(GameData::GameData& data) {
 		// Instantiate the network instance for our peer interface
@@ -150,6 +150,7 @@ namespace ConnectionSystem{
 		}
 	}
 
+	// CLIENT ONLY
 	bool ConnectionSystem::clientConnect(RakNet::RakPeerInterface* peer, unsigned short port, const char* hostAddress)
 	{
 		if (!(peer->Connect(hostAddress, port, 0, 0) == RakNet::CONNECTION_ATTEMPT_STARTED)) {
@@ -159,6 +160,7 @@ namespace ConnectionSystem{
 		return true;
 	}
 
+	// SERVER ONLY
 	void ConnectionSystem::clientDisconnect(RakNet::RakPeerInterface* peer, const char* hostAddress)
 	{
 		peer->CloseConnection(RakNet::SystemAddress(hostAddress), 1);
@@ -166,7 +168,7 @@ namespace ConnectionSystem{
 		//RakNet::AddressOrGUID(RakNet::SystemAddress(hostAddress));
 	}
 
-	// The server recognizes the connection from a client and creates an empty netID  map for that client
+	// SERVER ONLY: recognizes the connection from a client and creates an empty netID  map for that client
 	void ConnectionSystem::handleConnection(GameData::GameData& data, RakNet::Packet* pack)
 	{
 		// If is a server, the rakAddress is not initialized
@@ -187,7 +189,7 @@ namespace ConnectionSystem{
 
 	}
 
-	// The server recognizes the disconnection from a client and clears all entities related to that client
+	// SERVER ONLY: recognizes the disconnection from a client and clears all entities related to that client
 	void ConnectionSystem::handleDisconnect(GameData::GameData& data, RakNet::Packet* pack)
 	{
 		printf("A client has disconnected. Address: %s \n", pack->systemAddress.ToString());
@@ -198,6 +200,7 @@ namespace ConnectionSystem{
 
 	}
 
+	// SERVER ONLY
 	void ConnectionSystem::handleLostConnection(GameData::GameData& data, RakNet::Packet* pack) {
 		// Currently this had the same behavior as the way we handle disconnection. TBD
 		printf("A client lost the connection. Address: %s \n", pack->systemAddress.ToString());
@@ -209,6 +212,7 @@ namespace ConnectionSystem{
 		}
 	}
 
+	// CLIENT reads info from the update packet from the message system
 	void ConnectionSystem::handleGameUpdate(GameData::GameData& data, RakNet::Packet* pack)
 	{
 		//	std::cout << "update entty packet size = " << pack->length << std::endl;
@@ -219,15 +223,17 @@ namespace ConnectionSystem{
 		//	std::cout << "Calling make game update " << std::endl;
 		reflectionSystem.MakeGameUpdate(data, str);
 
+		// Do the game update
+		messagingSystem.readGameUpdate(data, str);
+		// reflectionsystem.MakeGameUpdate(data, str);
 	}
 
 	void ConnectionSystem::sendLoginPacket(GameData::GameData& data, std::string& name)
 	{
 		std::cout << "Sending login packet for " << name << std::endl;
-		MessagingSystem::MessagingSystem messagingSystem;
 		RakNet::BitStream stream = RakNet::BitStream();
 
-		messagingSystem.writeLogin(stream, name);
+		MessagingSystem::writeLogin(stream, name);
 
 		data.rpi->Send(&stream,
 			HIGH_PRIORITY,
@@ -237,13 +243,20 @@ namespace ConnectionSystem{
 			false);
 	}
 
+	// SERVER ONLY: receives the login info from CLIENT and register the CLIENT
 	void ConnectionSystem::handleLogin(GameData::GameData& data, RakNet::Packet* pack)
 	{
-		MessagingSystem::MessagingSystem messagingSystem;
-		UISystem::UISystem ui;
 		std::string stream = std::string((char*)(pack->data + 1));
-		std::string loginName = messagingSystem.readLogin(stream);
-		std::cout << "Adding tank for " << loginName << std::endl;
-		ui.addTank(data, loginName, pack);
+		std::string loginName = MessagingSystem::readLogin(stream);
+		// Create entity for the client
+		auto clientEntity = NetworkUtilitySystem::addEntity(data, pack, true, true);
+		// Add the components to the the registry
+		(data.m_reg.emplace<ComponentView::mapObject>(clientEntity, true)).unlock(data, clientEntity);
+		(data.m_reg.emplace<ComponentView::position>(clientEntity, true, true)).unlock(data, clientEntity);
+		//(data.m_reg.emplace<ComponentView::score>(clientEntity, true)).unlock(data, clientEntity); // Score's write function is not yet implemented
+		(data.m_reg.emplace<ComponentView::clientName>(clientEntity, loginName, true)).unlock(data, clientEntity);
+		(data.m_reg.emplace<ComponentView::userInput>(clientEntity, true)).unlock(data, clientEntity);
+		std::cout << "Added tank for " << loginName << std::endl;
+		//std::cout << "In registry: " << data.m_reg.has<ComponentView::mapObject, ComponentView::userInput, ComponentView::score>(clientEntity) << std::endl;
 	}
 }

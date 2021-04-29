@@ -2,18 +2,21 @@
 #include "MessagingSystem.h"
 #include <ctime>
 #include "IDTranslationSystem.h"
-#include "NetworkUtilitySystem.h"
 
 namespace MessagingSystem {
 
-    // System flush game update
+    void MessagingSystem::init(GameData::GameData& data) {
+
+    }
+    // SERVER ONLY: System flush
     void MessagingSystem::update(GameData::GameData& data) {
-        // Only handles messaging in server
         if (!data.isServer) return;
-        if (data.updateMap.size() <= 0) return;
+        if (data.updateMap.size() <= 0)
+            return;
         std::cout << "Flushing game update of size " << data.updateMap.size() << std::endl;
+        std::cout << "Comp list size: " << data.updateMap[0].size() << std::endl;
         RakNet::BitStream stream = RakNet::BitStream();
-        MessagingSystem::writeGameUpdate(stream, data.updateMap);
+        writeGameUpdate(stream, data.updateMap);
 
         // Broadcast the game update     
        data.rpi->Send(&stream,
@@ -25,17 +28,10 @@ namespace MessagingSystem {
       //  NetworkUtilitySystem::broadcast(data, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0);
     }
 
-    void MessagingSystem::init(GameData::GameData& data) {
-        // initialize the update map
-        data.updateMap = std::map<networkID, std::list<baseComponent*>>();
-    }
-
-
     /*
-    * Write defenitions:
+    * Write definitions:
     */
-
-    void MessagingSystem::writeAddEntity(RakNet::BitStream& stream, networkID netid)
+    void writeAddEntity(RakNet::BitStream& stream, networkID netid)
     {
 
         // first, write the packet type to the bitsream
@@ -44,7 +40,7 @@ namespace MessagingSystem {
 
         // Create a new message object with our fields
         auto msg = ProtoMessaging::AddRemoveEntityMessage();
-        
+
         msg.set_timestamp(std::time(nullptr));
 
         // Write the packet to the stream
@@ -52,7 +48,7 @@ namespace MessagingSystem {
     }
 
     // TODO: I THINK THIS IS WRONG AND THATS WHY WERE ONLY GETTING ZEROS
-    void MessagingSystem::writeControls(RakNet::BitStream& stream, ComponentView::userInput control, networkID netid)
+    void writeControls(RakNet::BitStream& stream, ComponentView::userInput control, networkID netid)
     {
 
         // write the packet type to the bitsream
@@ -81,11 +77,11 @@ namespace MessagingSystem {
         auto serializedMsg = msg.SerializeAsString();
         stream.Write(serializedMsg.c_str(), serializedMsg.size());
 
-      //  delete controlComp; // WE BREAK ON THIS LINE. SO MAYBE DONT DO THIS?? 
+        //  delete controlComp; // WE BREAK ON THIS LINE. SO MAYBE DONT DO THIS?? 
     }
-    
+
     // Flush the update map
-    void MessagingSystem::writeGameUpdate(RakNet::BitStream& stream, std::map<networkID, std::list<baseComponent*>>& updateMap)
+    void writeGameUpdate(RakNet::BitStream& stream, std::map<networkID, std::list<baseComponent*>>& updateMap)
     {
         // write the packet type to the bitsream
         RakNet::MessageID type = UPDATE_ENTITY;
@@ -98,10 +94,10 @@ namespace MessagingSystem {
         // We only have 1 key in the update map, which is ok
         // Iterate through the map, writing to the message          
         for (auto& myPair : updateMap) {                            // PROBLEM: getting a read access violation when trying to iterate to the next element
-         //   std::cout << "Writegameupdate, found an element. Has "<< myPair.second.size() << " element id = " << myPair.first << std::endl;
+            // std::cout << "Writegameupdate, found an entity with "<< myPair.second.size() << " components to update. EntityID = " << myPair.first << std::endl;
             // If the pair is an actual game update
-            for (auto& component: myPair.second) {
-          //      std::cout << "  Writegameupdate, writing a component " << component->CompId << std::endl;
+            for (auto& component : myPair.second) {
+                std::cout << "  Writegameupdate, writing a component " << component->CompId << std::endl;
                 component->write(message, myPair.first);
 
             }
@@ -111,21 +107,46 @@ namespace MessagingSystem {
         // Set the timestamp
         message.set_timestamp(std::time(nullptr));
 
+
         // Serialize and write the packet to the stream
         auto serializedMsg = message.SerializeAsString();
         stream.Write(serializedMsg.c_str(), serializedMsg.size());
+
+        ///////////////////////////////////////////////// DEBUG /////////////////////////////////////////////////
+        auto deserializedMsg = ProtoMessaging::UpdateEntityMessage();
+        deserializedMsg.ParseFromString(serializedMsg);
+
+        std::cout << "time stamp: " << deserializedMsg.timestamp() << std::endl;
+        auto desc = deserializedMsg.GetDescriptor();
+        auto refl = deserializedMsg.GetReflection();
+        int fieldCount = desc->field_count();
+        std::cout << "id: " << desc->field(0) << std::endl;
+        // std::cout << "  Found " << fieldCount << " Fields" << std::endl;
+             // loop over all of the fields, geting their descriptor
+        for (int i = FIRST_COMPONENT_IN_UPDATE; i < fieldCount; i++)
+        {
+            // get the field from the descriptor
+            auto field = desc->field(i);
+            auto size = refl->FieldSize(message, field);
+            std::cout << "field = " << i << " name = " << field->name() << " size = " << size << std::endl;
+
+        }
+        auto posComp = deserializedMsg.positioncomps().Get(0);
+        std::cout << "Before send: curX = " << posComp.curx() << " curY = " << posComp.cury() << std::endl;
+        auto nameComp = deserializedMsg.clientnamecomps().Get(0);
+        std::cout << "Before send: name = " << nameComp.name() << std::endl;
+
+        ///////////////////////////////////////////////// DEBUG /////////////////////////////////////////////////
     }
 
-
-
-    void MessagingSystem::writeRemoveEntity(RakNet::BitStream& stream, networkID netid)
+    void writeRemoveEntity(RakNet::BitStream& stream, networkID netid)
     {
         // first, write the packet type to the bitsream
         RakNet::MessageID type = REMOVE_ENTITY;
         stream.Write((char*)&type, sizeof(RakNet::MessageID));
 
         // Create a new message object with our fields
-        auto msg =  ProtoMessaging::AddRemoveEntityMessage();
+        auto msg = ProtoMessaging::AddRemoveEntityMessage();
         msg.set_netid(netid);
         msg.set_timestamp(std::time(nullptr));
 
@@ -134,7 +155,7 @@ namespace MessagingSystem {
     }
 
     // DEBUG ONLY (doesnt write to bitstream)
-    std::string MessagingSystem::writeGameUpdate(std::map<networkID, std::list<baseComponent*>>& updateMap)
+    std::string writeGameUpdate(std::map<networkID, std::list<baseComponent*>>& updateMap)
     {
         // our message
         auto message = ProtoMessaging::UpdateEntityMessage();
@@ -155,7 +176,7 @@ namespace MessagingSystem {
         return message.SerializeAsString();
     }
 
-    void MessagingSystem::writeLogin(RakNet::BitStream& stream, std::string& name)
+    void writeLogin(RakNet::BitStream& stream, std::string& name)
     {
         // first, write the packet type to the bitsream
         RakNet::MessageID type = LOGIN;
@@ -166,7 +187,7 @@ namespace MessagingSystem {
         auto msg = ProtoMessaging::LoginMessage();
         msg.set_name(name);
         std::cout << "in writelogin, name = " << msg.name() << std::endl;
-       
+
         // Write the packet to the stream
        // auto serializedMsg = new std::string;
         auto serializedMsg = msg.SerializeAsString();
@@ -174,86 +195,86 @@ namespace MessagingSystem {
     }
 
     /*
-    * Read defenitions:
+    * Read definitions:
     */
-
     // TODO: PROBLEM: NOT CALLING THE READCOMP FUNCTIONS (because it shows that we have 0 elements in those fields)
     // 1) Look at debug string on flush call. 2) call readgameupdate inside flush call
-    void MessagingSystem::readGameUpdate(GameData::GameData& data, std::string& stream)
+    void readGameUpdate(GameData::GameData& data, std::string& stream)
     {
-    //    std::cout << "In read game update!" << std::endl;
-        // Parse the message from our string
+        //    std::cout << "In read game update!" << std::endl;
+            // Parse the message from our string
         auto msg = ProtoMessaging::UpdateEntityMessage();
         msg.ParseFromString(stream);
-
+        
         // TODO: do some verification (for udp)
 
         // For all fields in the packet, loop over and call readComp
         auto desc = msg.GetDescriptor();
         auto refl = msg.GetReflection();
         int fieldCount = desc->field_count();
-   //     std::cout << "  Found " << fieldCount << " Fields" << std::endl;
-
+        // std::cout << "  Found " << fieldCount << " Fields" << std::endl;
+        std::cout << "time stamp: " << msg.timestamp() << std::endl;
+        std::cout << "id: " << desc->field(0) << std::endl;
         // loop over all of the fields, geting their descriptor
         for (int i = FIRST_COMPONENT_IN_UPDATE; i < fieldCount; i++)
         {
             // get the field from the descriptor
             auto field = desc->field(i);
-        //    std::cout << "field = " << i << " name = "<< field->name() << std::endl;
             auto size = refl->FieldSize(msg, field);
-            
+            std::cout << "field = " << i << " name = " << field->name() << " size = " << size << std::endl;
+
             // FOR NOW, HARD CODE WHATS GETTING UPDATED, AND GENERICIZE LATER (bad looking code, but will be phased out later)
         //    refl->GetRepeatedFieldRef(msg, field);
             // case statement of calling x function for x field
-            switch (i) { 
-                case FIRST_COMPONENT_IN_UPDATE: {
-            //        std::cout << "in position update case number of updates = " << msg.positioncomps_size() << std::endl;
-                    // updating positions, call readcomp for all positions
-                    // for all repetitions in this field, call readcomps and cast this message
-                    for (int j = 0; j < msg.positioncomps_size(); j++) {
-                        readPosComp(data, msg, j);
-                    }
-                    break;
+            switch (i) {
+            case FIRST_COMPONENT_IN_UPDATE: {
+                //        std::cout << "in position update case number of updates = " << msg.positioncomps_size() << std::endl;
+                        // updating positions, call readcomp for all positions
+                        // for all repetitions in this field, call readcomps and cast this message
+                for (int j = 0; j < msg.positioncomps_size(); j++) {
+                    readPosComp(data, msg, j);
                 }
-                case (FIRST_COMPONENT_IN_UPDATE + 1): {
-            //        std::cout << "in mapobj update case number of updates = " << msg.mapobjectcomps_size() << std::endl;
-                    for (int j = 0; j < msg.mapobjectcomps_size(); j++) {
-                        readObjComp(data, msg, j);
-                    }
-                    break;
+                break;
+            }
+            case (FIRST_COMPONENT_IN_UPDATE + 1): {
+                //        std::cout << "in mapobj update case number of updates = " << msg.mapobjectcomps_size() << std::endl;
+                for (int j = 0; j < msg.mapobjectcomps_size(); j++) {
+                    readObjComp(data, msg, j);
                 }
-                case (FIRST_COMPONENT_IN_UPDATE + 2): {
-                    //for (int j = 0; j < msg.scorecomps_size(); j++) {
-                    //    readComp(data, msg.scorecomps().Get(j));
-                    //}
-                    break;
+                break;
+            }
+            case (FIRST_COMPONENT_IN_UPDATE + 2): {
+                //for (int j = 0; j < msg.scorecomps_size(); j++) {
+                //    readComp(data, msg.scorecomps().Get(j));
+                //}
+                break;
+            }
+            case (FIRST_COMPONENT_IN_UPDATE + 3): {
+                //         std::cout << "in clientname update case number of updates = " << msg.clientnamecomps_size() << std::endl;
+                for (int j = 0; j < msg.clientnamecomps_size(); j++) {
+                    readNameComp(data, msg, j);
                 }
-                case (FIRST_COMPONENT_IN_UPDATE + 3) : {
-           //         std::cout << "in clientname update case number of updates = " << msg.clientnamecomps_size() << std::endl;
-                    for (int j = 0; j < msg.clientnamecomps_size(); j++) {
-                        readNameComp(data, msg, j);
-                    }
-                    break;
-                }
-                case (FIRST_COMPONENT_IN_UPDATE + 4): {
-                 //   for (int j = 0; j < msg.healthcomps_size(); j++) {
-                 //       readComp(data, msg.healthcomps().Get(j));
-                 //   }
-                    break;
-                }
+                break;
+            }
+            case (FIRST_COMPONENT_IN_UPDATE + 4): {
+                //   for (int j = 0; j < msg.healthcomps_size(); j++) {
+                //       readComp(data, msg.healthcomps().Get(j));
+                //   }
+                break;
+            }
 
-                case (FIRST_COMPONENT_IN_UPDATE + 5): {
-           //         std::cout << "in userinput update case number of updates = " << msg.uinputcomps_size() << std::endl;
-                       for (int j = 0; j < msg.uinputcomps_size(); j++) {
-                           readControlComp(data, msg, j);
-                       }
-                    break;
+            case (FIRST_COMPONENT_IN_UPDATE + 5): {
+                //         std::cout << "in userinput update case number of updates = " << msg.uinputcomps_size() << std::endl;
+                for (int j = 0; j < msg.uinputcomps_size(); j++) {
+                    readControlComp(data, msg, j);
                 }
+                break;
+            }
 
-                default: {
-                    std::cout << "DEFAULT case, do nothing" << std::endl;
-                    break;
-                }
+            default: {
+                std::cout << "DEFAULT case, do nothing" << std::endl;
+                break;
+            }
             }
 
             // For all valid repetitions of this field
@@ -263,11 +284,11 @@ namespace MessagingSystem {
           //  }
             // TODO: update the actual component
         }
-     //   std::cout << "Exiting read update" << std::endl;
+        //   std::cout << "Exiting read update" << std::endl;
 
     }
 
-    ProtoMessaging::AddRemoveEntityMessage* MessagingSystem::readAddRemoveEntity(std::string &stream)
+    ProtoMessaging::AddRemoveEntityMessage* readAddRemoveEntity(std::string& stream)
     {
         // Assume we got the first bit of the bitstream, so the bitstream only has our 
         auto msg = new ProtoMessaging::AddRemoveEntityMessage();
@@ -275,7 +296,7 @@ namespace MessagingSystem {
         return msg;
     }
 
-    entt::entity MessagingSystem::readControls(GameData::GameData& data, std::string& stream, ComponentView::userInput* ret)
+    entt::entity readControls(GameData::GameData& data, std::string& stream, ComponentView::userInput* ret)
     {
         entt::entity ent;
 
@@ -301,7 +322,7 @@ namespace MessagingSystem {
         return ent;
     }
 
-    std::string MessagingSystem::readLogin(std::string& stream)
+    std::string readLogin(std::string& stream)
     {
         auto msg = new ProtoMessaging::LoginMessage();
         msg->ParseFromString(stream);
@@ -317,56 +338,45 @@ namespace MessagingSystem {
     *  Protobuf component to Game component functions
     */
 
-    
-    void MessagingSystem::readPosComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage &msg, int index)
+
+    void readPosComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index)
     {
 
         auto comp = msg.positioncomps().Get(index);
         auto entity = TranslationSystem::getEntity(data, comp.netid());
-        
+
         std::cout << "Reading position component for entity " << comp.netid() << std::endl;
 
 
         // If entity already has this component, get, if not, emplace
-        auto &pos = (data.m_reg.has<ComponentView::position>(entity)) ? data.m_reg.get<ComponentView::position>(entity) :
-                                                                        data.m_reg.emplace<ComponentView::position>(entity, true, true);
+        auto& pos = (data.m_reg.has<ComponentView::position>(entity)) ? data.m_reg.get<ComponentView::position>(entity) :
+            data.m_reg.emplace<ComponentView::position>(entity, true, true);
 
-       // std::cout << "Got position component" << std::endl;
+        // std::cout << "Got position component" << std::endl;
 
-//        auto ref = comp.GetReflection();
+ //        auto ref = comp.GetReflection();
 
-  //      const google::protobuf::Descriptor* positiondescriptor = comp.GetDescriptor();
-   //     const google::protobuf::FieldDescriptor* prevx_field = positiondescriptor->FindFieldByName("prevx");
-    //    const google::protobuf::FieldDescriptor* prevy_field = positiondescriptor->FindFieldByName("prevy");
-    //    const google::protobuf::FieldDescriptor* curx_field = positiondescriptor->FindFieldByName("curx");
-    //    const google::protobuf::FieldDescriptor* cury_field = positiondescriptor->FindFieldByName("cury");
+   //      const google::protobuf::Descriptor* positiondescriptor = comp.GetDescriptor();
+    //     const google::protobuf::FieldDescriptor* prevx_field = positiondescriptor->FindFieldByName("prevx");
+     //    const google::protobuf::FieldDescriptor* prevy_field = positiondescriptor->FindFieldByName("prevy");
+     //    const google::protobuf::FieldDescriptor* curx_field = positiondescriptor->FindFieldByName("curx");
+     //    const google::protobuf::FieldDescriptor* cury_field = positiondescriptor->FindFieldByName("cury");
 
-        // TODO: what if i dont set some value?
+         // TODO: what if i dont set some value?
 
-        if (comp.has_prevx()) {
-            pos.setPrevx(comp.prevx());
-        }
-      //  std::cout << "prevx = " << comp.prevx() << std::endl;
-        if (comp.has_prevy()) {
-            pos.setPrevy(comp.prevy());
-        }
-      //  std::cout << "prevy = " << comp.prevy() << std::endl;
-        if (comp.has_curx()) {
-            pos.setCurx(comp.curx());
-        }
-      //  std::cout << "curx = " << comp.curx() << std::endl;
-        if (comp.has_cury()) {
-            pos.setCury(comp.cury());
-        }
-       // std::cout << "cury = " << comp.cury() << std::endl;
-
-        std::cout << "curx = " << pos.curx() << ", cury = "<< pos.cury() << ", prevx = " << pos.prevx() << ", prevy = " << pos.prevy() << std::endl;
-
-
+        pos.setPrevx(comp.prevx());
+        //  std::cout << "prevx = " << comp.prevx() << std::endl;
+        pos.setPrevy(comp.prevy());
+        //  std::cout << "prevy = " << comp.prevy() << std::endl;
+        pos.setCurx(comp.curx());
+        //  std::cout << "curx = " << comp.curx() << std::endl;
+        pos.setCury(comp.cury());
+        // std::cout << "cury = " << comp.cury() << std::endl;
+        std::cout << "Receive: curX = " << comp.curx() << " curY = " << comp.cury() << std::endl;
         pos.networked = true;
     }
 
-    void MessagingSystem::readObjComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index)
+    void readObjComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index)
     {
         auto comp = msg.mapobjectcomps().Get(index);
         // get the entity in the register, and swap over the values
@@ -379,54 +389,54 @@ namespace MessagingSystem {
             data.m_reg.emplace<ComponentView::mapObject>(entity, true);
 
 
-     //   auto ref = comp.GetReflection();
-     //   const google::protobuf::Descriptor* objectdescriptor = comp.GetDescriptor();
-     //   const google::protobuf::FieldDescriptor* mapchar_field = objectdescriptor->FindFieldByName("mapChar");
-     //   std::cout << "comp = " << comp.mapchar()[0] << std::endl;
+        //   auto ref = comp.GetReflection();
+        //   const google::protobuf::Descriptor* objectdescriptor = comp.GetDescriptor();
+        //   const google::protobuf::FieldDescriptor* mapchar_field = objectdescriptor->FindFieldByName("mapChar");
+        //   std::cout << "comp = " << comp.mapchar()[0] << std::endl;
         obj.setMapChar(comp.mapchar()[0]);
 
         obj.networked = true;
     }
 
-    void MessagingSystem::readNameComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index)
+    void readNameComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index)
     {
         auto comp = msg.clientnamecomps().Get(index);
         auto entity = TranslationSystem::getEntity(data, comp.netid());
 
         std::cout << "Reading name comp for entity " << comp.netid() << std::endl;
-      //  std::cout << "entity id = " << (int) entity << std::endl;
-        // get the entity in the register, and swap over the values
+        //  std::cout << "entity id = " << (int) entity << std::endl;
+          // get the entity in the register, and swap over the values
         auto& name = (data.m_reg.has<ComponentView::clientName>(entity)) ? data.m_reg.get<ComponentView::clientName>(entity) :
             data.m_reg.emplace<ComponentView::clientName>(entity, comp.name(), true);
 
-    //    auto ref = comp.GetReflection();
-      //  const google::protobuf::Descriptor* namedescriptor = comp.GetDescriptor();
-       // const google::protobuf::FieldDescriptor* name_field = namedescriptor->FindFieldByName("name");
-     //   std::cout << "name = " << comp.name() << std::endl;
+        //    auto ref = comp.GetReflection();
+          //  const google::protobuf::Descriptor* namedescriptor = comp.GetDescriptor();
+           // const google::protobuf::FieldDescriptor* name_field = namedescriptor->FindFieldByName("name");
+         //   std::cout << "name = " << comp.name() << std::endl;
         name.setName(comp.name());
 
         name.networked = true;
     }
 
-    void MessagingSystem::readControlComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index)
+    void readControlComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index)
     {
         auto comp = msg.uinputcomps().Get(index);
         auto entity = TranslationSystem::getEntity(data, comp.netid());
 
         std::cout << "Reading uinput comp for entity " << comp.netid() << std::endl;
-     //   std::cout << "entity id = " << (int)entity << std::endl;
+        //   std::cout << "entity id = " << (int)entity << std::endl;
 
-        // If entity already has this component, get, if not, emplace
+           // If entity already has this component, get, if not, emplace
         auto& uin = (data.m_reg.has<ComponentView::userInput>(entity)) ? data.m_reg.get<ComponentView::userInput>(entity) :
             data.m_reg.emplace<ComponentView::userInput>(entity, true);
 
-     //   auto ref = comp.GetReflection();
+        //   auto ref = comp.GetReflection();
 
-    //    const google::protobuf::Descriptor* inputdescriptor = comp.GetDescriptor();
-    //    const google::protobuf::FieldDescriptor* up_field = inputdescriptor->FindFieldByName("up");
-    //    const google::protobuf::FieldDescriptor* down_field = inputdescriptor->FindFieldByName("down");
-    //    const google::protobuf::FieldDescriptor* left_field = inputdescriptor->FindFieldByName("left");
-    //    const google::protobuf::FieldDescriptor* right_field = inputdescriptor->FindFieldByName("right");
+       //    const google::protobuf::Descriptor* inputdescriptor = comp.GetDescriptor();
+       //    const google::protobuf::FieldDescriptor* up_field = inputdescriptor->FindFieldByName("up");
+       //    const google::protobuf::FieldDescriptor* down_field = inputdescriptor->FindFieldByName("down");
+       //    const google::protobuf::FieldDescriptor* left_field = inputdescriptor->FindFieldByName("left");
+       //    const google::protobuf::FieldDescriptor* right_field = inputdescriptor->FindFieldByName("right");
 
         uin.setLeft(comp.left());
         uin.setRight(comp.right());
@@ -435,6 +445,5 @@ namespace MessagingSystem {
         uin.networked = true;
 
     }
-
 
 }

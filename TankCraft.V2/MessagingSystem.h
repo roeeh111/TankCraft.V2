@@ -44,46 +44,47 @@ namespace MessagingSystem {
 
 		void update(GameData::GameData& data);
 
-		// given a bitstream and the ToUpdate map, flush the map and write a gameupdate packet to the bitstream
-		void writeGameUpdate(RakNet::BitStream& stream, std::map<networkID, std::list<baseComponent*>>& updateMap);
-
-		// Given a bitstream and a netid, write a addEntity packet to the bitstream
-		void writeAddEntity(RakNet::BitStream& stream, networkID netid);
-
-		// Given a bitstream and a netid, write a removeEntity packet to the bitstream
-		void writeRemoveEntity(RakNet::BitStream& stream, networkID netid);
-
-		// Given a bitstream and a controls component, write a controlsPacket to the bitstream
-		void writeControls(RakNet::BitStream& stream, ComponentView::userInput control, networkID netid);
-
-		// Given a name as a string, serialize it and write it to the passed in bitstream
-		void writeLogin(RakNet::BitStream& stream, std::string& name);
-
-		// Given a bitstream, read it into a GameUpdatePacket, verify its integrity and do the actual game updates
-		// (game updates can be handled by another system)
-		void readGameUpdate(GameData::GameData& data, std::string& stream);
-
-		// Given a bitstream, read it into a addRemoveEntityPacket, verify its integrity and return the message
-		// (entity addition can be handled by another system)
-		ProtoMessaging::AddRemoveEntityMessage* readAddRemoveEntity(std::string& stream);
-
-		// Given a string as a serialized login, deserialize it, verify its integrity, and return the login name of the packet.
-		std::string readLogin(std::string& stream);
-
-		// Given a bitstream, read it into a ControlsPacket, verify its integrity and execute the controls
-		entt::entity readControls(GameData::GameData& data, std::string& stream, ComponentView::userInput* ret);
-
-		/*
-		* Functions to read a protobuf component into a game component (TBH, WE CAN JUST USE PROTOBUF COMPONENTS IN THE GAME....)
-		*/
-		void readPosComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index);
-		void readObjComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index);
-		void readNameComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index);
-		void readControlComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index);
-
-
-		// Debug only
-		std::string writeGameUpdate(std::map<networkID, std::list<baseComponent*>>& updateMap);
 	};
+	
+	// given a bitstream and the ToUpdate map, flush the map and write a gameupdate packet to the bitstream
+	void writeGameUpdate(RakNet::BitStream& stream, std::map<networkID, std::list<baseComponent*>>& updateMap);
+
+	// Given a bitstream and a netid, write a addEntity packet to the bitstream
+	void writeAddEntity(RakNet::BitStream& stream, networkID netid);
+
+	// Given a bitstream and a netid, write a removeEntity packet to the bitstream
+	void writeRemoveEntity(RakNet::BitStream& stream, networkID netid);
+
+	// Given a bitstream and a controls component, write a controlsPacket to the bitstream
+	void writeControls(RakNet::BitStream& stream, ComponentView::userInput control, networkID netid);
+
+	// Given a name as a string, serialize it and write it to the passed in bitstream
+	void writeLogin(RakNet::BitStream& stream, std::string& name);
+
+	// Given a bitstream, read it into a GameUpdatePacket, verify its integrity and do the actual game updates
+	// (game updates can be handled by another system)
+	void readGameUpdate(GameData::GameData& data, std::string& stream);
+
+	// Given a bitstream, read it into a addRemoveEntityPacket, verify its integrity and return the message
+	// (entity addition can be handled by another system)
+	ProtoMessaging::AddRemoveEntityMessage* readAddRemoveEntity(std::string& stream);
+
+	// Given a string as a serialized login, deserialize it, verify its integrity, and return the login name of the packet.
+	std::string readLogin(std::string& stream);
+
+	// Given a bitstream, read it into a ControlsPacket, verify its integrity and execute the controls
+	entt::entity readControls(GameData::GameData& data, std::string& stream, ComponentView::userInput* ret);
+
+	/*
+	* Functions to read a protobuf component into a game component (TBH, WE CAN JUST USE PROTOBUF COMPONENTS IN THE GAME....)
+	*/
+	void readPosComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index);
+	void readObjComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index);
+	void readNameComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index);
+	void readControlComp(GameData::GameData& data, ProtoMessaging::UpdateEntityMessage& msg, int index);
+
+
+	// Debug only
+	std::string writeGameUpdate(std::map<networkID, std::list<baseComponent*>>& updateMap);
 }
 
