@@ -49,28 +49,6 @@ namespace UISystem {
 		printUI(data);
 	}
 
-	void UISystem::addTank(GameData::GameData& data, std::string clientName_, RakNet::Packet* pack)
-	{
-		//std::cout << "Calling addTank" << std::endl;
-
-		// This function should be only called by the server, so it will add an entity via the network
-		// and then emplace all these components. how are we putting the components on the update map?
-
-		//auto clientEntity = RegWrapper::createEntity(data.m_reg, true);	
-		auto clientEntity = NetworkUtilitySystem::addEntity(data, pack, true, true);
-		std::cout << "in addTank: addEntity complete" << std::endl;
-
-		// Add the components to the the registry
-		(data.m_reg.emplace<ComponentView::mapObject>(clientEntity, true)).unlock(data, clientEntity);
-		(data.m_reg.emplace<ComponentView::position>(clientEntity, true, true)).unlock(data, clientEntity);
-		(data.m_reg.emplace<ComponentView::score>(clientEntity, true)).unlock(data, clientEntity);
-		(data.m_reg.emplace<ComponentView::clientName>(clientEntity, clientName_, true)).unlock(data, clientEntity);
-		(data.m_reg.emplace<ComponentView::userInput>(clientEntity, true)).unlock(data, clientEntity);
-
-	//	std::cout << "Add tank complete, update map size = " << data.updateMap.size() << std::endl;
-
-	}
-
 	void UISystem::update(GameData::GameData& data)
 	{
 		// Only display UI for client
@@ -81,7 +59,7 @@ namespace UISystem {
 
 		//	std::cout << "elements in reg = " << data.m_reg.size() << std::endl;
 		int i = 1;
-		std::cout << "size of view of user input: " << view.size_hint() << std::endl;
+		//std::cout << "size of view of user input: " << view.size_hint() << std::endl;
 		for (auto entity : view) {				// NOTOE: apparently there are no entities with these two components
 												//(we have a clientname, not a userinput. need to network the userinput)
 			// Compare clientname with our name

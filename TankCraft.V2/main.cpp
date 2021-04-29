@@ -15,7 +15,6 @@ void startMultiplyerClient();
 void testSerialization();
 void simpleMsgPackUpdateTest();
 
-
 int main(void)
 {
     startMultiplyerClient();
@@ -53,13 +52,10 @@ void simpleMsgPackUpdateTest() {
     delete pos;
 }
 
-
-
 void testLogin() {
-    MessagingSystem::MessagingSystem messagingSystem;
     RakNet::BitStream stream = RakNet::BitStream();
     std::string name = "test name";
-    messagingSystem.writeLogin(stream, name);
+    MessagingSystem::writeLogin(stream, name);
 }
 
 void testSerialization() {

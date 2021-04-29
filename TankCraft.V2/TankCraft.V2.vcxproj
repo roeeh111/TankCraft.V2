@@ -310,9 +310,9 @@
     <ClInclude Include="example_apply.h" />
     <ClInclude Include="example_reflection.h" />
     <ClInclude Include="example_types.h" />
-    <ClInclude Include="MsgPackTest.h" />
     <ClInclude Include="ComponentID.h" />
     <ClInclude Include="ConnectionSystem.h" />
+    <ClInclude Include="MsgPackTest.h" />
     <ClInclude Include="NetworkUtilitySystem.h" />
     <ClInclude Include="ReflectionSystem.h" />
     <ClInclude Include="RegWrappers.h" />
