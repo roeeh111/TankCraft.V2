@@ -82,6 +82,7 @@ namespace GameAdmin {
 	{
 		data.m_reg.clear();
 		RakNet::RakPeerInterface::DestroyInstance(data.rpi);
+		delete data.userName;
 
 	}
 }

@@ -40,11 +40,17 @@ namespace MessagingSystem {
 
         // Create a new message object with our fields
         auto msg = ProtoMessaging::AddRemoveEntityMessage();
+        msg.set_netid(netid);// = netid;                        // NEW, added this line, because it doesnt seem like were actually adding a netid
+        std::cout << "Called writeAddEntity, adding entity with netid = " << msg.netid() << std::endl;
 
         msg.set_timestamp(std::time(nullptr));
+        std::cout << "Timestamp = " << msg.timestamp() << std::endl;
 
         // Write the packet to the stream
-        stream.Write(msg.SerializeAsString());
+      //  stream.Write(msg.SerializeAsString());
+        auto serializedMsg = msg.SerializeAsString();
+        stream.Write(serializedMsg.c_str(), serializedMsg.size());
+
     }
 
     // TODO: I THINK THIS IS WRONG AND THATS WHY WERE ONLY GETTING ZEROS
@@ -69,7 +75,7 @@ namespace MessagingSystem {
         msg.set_allocated_control(controlComp);
         msg.set_timestamp(std::time(nullptr));
 
-        std::cout << "In writecontrols: left = " << controlComp->left() << " right = " << controlComp->right() << " up = " << controlComp->up() << " down = " << controlComp->down() << std::endl;
+       // std::cout << "In writecontrols: left = " << controlComp->left() << " right = " << controlComp->right() << " up = " << controlComp->up() << " down = " << controlComp->down() << std::endl;
 
 
         // Write the packet to the stream
@@ -97,7 +103,7 @@ namespace MessagingSystem {
             // std::cout << "Writegameupdate, found an entity with "<< myPair.second.size() << " components to update. EntityID = " << myPair.first << std::endl;
             // If the pair is an actual game update
             for (auto& component : myPair.second) {
-                std::cout << "  Writegameupdate, writing a component " << component->CompId << std::endl;
+                //std::cout << "  Writegameupdate, writing a component " << component->CompId << std::endl;
                 component->write(message, myPair.first);
 
             }

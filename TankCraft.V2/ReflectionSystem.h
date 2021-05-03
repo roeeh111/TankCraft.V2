@@ -6,52 +6,47 @@
 #include "Components.h"
 #include "IDTranslationComponent.h"
 #include "IDTranslationSystem.h"
-
+#include "UpdatePacketHeader.h"
 
 
 namespace ReflectionSystem {
 
 
 
-	class UpdatePacketHeader {
-	public:
-		std::vector<ComponentID::ComponentID> ids; // The array of component ids
-		networkID netid;						   // The netid attached to these components
-		MSGPACK_DEFINE(netid, ids);
-
-		UpdatePacketHeader(networkID netid_) {
-			ids = std::vector<ComponentID::ComponentID>();
-			netid = netid_;
-		}
-		UpdatePacketHeader() {
-			ids = std::vector<ComponentID::ComponentID>();
-			netid = 0;
-		}
-		~UpdatePacketHeader() = default;
-	};
 
 	class UpdatePacket {
 	public:
 
 		UpdatePacket(networkID netid_) {
-			header = UpdatePacketHeader(netid_);
+			header = UpdatePacketHeader::UpdatePacketHeader(netid_);
 			pk = new msgpack::packer<msgpack::sbuffer>(&sbuf);
 		}
+		
+		UpdatePacket(UpdatePacketHeader::UpdatePacketHeader header_) {
+			header = header_;
+			pk = new msgpack::packer<msgpack::sbuffer>(&sbuf);
+		}
+		
 		~UpdatePacket() { delete pk; };
 		
-		msgpack::sbuffer& Serialize(std::list<baseComponent*> components);
+		msgpack::sbuffer& Serialize(std::list<baseComponent*> components);			// DEPRICATED
 
+		// Serialize the update packet into a buffer
+		msgpack::sbuffer& Serialize(GameData::GameData &data);
 		// Serialize a component into theclass buffer
 	private:
 		msgpack::sbuffer sbuf;
 		msgpack::packer<msgpack::sbuffer>* pk;
-		UpdatePacketHeader header;
+		UpdatePacketHeader::UpdatePacketHeader header;
 
 		// Write all component id's into the header
-		void writeHeader(std::list<baseComponent*> components);
+		void writeHeader(std::list<baseComponent*> components);	// DEPRICATED
 
 		// Serialize all components into the packet, only if weve already written the header, return true if wrote, false otherwise.
-		void writeComponents(std::list<baseComponent*> components);
+		void writeComponents(std::list<baseComponent*> components); // DEPRICATED
+
+		// Given an entitiy id and component id, serialize that component into the packet
+		void SerializeComponent(GameData::GameData& data, entt::entity id, ComponentID::ComponentID compid);
 
 		template <typename Type>
 		void Serialize(Type& component) {
@@ -65,7 +60,7 @@ namespace ReflectionSystem {
 		// Given the gamedata, flush the update map and broadcast game updates to all users
 		void update(GameData::GameData& data);
 
-		void init(GameData::GameData& data) {}
+		void init(GameData::GameData& data) { data.compUpdateMap = std::map<networkID, UpdatePacketHeader::UpdatePacketHeader>(); }
 
 		void DebugDeserialize(GameData::GameData& data, msgpack::sbuffer& stream) { MakeGameUpdate(data, stream); };
 		void MakeGameUpdate(GameData::GameData& data, std::string& stream);
@@ -76,7 +71,6 @@ namespace ReflectionSystem {
 		void MakeGameUpdate(GameData::GameData& data, msgpack::sbuffer& stream);
 		void MakeGameUpdateHelper(GameData::GameData& data, const msgpack::object& obj, ComponentID::ComponentID id, entt::entity& enttid);
 
-
 		template <typename Type>
 		void writeComponent(GameData::GameData& data, const msgpack::object& obj, entt::entity& enttid)
 		{
@@ -85,13 +79,13 @@ namespace ReflectionSystem {
 				auto &enttobj = data.m_reg.emplace<Type>(enttid);
 				obj.convert(enttobj);
 				//std::cout << obj << std::endl;
-				//enttobj.print();
+			//	enttobj.print();
 			}
 			else {
 				auto &enttobj = data.m_reg.get<Type>(enttid);
 				obj.convert(enttobj);
 				//std::cout << obj << std::endl;
-				//enttobj.print();
+			//	enttobj.print();
 			}
 		}
 	};

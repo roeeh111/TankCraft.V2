@@ -7,8 +7,11 @@
 #include "MovementSystem.h"
 #include "NetworkUtilitySystem.h"
 #include "ReflectionSystem.h"
+#include "Tank.h"
+#include "SpikeMob.h"
 
 namespace ConnectionSystem {
+	void printupdatemap(GameData::GameData& data);
 
 	void ConnectionSystem::init(GameData::GameData& data) {
 		// Instantiate the network instance for our peer interface
@@ -77,7 +80,7 @@ namespace ConnectionSystem {
 				// This is for debug purposes
 			case REMOVE_ENTITY:
 				printf("Received remove entity packet from client.\n");
-				NetworkUtilitySystem::removeEntity(data, pack, 0, true, false);
+				NetworkUtilitySystem::removeEntity(data, pack, 0, true, true);
 				break;
 
 				// In an ideal server authoritative design, Clients shouldn't send this packet
@@ -114,27 +117,30 @@ namespace ConnectionSystem {
 			switch (pack->data[0])
 			{
 			case ID_CONNECTION_REQUEST_ACCEPTED:
+			{
 				std::cout << "Connection established." << std::endl;
 				handleConnection(data, pack);
 				break;
-
+			}
 			case ID_CONNECTION_LOST:
 				std::cout << "Connection lost." << std::endl;
 				break;
 
 			case ADD_ENTITY:
-				printf("Received add entity packet from server.\n");
+			{
+				//	printf("Received add entity packet from server.\n");
 				NetworkUtilitySystem::addEntity(data, pack, false, false);
 				break;
-
+			}
 			case REMOVE_ENTITY:
+			{
 				printf("Received remove entity packet from server.\n");
-				NetworkUtilitySystem::removeEntity(data, pack, 0, false, true);
+				NetworkUtilitySystem::removeEntity(data, pack, 0, false, true);	// only called here and in the client loop
 				break;
-
+			}
 			case UPDATE_ENTITY:
 			{
-				printf("Received update entity packet from server.\n");
+			//	printf("Received update entity packet from server.\n");
 				std::string str = std::string((char*)(pack->data + 1), pack->length - 1);
 
 				ReflectionSystem::ReflectionSystem reflectionSystem;
@@ -183,7 +189,7 @@ namespace ConnectionSystem {
 			data.rakAddress = pack->systemAddress; // This step is redundant, as the address is hardcoded in the initialization rn
 
 			// now add add a tank!
-			std::cout << "in handle connection, sending login packet for " << *data.userName << std::endl;
+			//std::cout << "in handle connection, sending login packet for " << *data.userName << std::endl;
 			sendLoginPacket(data, *data.userName);
 		}
 
@@ -247,15 +253,34 @@ namespace ConnectionSystem {
 	{
 		std::string stream = std::string((char*)(pack->data + 1));
 		std::string loginName = MessagingSystem::readLogin(stream);
-		// Create entity for the client
-		auto clientEntity = NetworkUtilitySystem::addEntity(data, pack, true, true);
-		// Add the components to the the registry
-		(data.m_reg.emplace<ComponentView::mapObject>(clientEntity, true)).unlock(data, clientEntity);
-		(data.m_reg.emplace<ComponentView::position>(clientEntity, true, true)).unlock(data, clientEntity);
-		//(data.m_reg.emplace<ComponentView::score>(clientEntity, true)).unlock(data, clientEntity); // Score's write function is not yet implemented
-		(data.m_reg.emplace<ComponentView::clientName>(clientEntity, loginName, true)).unlock(data, clientEntity);
-		(data.m_reg.emplace<ComponentView::userInput>(clientEntity, true)).unlock(data, clientEntity);
-		std::cout << "Added tank for " << loginName << std::endl;
-		//std::cout << "In registry: " << data.m_reg.has<ComponentView::mapObject, ComponentView::userInput, ComponentView::score>(clientEntity) << std::endl;
+
+		// Add a tank entity
+		Tank::addTank(data, pack, loginName);
+		std::cout << "Finished adding a tank, printing the map of size " << data.updateMap.size() << " \n" << std::endl;
+		printupdatemap(data);
+
+		// Try adding 2 spikes						// TODO: how are we making sure to print these entities on the map?
+		//Spikes::addSpikes(data, pack, 5, 3, 3);
+		Spikes::addSpikes(data, pack, 5, 7, 3);
+		Spikes::addSpikes(data, pack, 5, 0, 0);		
+		Spikes::addSpikes(data, pack, 5, 1, 1);		// OK, for some reason we are only printing/receiving the last one of all these..
+
+
+
+		std::cout << "Finished adding a spike, printing the map of size "<< data.updateMap.size() << " \n" << std::endl;
+		printupdatemap(data);
+
+	}
+	void printupdatemap(GameData::GameData& data) {
+
+
+		for (auto& it : data.updateMap) {
+			std::cout << "netid = " << it.first << " list size = " << it.second.size() <<std::endl;
+			for (auto comp : it.second) {
+				comp->print();
+			}
+		}
+		std::cout << "end of map" << std::endl;
 	}
 }
+

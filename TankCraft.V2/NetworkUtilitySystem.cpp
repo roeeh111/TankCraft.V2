@@ -42,7 +42,7 @@ namespace NetworkUtilitySystem {
 			// add the entity with entity id given to the m_reg
 			auto newEntity = RegWrapper::createEntity(data.m_reg, true);
 
-			// Allocate a new netId for this entity
+			// Allocate a new netId for this entity (make sure that this entity doesnt already exist...)
 			networkID netid = TranslationSystem::createMapping(data, newEntity);
 
 			// If the client map isnt constructed for this address, construct it
@@ -58,7 +58,8 @@ namespace NetworkUtilitySystem {
 			MessagingSystem::writeAddEntity(stream, netid);
 
 
-			std::cout << "Registered entity from client " << pack->systemAddress.GetPort() << ", broadcasting..." << std::endl;
+			//std::cout << "Registered entity from client " << pack->systemAddress.GetPort() << ", broadcasting..." << std::endl;
+			std::cout << "Adding entity for netid " << netid << std::endl;
 			// broadcast to all clients to add a new entity with entity ID, and all components
 
 			if (responding) {
@@ -77,30 +78,30 @@ namespace NetworkUtilitySystem {
 					pack->systemAddress,
 					true);
 			}
-			std::cout << "Finished broadcasting" << std::endl;
+			//std::cout << "Finished broadcasting" << std::endl;
 			return newEntity;
-			// TODO:			(also figure out how we want to packetize all of the components)
-			// add all components of the entity with the given values to the new entity
+
 		}
 		else {
 			// If is client:
 			// if were not requesting, but responding to a request
 			if (!responding) {
-				std::cout << "Adding entity in client after receiving a packet" << std::endl;
-				auto newEntity = RegWrapper::createEntity(data.m_reg, true);
+				//std::cout << "Adding entity in client after receiving a packet" << std::endl;
 
-				std::string str = std::string((char*)(pack->data + 1));
+				std::string str = std::string((char*)(pack->data + 1), pack->length - 1);
+
 				ProtoMessaging::AddRemoveEntityMessage* msg = MessagingSystem::readAddRemoveEntity(str);
 
-				// when unpacking input packet, get the netID passed to us
-				// Create a new mapping of netID and entity
-				TranslationSystem::setMapping(data, msg->netid(), newEntity);
+				auto newEntity = TranslationSystem::addEntity(data, msg);
+				//std::cout << "Adding entity " << msg->netid() << "for entity id = " << (int)newEntity << std::endl;
+				//std::cout << "Timestamp = " << msg->timestamp() << std::endl;
+
 				delete msg;
 				return newEntity;
 			}
 			else {
 				// if were requesting:
-				std::cout << "Sending out add entity request packet to server" << std::endl;
+				//std::cout << "Sending out add entity request packet to server" << std::endl;
 				RakNet::BitStream stream = RakNet::BitStream();
 
 				MessagingSystem::writeAddEntity(stream, 0);
@@ -118,56 +119,82 @@ namespace NetworkUtilitySystem {
 		}
 	}
 
-	// TODO:?????
+	// SO! there is a problem with remove entity....
 	void removeEntity(GameData::GameData& data, RakNet::Packet* pack, networkID remID, bool isServer, bool responding)
 	{
 
 		// If is Server:
 		if (isServer) {
-			// Get the remove packet
-			std::string str = std::string((char*)(pack->data + 1));
-			ProtoMessaging::AddRemoveEntityMessage* msg = MessagingSystem::readAddRemoveEntity(str);
+			if (responding) { // if were responding to some message
+				// Get the remove packet
+				std::string str = std::string((char*)(pack->data + 1));
+				ProtoMessaging::AddRemoveEntityMessage* msg = MessagingSystem::readAddRemoveEntity(str);
 
-			std::cout << "Server removing entity " << msg->netid() << std::endl;
-
-			// Remove the given entity from the m_reg
-			if (TranslationSystem::hasMapping(data, msg->netid())) {
 				std::cout << "Server removing entity " << msg->netid() << std::endl;
-				data.m_reg.destroy(TranslationSystem::getEntity(data, msg->netid()));
+
+				// Remove the given entity from the m_reg
+				if (TranslationSystem::hasMapping(data, msg->netid())) {
+					std::cout << "Server removing entity " << msg->netid() << std::endl;
+					data.m_reg.destroy(TranslationSystem::getEntity(data, msg->netid()));
+				}
+				else {
+					return;
+				}
+
+				// remove the mapping from the client map
+				data.clientAddressToEntities[pack->systemAddress].remove(msg->netid());
+
+				// Free the netid from the translation system
+				TranslationSystem::freeID(data, msg->netid());
+
+				// Write the packet data back to the stream
+				RakNet::BitStream stream = RakNet::BitStream();
+
+				stream.Write((char*)pack->data, pack->length);
+
+
+				std::cout << "Server removed entity from client " << pack->systemAddress.GetPort() << ", broadcasting..." << std::endl;
+				// broadcast to all clients to add a new entity with entity ID, and all components
+				data.rpi->Send(&stream,
+					HIGH_PRIORITY,
+					RELIABLE_ORDERED,
+					0,
+					pack->systemAddress,
+					true);
+				//std::cout << "sent message" << std::endl;
+				delete msg;
 			}
 			else {
-				return;
+				RakNet::BitStream stream = RakNet::BitStream();
+
+				MessagingSystem::writeRemoveEntity(stream, remID);
+
+				if (TranslationSystem::hasMapping(data, remID)) {
+					std::cout << "Server removing entity " << remID << std::endl;
+					data.m_reg.destroy(TranslationSystem::getEntity(data, remID));
+				}
+
+				// remove the mapping from the client map
+				data.clientAddressToEntities[pack->systemAddress].remove(remID);
+
+				// Free the netid from the translation system
+				TranslationSystem::freeID(data, remID);
+
+
+				// remove the entitiy by broadcasting a remove
+				data.rpi->Send(&stream,
+					HIGH_PRIORITY,
+					RELIABLE_ORDERED,
+					0,
+					data.rakAddress,
+					true);
 			}
-
-			// remove the mapping from the client map
-			data.clientAddressToEntities[pack->systemAddress].remove(msg->netid());
-
-			// Free the netid from the translation system
-			TranslationSystem::freeID(data, msg->netid());
-
-			// Write the packet data back to the stream
-			RakNet::BitStream stream = RakNet::BitStream();
-
-			// TODO: this might not work!
-			stream.Write((char*)pack->data, pack->length);
-
-
-			std::cout << "Server removed entity from client " << pack->systemAddress.GetPort() << ", broadcasting..." << std::endl;
-			// broadcast to all clients to add a new entity with entity ID, and all components
-			data.rpi->Send(&stream,
-				HIGH_PRIORITY,
-				RELIABLE_ORDERED,
-				0,
-				pack->systemAddress,
-				true);
-			std::cout << "sent message" << std::endl;
-			delete msg;
 		}
 		else {
 			// If is client:
 			// if were not requesting, but responding to a request
 			if (responding) {
-				std::cout << "removing entity in client after receiving a packet" << std::endl;
+				//std::cout << "removing entity in client after receiving a packet" << std::endl;
 
 				std::string str = std::string((char*)(pack->data + 1));
 				ProtoMessaging::AddRemoveEntityMessage* msg = MessagingSystem::readAddRemoveEntity(str);
@@ -186,7 +213,7 @@ namespace NetworkUtilitySystem {
 			}
 			else {
 				// if were requesting:
-				std::cout << "Sending out add entity request packet to server" << std::endl;
+				//std::cout << "Sending out add entity request packet to server" << std::endl;
 				RakNet::BitStream stream = RakNet::BitStream();
 
 				MessagingSystem::writeRemoveEntity(stream, remID);
@@ -203,9 +230,8 @@ namespace NetworkUtilitySystem {
 		}
 	}
 
-	// TODO!!!!!!
 	void sendClientInput(GameData::GameData& data, RakNet::Packet* pack) {
-		std::cout << "Sending out client input to the server" << std::endl;
+		//std::cout << "Sending out client input to the server" << std::endl;
 		RakNet::BitStream stream = RakNet::BitStream();
 
 		// HERE we write the control into the stream
@@ -248,3 +274,93 @@ namespace NetworkUtilitySystem {
 
 
 }
+
+
+/* Commented out remove entity
+
+		// If is Server:
+		if (isServer) {
+			// Get the remove packet
+			std::string str = std::string((char*)(pack->data + 1));
+			ProtoMessaging::AddRemoveEntityMessage* msg = MessagingSystem::readAddRemoveEntity(str);
+
+			std::cout << "Server removing entity " << msg->netid() << std::endl;
+
+			// Remove the given entity from the m_reg
+			if (TranslationSystem::hasMapping(data, msg->netid())) {
+				std::cout << "Server removing entity " << msg->netid() << std::endl;
+				data.m_reg.destroy(TranslationSystem::getEntity(data, msg->netid()));
+			}
+			else {
+				return;
+			}
+
+			// remove the mapping from the client map
+			data.clientAddressToEntities[pack->systemAddress].remove(msg->netid());
+
+			// Free the netid from the translation system
+			TranslationSystem::freeID(data, msg->netid());
+
+			// Write the packet data back to the stream
+			RakNet::BitStream stream = RakNet::BitStream();
+
+			// TODO: this might not work!
+			stream.Write((char*)pack->data, pack->length);
+
+
+			std::cout << "Server removed entity from client " << pack->systemAddress.GetPort() << ", broadcasting..." << std::endl;
+			// broadcast to all clients to add a new entity with entity ID, and all components
+			data.rpi->Send(&stream,
+				HIGH_PRIORITY,
+				RELIABLE_ORDERED,
+				0,
+				pack->systemAddress,
+				true);
+			//std::cout << "sent message" << std::endl;
+			delete msg;
+		}
+		else {
+			// If is client:
+			// if were not requesting, but responding to a request
+			if (responding) {
+				//std::cout << "removing entity in client after receiving a packet" << std::endl;
+
+				std::string str = std::string((char*)(pack->data + 1));
+				ProtoMessaging::AddRemoveEntityMessage* msg = MessagingSystem::readAddRemoveEntity(str);
+
+				// Remove the given entity from the m_reg
+				if (TranslationSystem::hasMapping(data, msg->netid())) {
+					data.m_reg.destroy(TranslationSystem::getEntity(data, msg->netid()));
+				}
+				else {
+					return;
+				}
+
+				// Free the netid from the translation system
+				TranslationSystem::freeID(data, msg->netid());
+				delete msg;
+			}
+			else {
+				// if were requesting:
+				//std::cout << "Sending out add entity request packet to server" << std::endl;
+				RakNet::BitStream stream = RakNet::BitStream();
+
+				MessagingSystem::writeRemoveEntity(stream, remID);
+
+
+				// Request an addition of a new entity
+				data.rpi->Send(&stream,
+					HIGH_PRIORITY,
+					RELIABLE_ORDERED,
+					0,
+					data.rakAddress,
+					false);
+			}
+		}
+
+
+
+
+*/
+
+

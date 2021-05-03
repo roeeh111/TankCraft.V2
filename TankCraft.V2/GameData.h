@@ -5,7 +5,7 @@
 #include "IDTranslationComponent.h"
 #include "Tanks.pb.h"
 #include "ComponentID.h"
-
+#include "UpdatePacketHeader.h"
 #include <msgpack.hpp>
 
 namespace GameData { class GameData; };
@@ -24,6 +24,7 @@ typedef struct baseComponent_ {
 	bool isNetworked() { return networked; }
 
 	virtual void Serialize(msgpack::sbuffer& sbuf) {};
+	virtual void print() { std::cout << "base print " << std::endl; }
 
 	virtual int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool); }
 	//virtual void read(ProtoMessaging::UpdateEntityMessage& message, networkID netid, int index) {}
@@ -69,8 +70,12 @@ namespace GameData {
 		// The map from each client to its list of entities
 		std::map<RakNet::SystemAddress, std::list<networkID>> clientAddressToEntities;
 
+
 		// The map of entities to components to update
 		std::map<networkID, std::list<baseComponent*>> updateMap; 
+
+		// Temporary
+		std::map<networkID, UpdatePacketHeader::UpdatePacketHeader> compUpdateMap;
 
 		// the address were connected to
 	//	const char* address;

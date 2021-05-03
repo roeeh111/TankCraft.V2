@@ -1,4 +1,5 @@
 #include "MsgPackTest.h"
+#include "UpdatePacketHeader.h"
 #include "ReflectionSystem.h"
 
 namespace msgpackTest {
@@ -57,7 +58,7 @@ namespace msgpackTest {
         msgpack::sbuffer buffer;
         msgpack::packer<msgpack::sbuffer> pk(&buffer);
 
-        auto head = ReflectionSystem::UpdatePacketHeader(69);
+        auto head = UpdatePacketHeader::UpdatePacketHeader(69);
         head.ids.push_back(ComponentID::Position);
         head.ids.push_back(ComponentID::MapObject);
         head.ids.push_back(ComponentID::Base);
@@ -77,7 +78,7 @@ namespace msgpackTest {
         bool begin = 1;
         while (pac.next(oh)) {
             if (begin) {
-                ReflectionSystem::UpdatePacketHeader header;
+                UpdatePacketHeader::UpdatePacketHeader header;
                 oh.get().convert(header);// GETTING A TYPE ERROR HERE ON UNPACKING!!!!
                 std::cout << header.netid << " " << header.ids[0] << std::endl;
             }
@@ -116,7 +117,7 @@ namespace msgpackTest {
         fdat.x = 7.0;
         fdat.y = 8.0;
         fdat.z = 9.0;
-        auto head = ReflectionSystem::UpdatePacketHeader(69);
+        auto head = UpdatePacketHeader::UpdatePacketHeader(69);
         head.ids.push_back(ComponentID::Position);
         head.ids.push_back(ComponentID::MapObject);
         head.ids.push_back(ComponentID::Base);      // TBH it looks like we can get the object just fine...
@@ -145,7 +146,7 @@ namespace msgpackTest {
 
         pac.next(oh);
 
-        ReflectionSystem::UpdatePacketHeader header;
+        UpdatePacketHeader::UpdatePacketHeader header;
      //   oh.get().convert(header);// GETTING A TYPE ERROR HERE ON UNPACKING!!!!
       //  pac.next(oh);
 

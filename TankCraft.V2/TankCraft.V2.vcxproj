@@ -322,11 +322,14 @@
     <ClInclude Include="ProtoTest.h" />
     <ClInclude Include="GameData.h" />
     <ClInclude Include="GameAdmin.h" />
+    <ClInclude Include="SpikeMob.h" />
+    <ClInclude Include="Tank.h" />
     <ClInclude Include="Tanks.pb.h" />
     <ClInclude Include="UISystem.h" />
     <ClInclude Include="IDTranslationSystem.h" />
     <ClInclude Include="MessagingSystem.h" />
     <ClInclude Include="Components.h" />
+    <ClInclude Include="UpdatePacketHeader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\RakNet\Source\Base64Encoder.cpp" />
@@ -457,6 +460,8 @@
     <ClCompile Include="ProtoTest.cpp" />
     <ClCompile Include="GameAdmin.cpp" />
     <ClCompile Include="ReflectionSystem.cpp" />
+    <ClCompile Include="SpikeMob.cpp" />
+    <ClCompile Include="Tank.cpp" />
     <ClCompile Include="Tanks.pb.cc" />
     <ClCompile Include="UISystem.cpp" />
   </ItemGroup>

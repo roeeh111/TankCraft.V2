@@ -41,8 +41,8 @@ namespace MovementSystem {
 	}
 
 	void MovementSystem::moveEntity(GameData::GameData& data, const entt::entity& entity, ComponentView::userInput& input) {
-		std::cout << "Moving entitiy:" << std::endl;
-		std::cout << "left = " << input.left() << " right = " << input.right() << " up = " << input.up() << " down = " << input.down() << std::endl;
+		//std::cout << "Moving entitiy:" << std::endl;
+		//std::cout << "left = " << input.left() << " right = " << input.right() << " up = " << input.up() << " down = " << input.down() << std::endl;
 		auto& points = data.m_reg.get<ComponentView::position>(entity);
 		points.lock(); // lock the component
 
@@ -87,7 +87,7 @@ namespace MovementSystem {
 		}
 		points.unlock(data, entity);
 
-		std::cout << "After move: " << "prevx = " << points.prevx() << " prevy = " << points.prevy() << " curx = " << points.curx() << " cury = " << points.cury() << std::endl;
+		//std::cout << "After move: " << "prevx = " << points.prevx() << " prevy = " << points.prevy() << " curx = " << points.curx() << " cury = " << points.cury() << std::endl;
 
 		// Clear the input 
 	//	input.lock();

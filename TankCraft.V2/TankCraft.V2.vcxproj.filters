@@ -43,6 +43,9 @@
     <Filter Include="Header Files\BondSchemas">
       <UniqueIdentifier>{257cb6c0-5103-42de-af5e-2f7f7e17a0f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{d2e2451e-421d-4081-b2d8-1626fd3f4c77}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h">
@@ -573,6 +576,15 @@
     <ClInclude Include="ReflectionSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="SpikeMob.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Tank.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="UpdatePacketHeader.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -964,6 +976,12 @@
     </ClCompile>
     <ClCompile Include="ConnectionSystem.cpp">
       <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="SpikeMob.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Tank.cpp">
+      <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,7 @@ namespace TranslationSystem {
 
 	networkID setMapping(GameData::GameData& data, networkID netId, entt::entity entityId);
 
-	void addEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg);
+	entt::entity addEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg);
 
 	void removeEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg);
 

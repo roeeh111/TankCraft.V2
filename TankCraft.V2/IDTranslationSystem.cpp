@@ -35,19 +35,23 @@ namespace TranslationSystem {
         return data.enttToNetidid[entity];
     }
 
-    void addEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg)
+    entt::entity addEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg)
     {
         // Assume the message has been verified, or add verification for udp
 
         // make a mapping of the given netid and a local entity netid value
         auto newEntity = RegWrapper::createEntity(data.m_reg, true);
 
+
         if (hasMapping(data, msg->netid())) {
             setMapping(data, msg->netid(), newEntity);
         }
         else {
+            	std::cout << "netid " << msg->netid() << " doesnt exist, adding it to the translation system" << std::endl;
+
             createMapping(data, newEntity);
         }
+        return newEntity;
     }
 
     void removeEntity(GameData::GameData& data, ProtoMessaging::AddRemoveEntityMessage* msg)

@@ -4,6 +4,7 @@
 #include "Components.h"
 #include "RegWrappers.h"
 #include "MessagingSystem.h"
+#include "SpikeMob.h"
 
 /*
 
@@ -22,6 +23,12 @@ Server responds with a position component for the entity, client sets the new po
 
 namespace UISystem {
 
+	// TODO: add into a score and health system
+	void updateScore(GameData::GameData& data, entt::entity entity, ComponentView::position& pos);
+	void printScore(GameData::GameData& data);
+	void printHealth(GameData::GameData& data);
+
+
 	void UISystem::init(GameData::GameData& data)
 	{
 		// Only display UI for client
@@ -35,6 +42,7 @@ namespace UISystem {
 			data.map[i].resize(WIDTH);
 		}
 
+		// TODO: Change this to be based on what entities we have and what map positions they have, not just a static allocation
 		for (int i = 0; i < HEIGHT; i++) {
 			for (int j = 0; j < WIDTH; j++) {
 				if ((i + j) % 8 == 4) {
@@ -53,50 +61,48 @@ namespace UISystem {
 	{
 		// Only display UI for client
 		if (data.isServer) { return; }
-		// get all elements that take user input
+		// get all elements that take user input, and get all of the input from those entities
 		auto view = data.m_reg.view<ComponentView::clientName, ComponentView::userInput>();
-
-
-		//	std::cout << "elements in reg = " << data.m_reg.size() << std::endl;
-		int i = 1;
-		//std::cout << "size of view of user input: " << view.size_hint() << std::endl;
 		for (auto entity : view) {	
 			// Compare clientname with our name
 			if (data.m_reg.get<ComponentView::clientName>(entity).name() == *data.userName) {
 				//std::cout << "Give me input: " << std::endl;
 				// Get the user input for our object, only if the name matches our name
-				getKeyBoardInput(data, entity);				// NOTE: Currently not being called yet since the update packet isnt being sent back
-				printUI(data);
+				getKeyBoardInput(data, entity);
+			//	printUI(data);
 			}
 		}
-		// update the map
+
+		// Do all movement updates
 		updateMapPositions(data);
+		// print the map
+		printUI(data);
 	}
 
 	void UISystem::updateMapPositions(GameData::GameData& data) {
 		// get all elements that have a mapObject and position, and then do the updates
 		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
+		int i = 0;
+		//std::cout << "Updating map positions: " << std::endl;
 		for (auto entity : view) {
-			//std::cout << "updatemappositions: updating an entity" << std::endl;
+		//	std::cout << "updating entity " << (int) entity << " with netid = " << TranslationSystem::getNetId(data, entity) << std::endl; i++;
 
 			auto& pos = view.get<ComponentView::position>(entity);
 			auto& disp = view.get<ComponentView::mapObject>(entity);
 
 			// If weve met a cookie, eat it, add it to points, and remove it from the map
-			if (data.map[pos.cury()][pos.curx()] == 'c') {
-				// if we have a points component, increment it
-				if (data.m_reg.has<ComponentView::score>(entity)) {
-					// Get the entities score
-					auto& scr = data.m_reg.get<ComponentView::score>(entity);
-					scr.lock();
-					scr.setPoints(scr.points()+1);
-					scr.unlock(data, entity);
-				}
-			}
+			updateScore(data, entity, pos);
+
+			Spikes::updateSpikes(data, entity, pos);
+
+			// If weve met spikes, cause damage to us and remove the spikes
+
+			// Set the previous location to a "." and move on
 			data.map[pos.prevy()][pos.prevx()] = '.';
 			data.map[pos.cury()][pos.curx()] = disp.mapChar();
 		//	disp.setMapChar(data.map[pos.cury()][pos.curx()]);
 		}
+		std::cout << std::endl;
 	}
 
 	void UISystem::printUI(GameData::GameData& data)
@@ -115,11 +121,8 @@ namespace UISystem {
 		}
 
 		// Print out points and client names of any entities that have those
-		auto view = data.m_reg.view<ComponentView::score, ComponentView::clientName>();
-		for (auto entity : view) {
-			std::cout << "Points for client " << view.get<ComponentView::clientName>(entity).name() << ": " << view.get<ComponentView::score>(entity).points() << std::endl;
-		}
-		
+		printScore(data);
+		printHealth(data);
 	}
 
 	void UISystem::getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity)
@@ -178,14 +181,41 @@ namespace UISystem {
 		* For later versions, append it to a tochange queue
 		*/
 		NetworkUtilitySystem::sendControl(data, usrInput, TranslationSystem::getNetId(data, clientEntity)); // TODO!!!! ERROR ON THIS LINE. CRASHING NULLPOINTER 
+	}
+
+
+	void updateScore(GameData::GameData& data, entt::entity entity, ComponentView::position& pos)
+	{
+		if (data.map[pos.cury()][pos.curx()] == 'c') {
+
+			if (data.m_reg.has<ComponentView::score>(entity)) {
+				// Get the entities score
+				auto& scr = data.m_reg.get<ComponentView::score>(entity);
+				scr.lock();
+				scr.setPoints(scr.points() + 1);
+				scr.unlock(data, entity);
+			}
+		}
+	}
+
+	void printScore(GameData::GameData& data)
+	{
+		// Print out points and client names of any entities that have those
+		auto view = data.m_reg.view<ComponentView::score, ComponentView::clientName>();
+		for (auto entity : view) {
+			std::cout << "Points for client " << view.get<ComponentView::clientName>(entity).name() << ": " << view.get<ComponentView::score>(entity).points() << std::endl;
+		}
 
 	}
+
+	void printHealth(GameData::GameData& data)
+	{
+		auto view = data.m_reg.view<ComponentView::health, ComponentView::clientName>();
+		for (auto entity : view) {
+			std::cout << "Health for client " << view.get<ComponentView::clientName>(entity).name() << ": " << view.get<ComponentView::health>(entity).hp() << std::endl;
+		}
+	}
+
+
 }
 
-// NEW USER INPUT METHOD:
-// get all entities with a username
-// find the entity with the players username
-// call getkeyboard input on that entity
-// bobs your uncle
-
-// (change login to set the global username value)
