@@ -250,9 +250,6 @@ namespace ComponentView {
 	}MapComponent ;
 
 
-
-
-
 	// TODO: implement getters and setters, havent done it yet since this might be phased out
 	typedef struct damageDone_ : baseComponent {
 		int32_t damage;
@@ -271,6 +268,27 @@ namespace ComponentView {
 		}
 	} damageDone;
 
+	typedef struct pointsGiven_ : baseComponent {
+		int32_t points;
+		pointsGiven_() { points = 0; networked = true; CompId = ComponentID::PointsGiven; }
+		pointsGiven_(int32_t p) { points = p; networked = true; CompId = ComponentID::PointsGiven; }
+		~pointsGiven_() = default;
+
+		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override {};
+		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool); }
+		void print() { std::cout << "points given =  " << points << " compid = " << CompId << " " << std::endl; }
+		MSGPACK_DEFINE(points);
+
+		void Serialize(msgpack::sbuffer& sbuf) {
+			msgpack::pack(sbuf, *this);
+		}
+
+	} pointsGiven;
+
+
+
+
+	// DEPRECATED
 	// To signify if the entity is networked.
 	// Could be filled with additional network important information, but for now only filled with a boolean
 	typedef struct networked_ : baseComponent {

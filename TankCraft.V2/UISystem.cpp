@@ -5,6 +5,9 @@
 #include "RegWrappers.h"
 #include "MessagingSystem.h"
 #include "SpikeMob.h"
+#include "ScoreSystem.h"
+#include "HealthAndDamageSystem.h"
+
 
 /*
 
@@ -23,12 +26,6 @@ Server responds with a position component for the entity, client sets the new po
 
 namespace UISystem {
 
-	// TODO: add into a score and health system
-	void updateScore(GameData::GameData& data, entt::entity entity, ComponentView::position& pos);
-	void printScore(GameData::GameData& data);
-	void printHealth(GameData::GameData& data);
-
-
 	void UISystem::init(GameData::GameData& data)
 	{
 		// Only display UI for client
@@ -45,12 +42,12 @@ namespace UISystem {
 		// TODO: Change this to be based on what entities we have and what map positions they have, not just a static allocation
 		for (int i = 0; i < HEIGHT; i++) {
 			for (int j = 0; j < WIDTH; j++) {
-				if ((i + j) % 8 == 4) {
-					data.map[i][j] = 'c';
-				}
-				else {
+		//		if ((i + j) % 8 == 4) {
+		//			data.map[i][j] = 'c';
+		//		}
+		//		else {
 					data.map[i][j] = '.';
-				}
+		//		}
 			}
 			std::cout << std::endl;
 		}
@@ -91,11 +88,8 @@ namespace UISystem {
 			auto& disp = view.get<ComponentView::mapObject>(entity);
 
 			// If weve met a cookie, eat it, add it to points, and remove it from the map
-			updateScore(data, entity, pos);
-
-			Spikes::updateSpikes(data, entity, pos);
-
-			// If weve met spikes, cause damage to us and remove the spikes
+			ScoreSystem::updateScore(data, entity, pos);
+			HealthAndDamageSystem::updateDamage(data, entity, pos);
 
 			// Set the previous location to a "." and move on
 			data.map[pos.prevy()][pos.prevx()] = '.';
@@ -121,8 +115,8 @@ namespace UISystem {
 		}
 
 		// Print out points and client names of any entities that have those
-		printScore(data);
-		printHealth(data);
+		ScoreSystem::printScore(data);
+		HealthAndDamageSystem::printHealth(data);
 	}
 
 	void UISystem::getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity)
@@ -182,40 +176,6 @@ namespace UISystem {
 		*/
 		NetworkUtilitySystem::sendControl(data, usrInput, TranslationSystem::getNetId(data, clientEntity)); // TODO!!!! ERROR ON THIS LINE. CRASHING NULLPOINTER 
 	}
-
-
-	void updateScore(GameData::GameData& data, entt::entity entity, ComponentView::position& pos)
-	{
-		if (data.map[pos.cury()][pos.curx()] == 'c') {
-
-			if (data.m_reg.has<ComponentView::score>(entity)) {
-				// Get the entities score
-				auto& scr = data.m_reg.get<ComponentView::score>(entity);
-				scr.lock();
-				scr.setPoints(scr.points() + 1);
-				scr.unlock(data, entity);
-			}
-		}
-	}
-
-	void printScore(GameData::GameData& data)
-	{
-		// Print out points and client names of any entities that have those
-		auto view = data.m_reg.view<ComponentView::score, ComponentView::clientName>();
-		for (auto entity : view) {
-			std::cout << "Points for client " << view.get<ComponentView::clientName>(entity).name() << ": " << view.get<ComponentView::score>(entity).points() << std::endl;
-		}
-
-	}
-
-	void printHealth(GameData::GameData& data)
-	{
-		auto view = data.m_reg.view<ComponentView::health, ComponentView::clientName>();
-		for (auto entity : view) {
-			std::cout << "Health for client " << view.get<ComponentView::clientName>(entity).name() << ": " << view.get<ComponentView::health>(entity).hp() << std::endl;
-		}
-	}
-
 
 }
 

@@ -24,6 +24,7 @@ namespace Spikes {
 	//	std::cout << std::endl;
 	}
 
+	/* DEPRECATED
 	void updateSpikes(GameData::GameData& data, entt::entity entity, ComponentView::position& pos)
 	{
 		if (data.map[pos.cury()][pos.curx()] == 'S') {
@@ -54,5 +55,6 @@ namespace Spikes {
 				health.unlock(data, entity);
 			}
 		}
-	}
+		
+	}*/
 }

@@ -9,6 +9,7 @@
 #include "ReflectionSystem.h"
 #include "Tank.h"
 #include "SpikeMob.h"
+#include "CoinMob.h"
 
 namespace ConnectionSystem {
 	void printupdatemap(GameData::GameData& data);
@@ -256,21 +257,24 @@ namespace ConnectionSystem {
 
 		// Add a tank entity
 		Tank::addTank(data, pack, loginName);
-		std::cout << "Finished adding a tank, printing the map of size " << data.updateMap.size() << " \n" << std::endl;
-		printupdatemap(data);
+	//	std::cout << "Finished adding a tank, printing the map of size " << data.updateMap.size() << " \n" << std::endl;
+//		printupdatemap(data);
 
-		// Try adding 2 spikes						// TODO: how are we making sure to print these entities on the map?
-		//Spikes::addSpikes(data, pack, 5, 3, 3);
 		Spikes::addSpikes(data, pack, 5, 7, 3);
 		Spikes::addSpikes(data, pack, 5, 0, 0);		
-		Spikes::addSpikes(data, pack, 5, 1, 1);		// OK, for some reason we are only printing/receiving the last one of all these..
+		Spikes::addSpikes(data, pack, 5, 1, 1);	
 
+		Coins::addCoins(data, pack, 1, 10, 10);
+		Coins::addCoins(data, pack, 1, 11, 11);
+		Coins::addCoins(data, pack, 1, 12, 12);
+		Coins::addCoins(data, pack, 1, 13, 13);
+		Coins::addCoins(data, pack, 1, 14, 14);
+		Coins::addCoins(data, pack, 1, 15, 15);
 
-
-		std::cout << "Finished adding a spike, printing the map of size "<< data.updateMap.size() << " \n" << std::endl;
-		printupdatemap(data);
-
+//		printupdatemap(data);
 	}
+	
+	// DEBUG::
 	void printupdatemap(GameData::GameData& data) {
 
 

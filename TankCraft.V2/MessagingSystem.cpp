@@ -157,7 +157,8 @@ namespace MessagingSystem {
         msg.set_timestamp(std::time(nullptr));
 
         // Write the packet to the stream
-        stream.Write(msg.SerializeAsString());
+        auto serializedMsg = msg.SerializeAsString();
+        stream.Write(serializedMsg.c_str(), serializedMsg.size());
     }
 
     // DEBUG ONLY (doesnt write to bitstream)

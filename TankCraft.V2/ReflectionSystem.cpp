@@ -103,6 +103,11 @@ namespace  ReflectionSystem {
 				Serialize<ComponentView::damageDone>(data.m_reg.get<ComponentView::damageDone>(id));
 			break;
 
+		case ComponentID::PointsGiven:
+			if (data.m_reg.has<ComponentView::pointsGiven>(id))
+				Serialize<ComponentView::pointsGiven>(data.m_reg.get<ComponentView::pointsGiven>(id));
+			break;
+
 		default:
 			std::cout << "do nothing for now" << std::endl;
 			break;
@@ -192,6 +197,10 @@ namespace  ReflectionSystem {
 
 		case ComponentID::DamageDone:
 			writeComponent<ComponentView::damageDone>(data, obj, enttid);
+			break;
+
+		case ComponentID::PointsGiven:
+			writeComponent<ComponentView::pointsGiven>(data, obj, enttid);
 			break;
 
 		default:

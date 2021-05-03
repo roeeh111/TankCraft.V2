@@ -307,11 +307,13 @@
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h" />
     <ClInclude Include="bitseryTest.h" />
     <ClInclude Include="BondTest.h" />
+    <ClInclude Include="CoinMob.h" />
     <ClInclude Include="example_apply.h" />
     <ClInclude Include="example_reflection.h" />
     <ClInclude Include="example_types.h" />
     <ClInclude Include="ComponentID.h" />
     <ClInclude Include="ConnectionSystem.h" />
+    <ClInclude Include="HealthAndDamageSystem.h" />
     <ClInclude Include="MsgPackTest.h" />
     <ClInclude Include="NetworkUtilitySystem.h" />
     <ClInclude Include="ReflectionSystem.h" />
@@ -322,6 +324,7 @@
     <ClInclude Include="ProtoTest.h" />
     <ClInclude Include="GameData.h" />
     <ClInclude Include="GameAdmin.h" />
+    <ClInclude Include="ScoreSystem.h" />
     <ClInclude Include="SpikeMob.h" />
     <ClInclude Include="Tank.h" />
     <ClInclude Include="Tanks.pb.h" />
@@ -445,11 +448,13 @@
     <ClCompile Include="BaseComponent.cpp" />
     <ClCompile Include="bitseryTest.cpp" />
     <ClCompile Include="BondTest.cpp" />
+    <ClCompile Include="CoinMob.cpp" />
     <ClCompile Include="Components.cpp" />
     <ClCompile Include="ConnectionSystem.cpp" />
     <ClCompile Include="CreateEntity.cpp" />
     <ClCompile Include="example_apply.cpp" />
     <ClCompile Include="example_types.cpp" />
+    <ClCompile Include="HealthAndDamageSystem.cpp" />
     <ClCompile Include="IDTranslationSystem.cpp" />
     <ClCompile Include="LibNoTest.cpp" />
     <ClCompile Include="main.cpp" />
@@ -460,6 +465,7 @@
     <ClCompile Include="ProtoTest.cpp" />
     <ClCompile Include="GameAdmin.cpp" />
     <ClCompile Include="ReflectionSystem.cpp" />
+    <ClCompile Include="ScoreSystem.cpp" />
     <ClCompile Include="SpikeMob.cpp" />
     <ClCompile Include="Tank.cpp" />
     <ClCompile Include="Tanks.pb.cc" />

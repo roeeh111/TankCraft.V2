@@ -159,7 +159,7 @@ namespace NetworkUtilitySystem {
 					HIGH_PRIORITY,
 					RELIABLE_ORDERED,
 					0,
-					pack->systemAddress,
+					RakNet::UNASSIGNED_SYSTEM_ADDRESS, // pack->systemAddress,
 					true);
 				//std::cout << "sent message" << std::endl;
 				delete msg;
@@ -196,7 +196,7 @@ namespace NetworkUtilitySystem {
 			if (responding) {
 				//std::cout << "removing entity in client after receiving a packet" << std::endl;
 
-				std::string str = std::string((char*)(pack->data + 1));
+				std::string str = std::string((char*)(pack->data + 1), pack->length - 1);
 				ProtoMessaging::AddRemoveEntityMessage* msg = MessagingSystem::readAddRemoveEntity(str);
 
 				// Remove the given entity from the m_reg
@@ -213,7 +213,7 @@ namespace NetworkUtilitySystem {
 			}
 			else {
 				// if were requesting:
-				//std::cout << "Sending out add entity request packet to server" << std::endl;
+				std::cout << "Sending out remove entity request packet to server" << std::endl;
 				RakNet::BitStream stream = RakNet::BitStream();
 
 				MessagingSystem::writeRemoveEntity(stream, remID);
