@@ -213,7 +213,7 @@ namespace NetworkUtilitySystem {
 			}
 			else {
 				// if were requesting:
-				std::cout << "Sending out remove entity request packet to server" << std::endl;
+			//	std::cout << "Sending out remove entity request packet to server" << std::endl;
 				RakNet::BitStream stream = RakNet::BitStream();
 
 				MessagingSystem::writeRemoveEntity(stream, remID);

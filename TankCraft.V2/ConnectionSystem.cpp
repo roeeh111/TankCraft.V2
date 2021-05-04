@@ -10,6 +10,7 @@
 #include "Tank.h"
 #include "SpikeMob.h"
 #include "CoinMob.h"
+#include "ZombieMob.h"
 
 namespace ConnectionSystem {
 	void printupdatemap(GameData::GameData& data);
@@ -135,7 +136,7 @@ namespace ConnectionSystem {
 			}
 			case REMOVE_ENTITY:
 			{
-				printf("Received remove entity packet from server.\n");
+			//	printf("Received remove entity packet from server.\n");
 				NetworkUtilitySystem::removeEntity(data, pack, 0, false, true);	// only called here and in the client loop
 				break;
 			}
@@ -271,6 +272,7 @@ namespace ConnectionSystem {
 		Coins::addCoins(data, pack, 1, 14, 14);
 		Coins::addCoins(data, pack, 1, 15, 15);
 
+		Zombie::addZombie(data, pack, 10, 5, 10, 10);
 //		printupdatemap(data);
 	}
 	

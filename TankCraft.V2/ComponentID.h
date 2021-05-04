@@ -16,7 +16,8 @@ namespace ComponentID {
 		DamageDone,
 		input,
 		MapComponent,
-		PointsGiven
+		PointsGiven,
+		Velocity
 	} ComponentID;
 };
 MSGPACK_ADD_ENUM(ComponentID::ComponentID);

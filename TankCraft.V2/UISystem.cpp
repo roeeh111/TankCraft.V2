@@ -39,15 +39,9 @@ namespace UISystem {
 			data.map[i].resize(WIDTH);
 		}
 
-		// TODO: Change this to be based on what entities we have and what map positions they have, not just a static allocation
 		for (int i = 0; i < HEIGHT; i++) {
 			for (int j = 0; j < WIDTH; j++) {
-		//		if ((i + j) % 8 == 4) {
-		//			data.map[i][j] = 'c';
-		//		}
-		//		else {
-					data.map[i][j] = '.';
-		//		}
+				data.map[i][j] = '.';
 			}
 			std::cout << std::endl;
 		}
@@ -79,7 +73,8 @@ namespace UISystem {
 	void UISystem::updateMapPositions(GameData::GameData& data) {
 		// get all elements that have a mapObject and position, and then do the updates
 		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
-		int i = 0;
+		MovementSystem::moveMobs(data);
+
 		//std::cout << "Updating map positions: " << std::endl;
 		for (auto entity : view) {
 		//	std::cout << "updating entity " << (int) entity << " with netid = " << TranslationSystem::getNetId(data, entity) << std::endl; i++;
@@ -87,10 +82,9 @@ namespace UISystem {
 			auto& pos = view.get<ComponentView::position>(entity);
 			auto& disp = view.get<ComponentView::mapObject>(entity);
 
-			// If weve met a cookie, eat it, add it to points, and remove it from the map
+			// Update any score interaction damage interaction, or mob movement
 			ScoreSystem::updateScore(data, entity, pos);
 			HealthAndDamageSystem::updateDamage(data, entity, pos);
-
 			// Set the previous location to a "." and move on
 			data.map[pos.prevy()][pos.prevx()] = '.';
 			data.map[pos.cury()][pos.curx()] = disp.mapChar();

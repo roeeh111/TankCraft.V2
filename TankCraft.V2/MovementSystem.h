@@ -11,6 +11,9 @@ namespace MovementSystem {
 
 		void moveEntity(GameData::GameData& data, const entt::entity& entity, ComponentView::userInput& input);
 	};
+
+	// Move all mobs with velocity depending on their count field
+	void moveMobs(GameData::GameData& data);
 }
 
 /*

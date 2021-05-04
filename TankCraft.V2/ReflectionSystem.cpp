@@ -108,6 +108,11 @@ namespace  ReflectionSystem {
 				Serialize<ComponentView::pointsGiven>(data.m_reg.get<ComponentView::pointsGiven>(id));
 			break;
 
+		case ComponentID::Velocity:
+			if (data.m_reg.has<ComponentView::velocity>(id))
+				Serialize<ComponentView::velocity>(data.m_reg.get<ComponentView::velocity>(id));
+			break;
+
 		default:
 			std::cout << "do nothing for now" << std::endl;
 			break;
@@ -203,6 +208,10 @@ namespace  ReflectionSystem {
 			writeComponent<ComponentView::pointsGiven>(data, obj, enttid);
 			break;
 
+		case ComponentID::Velocity:
+			writeComponent<ComponentView::velocity>(data, obj, enttid);
+			break;
+
 		default:
 			std::cout << "do nothing for now" << std::endl;
 			break;
@@ -218,23 +227,23 @@ namespace  ReflectionSystem {
 
 		// Loop over all mappings in the map, and write their serialized packets to the stream
 		for (auto& it : data.compUpdateMap) {
-			std::cout << "flushing update for id " << it.first << std::endl;
+	//		std::cout << "flushing update for id " << it.first << std::endl;
 			RakNet::BitStream stream = RakNet::BitStream();
 
 			// write the packet type to the bitsream
 			RakNet::MessageID type = UPDATE_ENTITY;
 			stream.Write((char*)&type, sizeof(RakNet::MessageID));
 
-			std::cout << "wrote id to the bitstream"  << std::endl;
+	//		std::cout << "wrote id to the bitstream"  << std::endl;
 
 			// Serialize the game update
 			UpdatePacket gameUpdate(it.second);
 
 			// TODO: Change this to only call write components on the header! (write components should also be changed)
 			msgpack::sbuffer& buf = gameUpdate.Serialize(data);			// ERROR IN THIS LINE OF CODE!!! (IDK BUT SOMETHING AINT SERIALIZING)
-			std::cout << "Serialized the game update object" << std::endl;
+		//	std::cout << "Serialized the game update object" << std::endl;
 
-			std::cout << "buffer size for game update = " << buf.size() << std::endl;
+		//	std::cout << "buffer size for game update = " << buf.size() << std::endl;
 
 			// Write the game update to the stream, and broadast it to all connections
 			stream.Write(buf.data(), buf.size());
@@ -272,7 +281,7 @@ namespace  ReflectionSystem {
 			*/
 
 		}
-		std::cout << "Finished flushing the map" << std::endl;
+	//	std::cout << "Finished flushing the map" << std::endl;
 
 		// Lastly, clear the update map now that weve done all of the updates
 		data.updateMap.clear();

@@ -11,7 +11,7 @@ namespace HealthAndDamageSystem {
 
 	void updateDamage(GameData::GameData& data, entt::entity entity, ComponentView::position& pos)
 	{
-		if (data.map[pos.cury()][pos.curx()] == 'S') {
+		if (data.map[pos.cury()][pos.curx()] == 'S' || data.map[pos.cury()][pos.curx()] == 'Z') {
 			if (data.m_reg.has<ComponentView::health>(entity)) {
 				// Get the entities health
 				auto& health = data.m_reg.get<ComponentView::health>(entity);
@@ -25,7 +25,7 @@ namespace HealthAndDamageSystem {
 					// if were in the same place
 					if (pos.curx() == damagePos.curx() && pos.cury() == damagePos.cury()) {
 						// Decrement the players health by the damage caused by the spikes
-						health.setHp(health.hp() - view.get<ComponentView::damageDone>(damageEntity).damage);
+						health.setHp(health.hp() - view.get<ComponentView::damageDone>(damageEntity).getDamage());
 					}
 				}
 				health.unlock(data, entity);

@@ -95,7 +95,70 @@ namespace MovementSystem {
 		input.dirty_ = false;
 //		input.unlock(data, entity);		// NOTE: NOT UNLOCKING THE USERINPUT COMPONENT BECAUSE WE DONT WANT TO SEND IT BACK
 	}
-}
- 
 
-// TODO: MAKE SURE TO ONLY CALL UNLOCK ON A COMPONENT IF THAT COMPONENT IS NOW DIRTY (the points and the input above us are the culprits)
+
+
+	void moveMobs(GameData::GameData& data)
+	{
+		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position, ComponentView::velocity>();
+		for (auto entity : view) {
+			// Get the entities velocity
+			auto& vel = view.get<ComponentView::velocity>(entity);
+			auto& pos = view.get<ComponentView::position>(entity);
+
+			pos.setPrevx(pos.curx());
+			pos.setPrevy(pos.cury());
+
+			// if the velocities count = dx or dy, move the entity
+			if (abs(vel.getDx()) == vel.getxCount()) {
+				if (vel.getDx() > 0) {
+					if (pos.curx() >= WIDTH-1) {
+						pos.setCurx(0);
+					}
+					else {
+						pos.setCurx(pos.curx() + 1);
+					}
+				}
+				else {
+					if (pos.curx() <= 0) {
+						pos.setCurx(WIDTH - 1);
+					}
+					else {
+						pos.setCurx(pos.curx() - 1);
+					}
+				}
+				vel.setxCount(0);
+			}
+			else {
+				vel.setxCount(vel.getxCount() + 1);
+			}
+
+			if (vel.getDy() == vel.getyCount()) {
+				if (vel.getDy() > 0) {
+					if (pos.cury() >= HEIGHT - 1) {
+						pos.setCury(0);
+					}
+					else {
+						pos.setCury(pos.cury() + 1);
+					}
+				}
+				else {
+					if (pos.cury() <= 0) {
+						pos.setCury(HEIGHT - 1);
+					}
+					else {
+						pos.setCury(pos.cury() - 1);
+					}
+				}
+				vel.setyCount(0);
+			}
+			else {
+				vel.setyCount(vel.getyCount() + 1);
+			}
+
+			vel.unlock(data, entity);
+			pos.unlock(data, entity);
+
+		}
+	}
+}

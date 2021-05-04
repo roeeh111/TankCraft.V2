@@ -214,7 +214,9 @@ namespace ComponentView {
 	public:
 		int32_t hp() { return hp_; }
 		void setHp(int32_t set) { hp_ = set;}
-		health_() { hp_ = 100; networked = false;  CompId = ComponentID::Health; }
+		health_() { hp_ = 100; networked = true;  CompId = ComponentID::Health; }
+		health_(int32_t set, bool net) { hp_ = set; networked = net;  CompId = ComponentID::Health; }
+
 		health_(bool net) { hp_ = 100; networked = net;  CompId = ComponentID::Health; }
 		~health_() = default;
 		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool) + sizeof(int32_t); }
@@ -252,10 +254,15 @@ namespace ComponentView {
 
 	// TODO: implement getters and setters, havent done it yet since this might be phased out
 	typedef struct damageDone_ : baseComponent {
+	private:
 		int32_t damage;
+	public:
 		damageDone_() { damage = 0; networked = true;  CompId = ComponentID::DamageDone; }
 		damageDone_(int32_t dm) { damage = dm; networked = true;  CompId = ComponentID::DamageDone;}
 		~damageDone_() = default;
+
+		int32_t getDamage() { return damage; }
+		void setDamage(int32_t d) { damage = d; }
 
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override {};
 		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool); }
@@ -269,10 +276,15 @@ namespace ComponentView {
 	} damageDone;
 
 	typedef struct pointsGiven_ : baseComponent {
+	private:
 		int32_t points;
+	public:
 		pointsGiven_() { points = 0; networked = true; CompId = ComponentID::PointsGiven; }
 		pointsGiven_(int32_t p) { points = p; networked = true; CompId = ComponentID::PointsGiven; }
 		~pointsGiven_() = default;
+
+		int32_t getPoints() { return points; }
+		void setPoints(int32_t p) { points = p; }
 
 		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override {};
 		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool); }
@@ -285,7 +297,43 @@ namespace ComponentView {
 
 	} pointsGiven;
 
+	
+	// Velocity: measured in frames per step
+	typedef struct velocity_ : baseComponent {
+	private:
+		int32_t dx;
+		int32_t dy;
 
+		int xcounter; // internal counter to judge how many frames have gone by
+		int ycounter; // internal counter to judge how many frames have gone by
+
+	public:
+		velocity_() { dx = 0; dy = 0; xcounter = 0; ycounter = 0; networked = true; CompId = ComponentID::Velocity; }
+		velocity_(int32_t ndx, int32_t ndy) { dx = ndx; dy = ndy; xcounter = 0; ycounter = 0; networked = true; CompId = ComponentID::Velocity; }
+		~velocity_() = default;
+
+		int32_t getDx() { return dx; }
+		int32_t getDy() { return dy; }
+		int getxCount() { return xcounter; }
+		int getyCount() { return ycounter; }
+		void setDx(int32_t x) { dx = x; }
+		void setDy(int32_t y) { dy = y; }
+		void setxCount(int set) { xcounter = set; }
+		void setyCount(int set) { ycounter = set; }
+
+		virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) override {};
+
+		int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool); }
+		void print() { std::cout << "dx =  " << dx << " dy = " << dy << " compid = " << CompId << " " << std::endl; }
+
+
+		MSGPACK_DEFINE(dx, dy);
+
+		void Serialize(msgpack::sbuffer& sbuf) {
+			msgpack::pack(sbuf, *this);
+		}
+
+	} velocity;
 
 
 	// DEPRECATED

@@ -606,6 +606,9 @@
     <ClInclude Include="HealthAndDamageSystem.h">
       <Filter>Header Files\Systems\Secondary Systems</Filter>
     </ClInclude>
+    <ClInclude Include="ZombieMob.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1011,6 +1014,9 @@
       <Filter>Source Files\Systems\Secondary Systems</Filter>
     </ClCompile>
     <ClCompile Include="CoinMob.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="ZombieMob.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>

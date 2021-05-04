@@ -333,6 +333,7 @@
     <ClInclude Include="MessagingSystem.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="UpdatePacketHeader.h" />
+    <ClInclude Include="ZombieMob.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\RakNet\Source\Base64Encoder.cpp" />
@@ -470,6 +471,7 @@
     <ClCompile Include="Tank.cpp" />
     <ClCompile Include="Tanks.pb.cc" />
     <ClCompile Include="UISystem.cpp" />
+    <ClCompile Include="ZombieMob.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\..\..\..\RakNet\Source\CMakeLists.txt" />
