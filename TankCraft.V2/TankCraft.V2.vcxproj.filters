@@ -609,6 +609,9 @@
     <ClInclude Include="ZombieMob.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="CoinPolice.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1017,6 +1020,9 @@
       <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="ZombieMob.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="CoinPolice.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>
