@@ -609,8 +609,8 @@
     <ClInclude Include="ZombieMob.h">
       <Filter>Entities</Filter>
     </ClInclude>
-    <ClInclude Include="MsgPackCondDeserialTest.h">
-      <Filter>Tests</Filter>
+    <ClInclude Include="CoinPolice.h">
+      <Filter>Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1020,6 +1020,9 @@
       <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="ZombieMob.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="CoinPolice.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>
