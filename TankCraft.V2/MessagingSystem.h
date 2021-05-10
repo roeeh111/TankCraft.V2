@@ -74,6 +74,8 @@ namespace MessagingSystem {
 
 	// Given a bitstream, read it into a ControlsPacket, verify its integrity and execute the controls
 	entt::entity readControls(GameData::GameData& data, std::string& stream, ComponentView::userInput* ret);
+	ComponentView::userInput& readControls(GameData::GameData& data, std::string& stream, entt::entity* ent);
+
 
 	/*
 	* Functions to read a protobuf component into a game component (TBH, WE CAN JUST USE PROTOBUF COMPONENTS IN THE GAME....)

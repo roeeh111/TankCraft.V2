@@ -19,12 +19,12 @@ typedef struct baseComponent_ {
 	baseComponent_() { CompId = ComponentID::Base; networked = false; }
 	virtual ~baseComponent_() = default;
 	virtual void write(ProtoMessaging::UpdateEntityMessage& message, networkID netid) { std::cout << "base write " << std::endl; }
-	virtual void lock() { std::cout << "base lock " << std::endl; };
+	virtual void lock() { };
 	void unlock(GameData::GameData& data, const entt::entity& entity) ; // { std::cout << " base unlock" << std::endl; }
 	bool isNetworked() { return networked; }
 
 	virtual void Serialize(msgpack::sbuffer& sbuf) {};
-	virtual void print() { std::cout << "base print " << std::endl; }
+	virtual void print() {  }
 
 	virtual int size() { return sizeof(ComponentID::ComponentID) + sizeof(bool); }
 	//virtual void read(ProtoMessaging::UpdateEntityMessage& message, networkID netid, int index) {}
@@ -64,21 +64,19 @@ namespace GameData {
 
 		// The translation of net to entity structure
 		// This data should be SERVER ONLY and ONE PER CLIENT
-		std::map<networkID, entt::entity> netToEnttid;			// TODO: do i need this? can just use the freelist... (instead of a list of bools, a list of entt entities)
+		std::map<networkID, entt::entity> netToEnttid;	
 		std::map<entt::entity, networkID> enttToNetidid;
 
 		// The map from each client to its list of entities
 		std::map<RakNet::SystemAddress, std::list<networkID>> clientAddressToEntities;
 
-
-		// The map of entities to components to update
-		std::map<networkID, std::list<baseComponent*>> updateMap; 
-
-		// Temporary
+		// The map of updates to broadcast to all nodes
 		std::map<networkID, UpdatePacketHeader::UpdatePacketHeader> compUpdateMap;
 
+		// The log of most rescent updates (to be sent to any user loging in)
+		std::map<networkID, UpdatePacketHeader::UpdatePacketHeader> compLog;
+
 		// the address were connected to
-	//	const char* address;
 		RakNet::SystemAddress rakAddress;
 
 		std::list<PrimarySystem::PrimarySystem*> primarySystemList;
@@ -88,7 +86,7 @@ namespace GameData {
 
 		int maxClients;
 
-		// for debugging purposes
+		// Whether the first client has logged in or not
 		bool first;
 
 		std::string *userName;

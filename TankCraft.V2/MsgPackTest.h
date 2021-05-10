@@ -30,6 +30,17 @@ namespace msgpackTest{
 		fltposition_() = default;
 	} fltposition;
 
+	
+	/*
+namespace msgpack {
+	MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS) {
+		namespace adaptor {
+		}
+}
+*/
+
+
+
 
 	// Serialize a component into the buffer
 //	template <typename T>
@@ -40,6 +51,7 @@ namespace msgpackTest{
 	void singleStructTest();
 	void singleStructStreamTest();
 	void multiStructStreamTest();
+
 
 
 

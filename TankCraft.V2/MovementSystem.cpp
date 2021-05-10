@@ -29,20 +29,23 @@ namespace MovementSystem {
 		if (!data.isServer) { return; }
 		// For now, loop over all entities with position and user input
 		// and call moveEntity
-		auto view = data.m_reg.view<ComponentView::userInput, ComponentView::position>();
+/*		auto view = data.m_reg.view<ComponentView::userInput, ComponentView::position>();
 		for (auto &entity : view) {
 			auto& uinput = data.m_reg.get<ComponentView::userInput>(entity);
+			std::cout << "updating movement for entity " << (int)entity << std::endl;
 
 			// We are guarenteed that any user input that needs to be updated will be set dirty=1
 			if (uinput.dirty()) {	
 				moveEntity(data, entity, data.m_reg.get<ComponentView::userInput>(entity));
 			}
 		}
+		*/
 	}
 
 	void MovementSystem::moveEntity(GameData::GameData& data, const entt::entity& entity, ComponentView::userInput& input) {
-		//std::cout << "Moving entitiy:" << std::endl;
+		//std::cout << "Moving entitiy: " << (int) entity << std::endl;
 		//std::cout << "left = " << input.left() << " right = " << input.right() << " up = " << input.up() << " down = " << input.down() << std::endl;
+		std::cout << std::endl;
 		auto& points = data.m_reg.get<ComponentView::position>(entity);
 		points.lock(); // lock the component
 

@@ -19,9 +19,13 @@ namespace TranslationSystem {
     // ASSUMED THAT THE MAPPING HAS ALREADY BEEN ALLOCATED
     networkID setMapping(GameData::GameData& data, networkID netId, entt::entity entityId)
     {
-        const auto &flist = getFreelist(data.m_reg);
+        auto &flist = getFreelist(data.m_reg);
         data.netToEnttid[netId] = entityId;
         data.enttToNetidid[entityId] = netId;
+
+        // SET THE MAPPING IN THE FREE LIST as true!!!
+        flist.map[netId] = 1;
+
         return netId;
     }
 
@@ -43,11 +47,11 @@ namespace TranslationSystem {
         auto newEntity = RegWrapper::createEntity(data.m_reg, true);
 
 
-        if (hasMapping(data, msg->netid())) {
+        if (hasMapping(data, msg->netid())) {              
             setMapping(data, msg->netid(), newEntity);
         }
         else {
-            	std::cout << "netid " << msg->netid() << " doesnt exist, adding it to the translation system" << std::endl;
+            //	std::cout << "netid " << msg->netid() << " doesnt exist, adding it to the translation system" << std::endl;
 
             createMapping(data, newEntity);
         }
@@ -98,7 +102,8 @@ namespace TranslationSystem {
         auto view = m_reg.view<FreeListComponent::freelist>();
         // This for loop will only iterate once
         for (auto entity : view) {
-            FreeListComponent::freelist &flist = view.get<FreeListComponent::freelist>(entity);
+            auto &flist = view.get<FreeListComponent::freelist>(entity);
+         //   std::cout << "Fount Freelist" << std::endl;
             return flist;
         }
         std::cerr << "cant find a freelist" << std::endl;

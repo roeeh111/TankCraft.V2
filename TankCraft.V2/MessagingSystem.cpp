@@ -11,20 +11,20 @@ namespace MessagingSystem {
     // SERVER ONLY: System flush
     void MessagingSystem::update(GameData::GameData& data) {
         if (!data.isServer) return;
-        if (data.updateMap.size() <= 0)
+    //    if (data.updateMap.size() <= 0)
             return;
-        std::cout << "Flushing game update of size " << data.updateMap.size() << std::endl;
-        std::cout << "Comp list size: " << data.updateMap[0].size() << std::endl;
-        RakNet::BitStream stream = RakNet::BitStream();
-        writeGameUpdate(stream, data.updateMap);
+     //   std::cout << "Flushing game update of size " << data.updateMap.size() << std::endl;
+      ///  std::cout << "Comp list size: " << data.updateMap[0].size() << std::endl;
+      //  RakNet::BitStream stream = RakNet::BitStream();
+      //  writeGameUpdate(stream, data.updateMap);
 
         // Broadcast the game update     
-       data.rpi->Send(&stream,
-            HIGH_PRIORITY,
-            RELIABLE_ORDERED,
-            0,
-            RakNet::UNASSIGNED_SYSTEM_ADDRESS,
-            true);
+     //  data.rpi->Send(&stream,
+      //      HIGH_PRIORITY,
+      //      RELIABLE_ORDERED,
+      //      0,
+      //      RakNet::UNASSIGNED_SYSTEM_ADDRESS,
+       //     true);
       //  NetworkUtilitySystem::broadcast(data, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0);
     }
 
@@ -41,10 +41,10 @@ namespace MessagingSystem {
         // Create a new message object with our fields
         auto msg = ProtoMessaging::AddRemoveEntityMessage();
         msg.set_netid(netid);// = netid;                        // NEW, added this line, because it doesnt seem like were actually adding a netid
-        std::cout << "Called writeAddEntity, adding entity with netid = " << msg.netid() << std::endl;
+        //std::cout << "Called writeAddEntity, adding entity with netid = " << msg.netid() << std::endl;
 
         msg.set_timestamp(std::time(nullptr));
-        std::cout << "Timestamp = " << msg.timestamp() << std::endl;
+      //  std::cout << "Timestamp = " << msg.timestamp() << std::endl;
 
         // Write the packet to the stream
       //  stream.Write(msg.SerializeAsString());
@@ -122,11 +122,11 @@ namespace MessagingSystem {
         auto deserializedMsg = ProtoMessaging::UpdateEntityMessage();
         deserializedMsg.ParseFromString(serializedMsg);
 
-        std::cout << "time stamp: " << deserializedMsg.timestamp() << std::endl;
+      //  std::cout << "time stamp: " << deserializedMsg.timestamp() << std::endl;
         auto desc = deserializedMsg.GetDescriptor();
         auto refl = deserializedMsg.GetReflection();
         int fieldCount = desc->field_count();
-        std::cout << "id: " << desc->field(0) << std::endl;
+     //   std::cout << "id: " << desc->field(0) << std::endl;
         // std::cout << "  Found " << fieldCount << " Fields" << std::endl;
              // loop over all of the fields, geting their descriptor
         for (int i = FIRST_COMPONENT_IN_UPDATE; i < fieldCount; i++)
@@ -134,7 +134,7 @@ namespace MessagingSystem {
             // get the field from the descriptor
             auto field = desc->field(i);
             auto size = refl->FieldSize(message, field);
-            std::cout << "field = " << i << " name = " << field->name() << " size = " << size << std::endl;
+         //   std::cout << "field = " << i << " name = " << field->name() << " size = " << size << std::endl;
 
         }
         auto posComp = deserializedMsg.positioncomps().Get(0);
@@ -303,10 +303,38 @@ namespace MessagingSystem {
         return msg;
     }
 
+    ComponentView::userInput& readControls(GameData::GameData& data, std::string& stream, entt::entity * ent)
+    {
+        auto msg = new ProtoMessaging::ControlMessage();
+        msg->ParseFromString(stream);
+
+        // if the netid doesnt exist, return nullptr
+        if (TranslationSystem::hasMapping(data, msg->control().netid())) {
+            *ent = TranslationSystem::getEntity(data, msg->control().netid());
+        }
+
+
+        std::cout << "Handling control for netid: " << msg->control().netid() << " With entt id: " << (int) *ent << std::endl;
+        auto &ret = data.m_reg.get<ComponentView::userInput>(*ent);
+
+
+
+        // copy over the values
+        ret.setDown(msg->control().down());
+        ret.setUp(msg->control().up());
+        ret.setLeft(msg->control().left());
+        ret.setRight(msg->control().right());
+        ret.dirty_ = true;
+
+
+        delete msg;
+        return ret;
+
+    }
+
     entt::entity readControls(GameData::GameData& data, std::string& stream, ComponentView::userInput* ret)
     {
         entt::entity ent;
-
         auto msg = new ProtoMessaging::ControlMessage();
         msg->ParseFromString(stream);
 
@@ -315,14 +343,23 @@ namespace MessagingSystem {
             ent = TranslationSystem::getEntity(data, msg->control().netid());
         }
         else {
+            std::cout << "no entity for this control input of netid = " << msg->control().netid() << std::endl;
             return entt::null;
         }
+
+        auto name = data.m_reg.get<ComponentView::clientName>(ent).name();
+        auto pos = data.m_reg.get<ComponentView::position>(ent);
+        std::cout << "Handling control for netid: " << msg->control().netid() << " With entt id: " << (int) ent << " And login name = "  << name <<std::endl;
+        pos.print();
+ 
+
 
         // copy over the values
         ret->setDown(msg->control().down());
         ret->setUp(msg->control().up());
         ret->setLeft(msg->control().left());
         ret->setRight(msg->control().right());
+        ret->dirty_ = true; // ADDED LATER
 
 
         delete msg;

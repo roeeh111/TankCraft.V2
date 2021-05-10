@@ -25,7 +25,7 @@ namespace UISystem {
 		//void getUserInput(entt::registry& m_reg, entt::entity& clientEntity); // Might need this later, but has been refactored into other methods
 
 		// Getting keyboard input
-		void getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity);
+		bool getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity);
 
 		// Update each ui entity's position in the map
 		void updateMapPositions(GameData::GameData& data);

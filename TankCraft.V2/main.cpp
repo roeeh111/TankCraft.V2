@@ -6,6 +6,7 @@
 #include "BondTest.h"
 #include "MessagingSystem.h"
 #include "ReflectionSystem.h"
+#include "MsgPackCondDeserialTest.h"
 
 
 #define MAX_CLIENTS 10
@@ -14,9 +15,23 @@ void testLogin();
 void startMultiplyerClient();
 void testSerialization();
 void simpleMsgPackUpdateTest();
+/*
+*   Tasks ordered by priority:
+* 
+* 1) Get multiplayer working (requires game dump)
+* 2) Create script to generate all code required given a schema
+* 3) Add more entities to the game, make it an actual game
+* 4) Get UI Working
+* 5) Clean up code, and delete unused/deprecated code
+* 6) Draft up reflection system instructions
+* 
+*/
+
+
 
 int main(void)
 {
+    //msgpackTest::multiStructStreamTest();
     startMultiplyerClient();
 }
 
@@ -48,12 +63,12 @@ void simpleMsgPackUpdateTest() {
     mp->mp[0] = 60;
     mp->mp[5] = 5;
 
-    scene.data.updateMap[0] = { pos, new ComponentView::mapObject(), mp};
+   // scene.data.updateMap[0] = { pos, new ComponentView::mapObject(), mp};
 
     ReflectionSystem::UpdatePacket pack(0);
-    msgpack::sbuffer& stream = pack.Serialize(scene.data.updateMap[0]);
+  //  msgpack::sbuffer& stream = pack.Serialize(scene.data.updateMap[0]);
 
-    scene.reflectionSystem.DebugDeserialize(scene.data, stream);
+  //  scene.reflectionSystem.DebugDeserialize(scene.data, stream);
     //scene.reflectionSystem.update(scene.data);
     delete pos;
     delete mp;

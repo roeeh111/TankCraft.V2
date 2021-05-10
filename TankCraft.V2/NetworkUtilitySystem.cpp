@@ -8,13 +8,18 @@
 
 namespace NetworkUtilitySystem {
 
+	// Change this, so that we get the control input of the given user, and change that 
 	void handleControl(GameData::GameData& data, RakNet::Packet* pack)
 	{
 		// given a packet, call readcontrol
 		ComponentView::userInput contrl;
 		std::string stream = std::string((char*)(pack->data + 1));
-
+	//	entt::entity ent;
 		entt::entity ent = MessagingSystem::readControls(data, stream, &contrl);
+
+		//ComponentView::userInput& contrl = MessagingSystem::readControls(data, stream, &ent);
+
+
 		if (!(ent == entt::null)) {
 			//	 if readcontrol returns not nullentitiy, call movementsystem.move(component) 
 			MovementSystem::MovementSystem movementSystem;
@@ -59,10 +64,10 @@ namespace NetworkUtilitySystem {
 
 
 			//std::cout << "Registered entity from client " << pack->systemAddress.GetPort() << ", broadcasting..." << std::endl;
-			std::cout << "Adding entity for netid " << netid << std::endl;
+			//std::cout << "Adding entity for netid " << netid << std::endl;
 			// broadcast to all clients to add a new entity with entity ID, and all components
 
-			if (responding) {
+			if (responding) {	// Tell all clients to add this entity
 				data.rpi->Send(&stream,
 					HIGH_PRIORITY,
 					RELIABLE_ORDERED,
@@ -71,7 +76,7 @@ namespace NetworkUtilitySystem {
 					true);
 			}
 			else {
-				data.rpi->Send(&stream,
+				data.rpi->Send(&stream, // tell all clients excepy for whoever sent us this message to add this entity
 					HIGH_PRIORITY,
 					RELIABLE_ORDERED,
 					0,
@@ -93,7 +98,7 @@ namespace NetworkUtilitySystem {
 				ProtoMessaging::AddRemoveEntityMessage* msg = MessagingSystem::readAddRemoveEntity(str);
 
 				auto newEntity = TranslationSystem::addEntity(data, msg);
-				//std::cout << "Adding entity " << msg->netid() << "for entity id = " << (int)newEntity << std::endl;
+				std::cout << "Client adding entity with netid " << msg->netid() << "for entity id = " << (int)newEntity << std::endl;
 				//std::cout << "Timestamp = " << msg->timestamp() << std::endl;
 
 				delete msg;

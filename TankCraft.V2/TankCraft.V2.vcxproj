@@ -314,6 +314,7 @@
     <ClInclude Include="ComponentID.h" />
     <ClInclude Include="ConnectionSystem.h" />
     <ClInclude Include="HealthAndDamageSystem.h" />
+    <ClInclude Include="MsgPackCondDeserialTest.h" />
     <ClInclude Include="MsgPackTest.h" />
     <ClInclude Include="NetworkUtilitySystem.h" />
     <ClInclude Include="ReflectionSystem.h" />

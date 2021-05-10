@@ -56,6 +56,9 @@ namespace ConnectionSystem {
 		// Handle an incoming game update packet
 		void handleGameUpdate(GameData::GameData& data, RakNet::Packet* pack);
 
+		// Dump the current state of the game to a user
+		void dumpGameState(GameData::GameData& data, RakNet::Packet* pack);
+
 	};
 
 }

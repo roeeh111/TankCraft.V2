@@ -29,8 +29,6 @@ namespace ReflectionSystem {
 		
 		~UpdatePacket() { delete pk; };
 		
-		msgpack::sbuffer& Serialize(std::list<baseComponent*> components);			// DEPRICATED
-
 		// Serialize the update packet into a buffer
 		msgpack::sbuffer& Serialize(GameData::GameData &data);
 		// Serialize a component into theclass buffer
@@ -38,12 +36,6 @@ namespace ReflectionSystem {
 		msgpack::sbuffer sbuf;
 		msgpack::packer<msgpack::sbuffer>* pk;
 		UpdatePacketHeader::UpdatePacketHeader header;
-
-		// Write all component id's into the header
-		void writeHeader(std::list<baseComponent*> components);	// DEPRICATED
-
-		// Serialize all components into the packet, only if weve already written the header, return true if wrote, false otherwise.
-		void writeComponents(std::list<baseComponent*> components); // DEPRICATED
 
 		// Given an entitiy id and component id, serialize that component into the packet
 		void SerializeComponent(GameData::GameData& data, entt::entity id, ComponentID::ComponentID compid);
@@ -60,17 +52,22 @@ namespace ReflectionSystem {
 		// Given the gamedata, flush the update map and broadcast game updates to all users
 		void update(GameData::GameData& data);
 
-		void init(GameData::GameData& data) { data.compUpdateMap = std::map<networkID, UpdatePacketHeader::UpdatePacketHeader>(); }
+		void init(GameData::GameData& data) {
+			data.compUpdateMap = std::map<networkID, UpdatePacketHeader::UpdatePacketHeader>(); 
+			data.compLog = std::map<networkID, UpdatePacketHeader::UpdatePacketHeader>();
+		}
 
-		void DebugDeserialize(GameData::GameData& data, msgpack::sbuffer& stream) { MakeGameUpdate(data, stream); };
+		//void DebugDeserialize(GameData::GameData& data, msgpack::sbuffer& stream) { MakeGameUpdate(data, stream); };
 		void MakeGameUpdate(GameData::GameData& data, std::string& stream);
 
 	private:
 
 		// Given a stream representing a serialized game update message, write all of the game updates to the game registry
-		void MakeGameUpdate(GameData::GameData& data, msgpack::sbuffer& stream);
 		void MakeGameUpdateHelper(GameData::GameData& data, const msgpack::object& obj, ComponentID::ComponentID id, entt::entity& enttid);
 
+		// Helper function to handle the removal of components given the header of a remove component packet
+		void RemoveComponents(GameData::GameData& data, UpdatePacketHeader::UpdatePacketHeader& header);
+		void RemoveComponentsHelper(GameData::GameData& data, entt::entity id, ComponentID::ComponentID compid);
 		template <typename Type>
 		void writeComponent(GameData::GameData& data, const msgpack::object& obj, entt::entity& enttid)
 		{
@@ -79,16 +76,23 @@ namespace ReflectionSystem {
 				auto &enttobj = data.m_reg.emplace<Type>(enttid);
 				obj.convert(enttobj);
 				//std::cout << obj << std::endl;
-			//	enttobj.print();
+		//		std::cout << "entity "  << (int) enttid << " does not have component, had to emplace..." << std::endl;
+				enttobj.print();
 			}
 			else {
 				auto &enttobj = data.m_reg.get<Type>(enttid);
 				obj.convert(enttobj);
 				//std::cout << obj << std::endl;
-			//	enttobj.print();
+				enttobj.print();
 			}
 		}
 	};
+
+	// Helper function to log a component change within the update map
+	void UpdateLog(GameData::GameData& data, UpdatePacketHeader::UpdatePacketHeader header);
+
+	// Helper function to remove a component from the log
+	void RemoveLogComponent(GameData::GameData& data, ComponentID::ComponentID compID);
 		
 
 }
@@ -105,4 +109,14 @@ Steps:
 	User creates a packet
 
 
+*/
+
+/*
+* If a dev wants to add a new component:
+* 1) enherit from base component
+* 2) fill out the serialize function
+* 3) write the convert and pack methods
+* 4) add a case to the make update helper function
+* 5) add a case to the serialize component function
+* 6) add a case to the componentID->remove helper function
 */

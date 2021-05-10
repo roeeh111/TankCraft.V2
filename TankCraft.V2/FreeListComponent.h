@@ -13,7 +13,7 @@ namespace FreeListComponent {
 			for (int i = 0; i < MAX_ENTITIES; i++) {
 				map[i] = false;
 			}
-			lastMapping = 0;
+			lastMapping = 1;
 		}
 	} freelist;
 }

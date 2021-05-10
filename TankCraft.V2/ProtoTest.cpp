@@ -161,33 +161,33 @@ namespace ProtoTests {
 
 
 	void testGameUpdate(GameData::GameData& data) {
-		data.updateMap[0] =  std::list<baseComponent*>();
+	//	data.updateMap[0] =  std::list<baseComponent*>();
 
 		auto pos = new ComponentView::position();
 		pos->setCurx(0);
 		pos->setCury(1);
 		pos->setPrevx(2);
 		pos->setPrevy(3);
-		data.updateMap[0].push_back(pos);
+//		data.updateMap[0].push_back(pos);
 		std::cout << "curx = 0, cury = 1, prevx = 2, prevy = 3" << std::endl;
 
 
-		std::string str = MessagingSystem::writeGameUpdate(data.updateMap);
-		MessagingSystem::readGameUpdate(data, str);
+	//	std::string str = MessagingSystem::writeGameUpdate(data.updateMap);
+	//	MessagingSystem::readGameUpdate(data, str);
 		delete pos;
 	}
 
 	void ProtoTests::testGameUpdate() {
 		MessagingSystem::MessagingSystem messagingSystem;
 		GameData::GameData data = GameData::GameData();
-		data.updateMap[0] = std::list<baseComponent*>();
+	//	data.updateMap[0] = std::list<baseComponent*>();
 
 		auto pos = new ComponentView::position();
 		pos->setCurx(0);
 		pos->setCury(1);
 		pos->setPrevx(2);
 		pos->setPrevy(3);
-		data.updateMap[0].push_back(pos);
+	//	data.updateMap[0].push_back(pos);
 		std::cout << "curx = 0, cury = 1, prevx = 2, prevy = 3" << std::endl;
 
 		auto pos2 = new ComponentView::position();
@@ -195,12 +195,12 @@ namespace ProtoTests {
 		pos2->setCury(5);
 		pos2->setPrevx(6);
 		pos2->setPrevy(7);
-		data.updateMap[0].push_back(pos2);
+	//	data.updateMap[0].push_back(pos2);
 		std::cout << "curx = 4, cury = 5, prevx = 6, prevy = 7" << std::endl;
 
 
-		std::string str = MessagingSystem::writeGameUpdate(data.updateMap);
-		MessagingSystem::readGameUpdate(data, str);
+	//	std::string str = MessagingSystem::writeGameUpdate(data.updateMap);
+	//	MessagingSystem::readGameUpdate(data, str);
 
 		delete pos;
 		delete pos2;

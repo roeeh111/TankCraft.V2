@@ -609,6 +609,9 @@
     <ClInclude Include="ZombieMob.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="MsgPackCondDeserialTest.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

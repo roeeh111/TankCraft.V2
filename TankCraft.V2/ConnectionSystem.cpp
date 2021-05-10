@@ -13,7 +13,6 @@
 #include "ZombieMob.h"
 
 namespace ConnectionSystem {
-	void printupdatemap(GameData::GameData& data);
 
 	void ConnectionSystem::init(GameData::GameData& data) {
 		// Instantiate the network instance for our peer interface
@@ -74,14 +73,14 @@ namespace ConnectionSystem {
 				// In an ideal server authoritative design, Clients shouldn't send this packet.
 				// This is for debug purposes
 			case ADD_ENTITY:
-				printf("Received add entity packet from client.\n");
+				//printf("Received add entity packet from client.\n");
 				NetworkUtilitySystem::addEntity(data, pack, data.isServer, true);
 				break;
 
 				// In an ideal server authoritative design, Clients shouldn't send this packet
 				// This is for debug purposes
 			case REMOVE_ENTITY:
-				printf("Received remove entity packet from client.\n");
+				//printf("Received remove entity packet from client.\n");
 				NetworkUtilitySystem::removeEntity(data, pack, 0, true, true);
 				break;
 
@@ -90,11 +89,11 @@ namespace ConnectionSystem {
 			case UPDATE_ENTITY:
 				break;
 
-			case CONTROL:
-				printf("Received control packet from client, inputting controls.\n");
+			case CONTROL: {
+				//printf("Received control packet from client, inputting controls.\n");
 				NetworkUtilitySystem::handleControl(data, pack);
 				break;
-
+			}
 			case LOGIN:
 			{
 				printf("Received log in packet.\n");
@@ -145,7 +144,7 @@ namespace ConnectionSystem {
 			//	printf("Received update entity packet from server.\n");
 				std::string str = std::string((char*)(pack->data + 1), pack->length - 1);
 
-				ReflectionSystem::ReflectionSystem reflectionSystem;
+				ReflectionSystem::ReflectionSystem reflectionSystem;			// MAYBE THE PROBLEM IS HERE?? MAYBE WE ARE LOSING WHATS IN THE SYSTEM, OR IN THE TRANS SYSTEM???
 				reflectionSystem.MakeGameUpdate(data, str);
 				break;
 			}
@@ -257,36 +256,73 @@ namespace ConnectionSystem {
 		std::string loginName = MessagingSystem::readLogin(stream);
 
 		// Add a tank entity
-		Tank::addTank(data, pack, loginName);
-	//	std::cout << "Finished adding a tank, printing the map of size " << data.updateMap.size() << " \n" << std::endl;
-//		printupdatemap(data);
+		//std::cout << "Adding tank for " << loginName << std::endl;
 
-		Spikes::addSpikes(data, pack, 5, 7, 3);
-		Spikes::addSpikes(data, pack, 5, 0, 0);		
-		Spikes::addSpikes(data, pack, 5, 1, 1);	
+		// IF this is the first player in the game, add spikes and shit to the screen
+		if (data.first) {
+			std::cout << "First player logging in, spawn a bunch of items" << std::endl;
+			Tank::addTank(data, pack, loginName);
+		//	Spikes::addSpikes(data, pack, 5, 7, 3);
+		//	Spikes::addSpikes(data, pack, 5, 0, 0);
+		//	Spikes::addSpikes(data, pack, 5, 1, 1);
 
-		Coins::addCoins(data, pack, 1, 10, 10);
-		Coins::addCoins(data, pack, 1, 11, 11);
-		Coins::addCoins(data, pack, 1, 12, 12);
-		Coins::addCoins(data, pack, 1, 13, 13);
-		Coins::addCoins(data, pack, 1, 14, 14);
-		Coins::addCoins(data, pack, 1, 15, 15);
+		//	Coins::addCoins(data, pack, 1, 10, 10);
+		//	Coins::addCoins(data, pack, 1, 11, 11);
+		//	Coins::addCoins(data, pack, 1, 12, 12);
+		//	Coins::addCoins(data, pack, 1, 13, 13);
+		//	Coins::addCoins(data, pack, 1, 14, 14);
+			//Coins::addCoins(data, pack, 1, 15, 15);
 
-		Zombie::addZombie(data, pack, 10, 5, 10, 10);
-//		printupdatemap(data);
-	}
-	
-	// DEBUG::
-	void printupdatemap(GameData::GameData& data) {
-
-
-		for (auto& it : data.updateMap) {
-			std::cout << "netid = " << it.first << " list size = " << it.second.size() <<std::endl;
-			for (auto comp : it.second) {
-				comp->print();
-			}
+//			Zombie::addZombie(data, pack, 10, 5, 10, 10);
+			data.first = false;
 		}
-		std::cout << "end of map" << std::endl;
+		else {
+			// IF this is not the first player in the game, dump the state of the game on that fool
+			std::cout << "new player logging in, add a new tank entity, dump it to the log, and send the log to the new player" << std::endl;
+
+			Tank::logTank(data, pack, loginName);
+			dumpGameState(data, pack);
+		}
 	}
+
+
+	void ConnectionSystem::dumpGameState(GameData::GameData& data, RakNet::Packet* pack)
+	{
+		// Loop over all mappings in the log, and write their serialized packets to the stream
+		std::cout << "Dumping game state to user:" << std::endl;
+		for (auto& it : data.compUpdateMap) {
+			ReflectionSystem::UpdateLog(data, it.second);
+		}
+
+
+		for (auto& it : data.compLog) {
+			//		std::cout << "flushing update for id " << it.first << std::endl;
+			RakNet::BitStream stream = RakNet::BitStream();
+
+			// write the packet type to the bitsream
+			RakNet::MessageID type = UPDATE_ENTITY;
+			stream.Write((char*)&type, sizeof(RakNet::MessageID));
+
+			// Serialize the game update
+			ReflectionSystem::UpdatePacket gameUpdate(it.second);
+			std::cout << "dumping netid = " << it.first << std::endl;
+			msgpack::sbuffer& buf = gameUpdate.Serialize(data);
+			std::cout << buf.size() << " Bytes of data" << std::endl;
+
+
+			// Write the game update to the stream, and send it only to the user asking
+			stream.Write(buf.data(), buf.size());
+
+			data.rpi->Send(&stream,
+				HIGH_PRIORITY,
+				RELIABLE_ORDERED,
+				0,
+				pack->systemAddress,
+				false);
+		}
+
+	}
+
+
 }
 

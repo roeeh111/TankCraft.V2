@@ -1,6 +1,34 @@
 #include "MsgPackTest.h"
 #include "UpdatePacketHeader.h"
 #include "ReflectionSystem.h"
+#include "MsgPackCondDeserialTest.h"
+
+
+void CondTest::condDeserialTest() {
+    auto plr = CondTest::player();
+    plr.fields[0] = false;
+    msgpack::sbuffer sbuf;
+    msgpack::pack(sbuf, plr);
+
+    msgpack::object_handle oh =
+        msgpack::unpack(sbuf.data(), sbuf.size());
+
+
+    // Generic object from handler
+    msgpack::object obj = oh.get();
+
+
+    auto res = CondTest::player();
+    res.name = "funnybone";
+
+    // you can convert object to custom class directly
+    obj.convert(res);
+
+    std::cout << res.get_name() << res.get_x() << res.get_y()  << std::endl;
+    std::cout << obj << std::endl;
+}
+
+
 
 namespace msgpackTest {
 
@@ -12,9 +40,6 @@ namespace msgpackTest {
     /*
         TODO: in python, have a dev write a schema file, and from that defnine the enum file, and the switch statement!!!!!!!!!!!!!!!!
     */
-
-
-
 
 	void singleStructTest() {
 
@@ -59,9 +84,9 @@ namespace msgpackTest {
         msgpack::packer<msgpack::sbuffer> pk(&buffer);
 
         auto head = UpdatePacketHeader::UpdatePacketHeader(69);
-        head.ids.push_back(ComponentID::Position);
-        head.ids.push_back(ComponentID::MapObject);
-        head.ids.push_back(ComponentID::Base);
+        head.ids.insert(ComponentID::Position);
+        head.ids.insert(ComponentID::MapObject);
+        head.ids.insert(ComponentID::Base);
         pk.pack(head);
         pk.pack(dat);
 
@@ -80,7 +105,7 @@ namespace msgpackTest {
             if (begin) {
                 UpdatePacketHeader::UpdatePacketHeader header;
                 oh.get().convert(header);// GETTING A TYPE ERROR HERE ON UNPACKING!!!!
-                std::cout << header.netid << " " << header.ids[0] << std::endl;
+                std::cout << header.netid << " " << *header.ids.begin() << std::endl;
             }
             else {
                 auto res = position();
@@ -118,9 +143,12 @@ namespace msgpackTest {
         fdat.y = 8.0;
         fdat.z = 9.0;
         auto head = UpdatePacketHeader::UpdatePacketHeader(69);
-        head.ids.push_back(ComponentID::Position);
-        head.ids.push_back(ComponentID::MapObject);
-        head.ids.push_back(ComponentID::Base);      // TBH it looks like we can get the object just fine...
+        head.ids.insert(ComponentID::Position);
+        head.ids.insert(ComponentID::MapObject);
+        head.ids.insert(ComponentID::Base);      // TBH it looks like we can get the object just fine...
+
+
+        auto plr = CondTest::player();
 
 
         // Serialize all components into the buffer
@@ -130,8 +158,9 @@ namespace msgpackTest {
         pk.pack(dat2);
         pk.pack(fdat);
         pk.pack(std::string("Josantonio Diaz@"));
+        pk.pack(plr);
 
-
+        std::cout << "Done packing" << std::endl;
 
         // deserializes these objects using msgpack::unpacker.
         msgpack::unpacker pac;
@@ -144,16 +173,16 @@ namespace msgpackTest {
         // now starts streaming deserialization.
         msgpack::object_handle oh;
 
-        pac.next(oh);
+        //pac.next(oh);
 
-        UpdatePacketHeader::UpdatePacketHeader header;
+       // UpdatePacketHeader::UpdatePacketHeader header;
      //   oh.get().convert(header);// GETTING A TYPE ERROR HERE ON UNPACKING!!!!
       //  pac.next(oh);
 
-        auto dres = position();
-        oh.get().convert(dres);// GETTING A TYPE ERROR HERE ON UNPACKING!!!!
+      //  auto dres = position();
+     //   oh.get().convert(dres);// GETTING A TYPE ERROR HERE ON UNPACKING!!!!
 
-
+     //   std::cout << "converted position"
         while (pac.next(oh)) {
             std::cout << oh.get() << std::endl;
 

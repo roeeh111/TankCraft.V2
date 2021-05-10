@@ -14,7 +14,7 @@ void baseComponent_::unlock(GameData::GameData& data, const entt::entity& entity
 			data.compUpdateMap[id] = UpdatePacketHeader::UpdatePacketHeader(id);
 		}
 		// Push back the component id
-		data.compUpdateMap[id].ids.push_back(CompId);
+		data.compUpdateMap[id].ids.insert(CompId);
 
 		//if (data.updateMap.count(id) == 0) {
 		//	std::cout << "\nallocating new map for id = " << id << std::endl;

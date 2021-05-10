@@ -10,7 +10,7 @@ namespace Spikes {
 	void addSpikes(GameData::GameData& data, RakNet::Packet* pack, uint32_t damage, uint32_t x, uint32_t y)
 	{
 		auto clientEntity = NetworkUtilitySystem::addEntity(data, pack, true, true);
-		std::cout << "Adding spikes for entity" << TranslationSystem::getNetId(data, clientEntity) << std::endl;
+		//std::cout << "Adding spikes for entity" << TranslationSystem::getNetId(data, clientEntity) << std::endl;
 
 		// Add the components to the the registry
 		(data.m_reg.emplace<ComponentView::mapObject>(clientEntity, 'S' ,true)).unlock(data, clientEntity);

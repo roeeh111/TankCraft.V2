@@ -52,14 +52,17 @@ namespace UISystem {
 	{
 		// Only display UI for client
 		if (data.isServer) { return; }
+		bool input = false;
+
 		// get all elements that take user input, and get all of the input from those entities
 		auto view = data.m_reg.view<ComponentView::clientName, ComponentView::userInput>();
 		for (auto entity : view) {	
 			// Compare clientname with our name
-			if (data.m_reg.get<ComponentView::clientName>(entity).name() == *data.userName) {
-				//std::cout << "Give me input: " << std::endl;
+		//	std::cout << "Username = " << *data.userName << " netid = " << TranslationSystem::getNetId(data, entity) << std::endl;
+			if (view.get<ComponentView::clientName>(entity).name() == *data.userName) {
+		//		std::cout << "Give me input for : " << view.get<ComponentView::clientName>(entity).name() << std::endl;
 				// Get the user input for our object, only if the name matches our name
-				getKeyBoardInput(data, entity);
+				input = getKeyBoardInput(data, entity);
 			//	printUI(data);
 			}
 		}
@@ -67,7 +70,8 @@ namespace UISystem {
 		// Do all movement updates
 		updateMapPositions(data);
 		// print the map
-		printUI(data);
+		if (input)
+			printUI(data);
 	}
 
 	void UISystem::updateMapPositions(GameData::GameData& data) {
@@ -77,7 +81,7 @@ namespace UISystem {
 
 		//std::cout << "Updating map positions: " << std::endl;
 		for (auto entity : view) {
-		//	std::cout << "updating entity " << (int) entity << " with netid = " << TranslationSystem::getNetId(data, entity) << std::endl; i++;
+		//	std::cout << "updating entity " << (int) entity << " with netid = " << TranslationSystem::getNetId(data, entity) << std::endl;
 
 			auto& pos = view.get<ComponentView::position>(entity);
 			auto& disp = view.get<ComponentView::mapObject>(entity);
@@ -86,11 +90,12 @@ namespace UISystem {
 			ScoreSystem::updateScore(data, entity, pos);
 			HealthAndDamageSystem::updateDamage(data, entity, pos);
 			// Set the previous location to a "." and move on
+		//	pos.print();
 			data.map[pos.prevy()][pos.prevx()] = '.';
 			data.map[pos.cury()][pos.curx()] = disp.mapChar();
 		//	disp.setMapChar(data.map[pos.cury()][pos.curx()]);
 		}
-		std::cout << std::endl;
+		//std::cout << std::endl;
 	}
 
 	void UISystem::printUI(GameData::GameData& data)
@@ -111,9 +116,10 @@ namespace UISystem {
 		// Print out points and client names of any entities that have those
 		ScoreSystem::printScore(data);
 		HealthAndDamageSystem::printHealth(data);
+		
 	}
 
-	void UISystem::getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity)
+	bool UISystem::getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity)
 	{
 
 		// Get the userInput component for this entity
@@ -124,7 +130,7 @@ namespace UISystem {
 
 		usrInput.dirty_ = 1;
 
-		/*
+	/*
 		char input;
 		std::cin >> input;
 		// set the user input values depending on what we got
@@ -142,8 +148,9 @@ namespace UISystem {
 		}
 		else {
 			usrInput.dirty_ = 0;
-		}
-		*/
+		}*/
+		
+		// Commenting out for debug
 		if (GetAsyncKeyState(87)) {
 			usrInput.setUp(true);
 		}
@@ -159,16 +166,19 @@ namespace UISystem {
 		else {
 			usrInput.dirty_ = 0;
 		}
+		
 		//std::cout << "left = " << usrInput.left() << " right = " << usrInput.right() << " up = " << usrInput.up() << " down = " << usrInput.down() << std::endl;
 
 
 		//usrInput.unlock(data, clientEntity);			// TODO: do i really need this???
 
-		/* TODO:																		(need a map from entity->netid for this to be quick)
-		* For now, send the control to the user exactly as we inputed it.
-		* For later versions, append it to a tochange queue
-		*/
-		NetworkUtilitySystem::sendControl(data, usrInput, TranslationSystem::getNetId(data, clientEntity)); // TODO!!!! ERROR ON THIS LINE. CRASHING NULLPOINTER 
+		// Only send input if dirty
+		if (usrInput.dirty_) {
+			std::cout << "Sending control for netid = " << TranslationSystem::getNetId(data, clientEntity) << std::endl;
+			NetworkUtilitySystem::sendControl(data, usrInput, TranslationSystem::getNetId(data, clientEntity));
+			return true;
+		}
+		return false;
 	}
 
 }
