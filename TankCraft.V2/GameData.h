@@ -51,9 +51,9 @@ namespace PrimarySystem {
 namespace GameData {
 	class GameData {
 	public:
-		// The main UI
+		// The UI
 		// This data is the SAME across all clients
-		std::vector<std::vector<char>> map;
+		std::vector<std::vector<int>> map;
 
 		// main registry
 		// This data is DIFFERENT across the server and all clients
