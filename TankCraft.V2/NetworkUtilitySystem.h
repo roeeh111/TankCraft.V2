@@ -8,7 +8,6 @@
 #include "IDTranslationComponent.h"
 #include "MovementSystem.h"
 
-// TODO: add multithreading to the server
 
 #define RELIABILITY RELIABLE_ORDERED
 #define SERVER_PORT 60000
@@ -28,7 +27,7 @@ namespace NetworkUtilitySystem {
 	void sendControl(GameData::GameData& data, ComponentView::userInput& usrInput, networkID netid);
 
 	// Broadcast the contents of a bistream to all connections in the connections list
-	void broadcast(GameData::GameData& data, const RakNet::BitStream* bitStream, PacketPriority priority, PacketReliability reliability, char orderingChannel);
+	void broadcast(GameData::GameData& data, const RakNet::BitStream* bitStream, PacketPriority priority, PacketReliability reliability, char orderingChannel, RakNet::SystemAddress addr);
 
 	// Handle an incomming game update packet
 	void handleGameUpdate(GameData::GameData& data, RakNet::Packet* pack);

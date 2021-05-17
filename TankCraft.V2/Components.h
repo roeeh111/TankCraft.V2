@@ -233,6 +233,7 @@ namespace ComponentView {
 
 
 	// Simply a component with a map of int to int in it
+	// A good example of serialing an stl container
 	typedef struct MapComponent_ : baseComponent {
 
 	public:

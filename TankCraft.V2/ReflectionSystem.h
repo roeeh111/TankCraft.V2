@@ -75,14 +75,11 @@ namespace ReflectionSystem {
 			if (!data.m_reg.has<Type>(enttid)) {
 				auto &enttobj = data.m_reg.emplace<Type>(enttid);
 				obj.convert(enttobj);
-				//std::cout << obj << std::endl;
-		//		std::cout << "entity "  << (int) enttid << " does not have component, had to emplace..." << std::endl;
 				enttobj.print();
 			}
 			else {
 				auto &enttobj = data.m_reg.get<Type>(enttid);
 				obj.convert(enttobj);
-				//std::cout << obj << std::endl;
 				enttobj.print();
 			}
 		}

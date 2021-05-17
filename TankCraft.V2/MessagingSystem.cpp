@@ -13,19 +13,6 @@ namespace MessagingSystem {
         if (!data.isServer) return;
     //    if (data.updateMap.size() <= 0)
             return;
-     //   std::cout << "Flushing game update of size " << data.updateMap.size() << std::endl;
-      ///  std::cout << "Comp list size: " << data.updateMap[0].size() << std::endl;
-      //  RakNet::BitStream stream = RakNet::BitStream();
-      //  writeGameUpdate(stream, data.updateMap);
-
-        // Broadcast the game update     
-     //  data.rpi->Send(&stream,
-      //      HIGH_PRIORITY,
-      //      RELIABLE_ORDERED,
-      //      0,
-      //      RakNet::UNASSIGNED_SYSTEM_ADDRESS,
-       //     true);
-      //  NetworkUtilitySystem::broadcast(data, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0);
     }
 
     /*

@@ -20,7 +20,7 @@ namespace ConnectionSystem {
 		void init(GameData::GameData& data) override;
 
 		void update(GameData::GameData& data);
-		// TODO: may need a refrence to the m_reg if its not global
+
 		// Go through all incoming packets to the server, and dispatch game changes accordingly
 		// Broadcast the results to all clients
 		void updateServer(GameData::GameData& data);
@@ -40,11 +40,9 @@ namespace ConnectionSystem {
 		void handleConnection(GameData::GameData& data, RakNet::Packet* pack);
 
 		// Server handling a disconnecting client
-		// NOT USED right now
 		void handleDisconnect(GameData::GameData& data, RakNet::Packet* pack);
 
 		// Server handling a lost client
-		// TODO: Figure out the behavior of lost connection
 		void handleLostConnection(GameData::GameData& data, RakNet::Packet* pack);
 
 		// Send a login packet to the server with the given username

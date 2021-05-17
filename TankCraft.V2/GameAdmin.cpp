@@ -14,15 +14,12 @@ namespace GameAdmin {
 	void MainScene::update()
 	{	
 		std::this_thread::sleep_for(std::chrono::milliseconds(16));
-		//Please help me fix this linker error, or uncomment lines below to get things to work
+
 		for (PrimarySystem::PrimarySystem* system : data.primarySystemList)
 		{
 			system->update(data);
 		}
-		//connectionSystem.update(data);
-		//movementSystem.update(data);
-		//messagingSystem.update(data);
-		//ui.update(data);
+
 	}
 
 	MainScene::MainScene(bool isServer_, uint32_t maxClients)
@@ -41,14 +38,10 @@ namespace GameAdmin {
 		data.primarySystemList = std::list<PrimarySystem::PrimarySystem*>();
 		data.primarySystemList.push_back(&connectionSystem);
 		data.primarySystemList.push_back(&movementSystem);
-		//data.primarySystemList.push_back(&messagingSystem);
 		data.primarySystemList.push_back(&ui);
 		data.primarySystemList.push_back(&reflectionSystem);
 
-		//connectionSystem.init(data);
-		//movementSystem.init(data);
-		//messagingSystem.init(data);
-		//ui.init(data);
+
 		for (PrimarySystem::PrimarySystem* system : data.primarySystemList)
 		{
 			system->init(data);

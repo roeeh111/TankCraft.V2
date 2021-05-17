@@ -73,14 +73,12 @@ namespace ConnectionSystem {
 				// In an ideal server authoritative design, Clients shouldn't send this packet.
 				// This is for debug purposes
 			case ADD_ENTITY:
-				//printf("Received add entity packet from client.\n");
 				NetworkUtilitySystem::addEntity(data, pack, data.isServer, true);
 				break;
 
 				// In an ideal server authoritative design, Clients shouldn't send this packet
 				// This is for debug purposes
 			case REMOVE_ENTITY:
-				//printf("Received remove entity packet from client.\n");
 				NetworkUtilitySystem::removeEntity(data, pack, 0, true, true);
 				break;
 
@@ -90,7 +88,6 @@ namespace ConnectionSystem {
 				break;
 
 			case CONTROL: {
-				//printf("Received control packet from client, inputting controls.\n");
 				NetworkUtilitySystem::handleControl(data, pack);
 				break;
 			}
@@ -129,19 +126,16 @@ namespace ConnectionSystem {
 
 			case ADD_ENTITY:
 			{
-				//	printf("Received add entity packet from server.\n");
 				NetworkUtilitySystem::addEntity(data, pack, false, false);
 				break;
 			}
 			case REMOVE_ENTITY:
 			{
-			//	printf("Received remove entity packet from server.\n");
 				NetworkUtilitySystem::removeEntity(data, pack, 0, false, true);	// only called here and in the client loop
 				break;
 			}
 			case UPDATE_ENTITY:
 			{
-			//	printf("Received update entity packet from server.\n");
 				std::string str = std::string((char*)(pack->data + 1), pack->length - 1);
 
 				ReflectionSystem::ReflectionSystem reflectionSystem;			// MAYBE THE PROBLEM IS HERE?? MAYBE WE ARE LOSING WHATS IN THE SYSTEM, OR IN THE TRANS SYSTEM???
@@ -214,8 +208,10 @@ namespace ConnectionSystem {
 		printf("This client has %d entities.\n", data.clientAddressToEntities[pack->systemAddress].size());
 		for (auto const& netId : data.clientAddressToEntities[pack->systemAddress]) {
 			std::cout << "removing entity " << netId << std::endl;
-			data.m_reg.destroy(TranslationSystem::getEntity(data, netId));
-			TranslationSystem::freeID(data, netId); // Free the space for that entity
+			if (data.m_reg.valid(TranslationSystem::getEntity(data, netId))) {
+				data.m_reg.destroy(TranslationSystem::getEntity(data, netId));
+				TranslationSystem::freeID(data, netId); // Free the space for that entity
+			}
 		}
 	}
 
@@ -259,19 +255,19 @@ namespace ConnectionSystem {
 		//std::cout << "Adding tank for " << loginName << std::endl;
 
 		// IF this is the first player in the game, add spikes and shit to the screen
-		if (data.first) {
+		if (data.first) {																		// TODO: make a map and dump that map
 			std::cout << "First player logging in, spawn a bunch of items" << std::endl;
 			Tank::addTank(data, pack, loginName);
-		//	Spikes::addSpikes(data, pack, 5, 7, 3);
-		//	Spikes::addSpikes(data, pack, 5, 0, 0);
-		//	Spikes::addSpikes(data, pack, 5, 1, 1);
+			Spikes::addSpikes(data, pack, 5, 7, 3);
+			Spikes::addSpikes(data, pack, 5, 0, 0);
+			Spikes::addSpikes(data, pack, 5, 1, 1);
 
-		//	Coins::addCoins(data, pack, 1, 10, 10);
-		//	Coins::addCoins(data, pack, 1, 11, 11);
-		//	Coins::addCoins(data, pack, 1, 12, 12);
-		//	Coins::addCoins(data, pack, 1, 13, 13);
-		//	Coins::addCoins(data, pack, 1, 14, 14);
-			//Coins::addCoins(data, pack, 1, 15, 15);
+			Coins::addCoins(data, pack, 1, 10, 10);
+			Coins::addCoins(data, pack, 1, 11, 11);
+			Coins::addCoins(data, pack, 1, 12, 12);
+			Coins::addCoins(data, pack, 1, 13, 13);
+			Coins::addCoins(data, pack, 1, 14, 14);
+			Coins::addCoins(data, pack, 1, 15, 15);
 
 //			Zombie::addZombie(data, pack, 10, 5, 10, 10);
 			data.first = false;
@@ -282,6 +278,7 @@ namespace ConnectionSystem {
 
 			Tank::logTank(data, pack, loginName);
 			dumpGameState(data, pack);
+			std::cout << "finished dumping" << std::endl;
 		}
 	}
 
@@ -296,7 +293,14 @@ namespace ConnectionSystem {
 
 
 		for (auto& it : data.compLog) {
-			//		std::cout << "flushing update for id " << it.first << std::endl;
+			std::cout << "flushing update for id " << it.first << std::endl;
+			// First, verify that the entity in fact exists in our system
+			
+			if (!data.m_reg.valid(TranslationSystem::getEntity(data, abs(it.first)))) {
+				// IF the entity doesnt exist in the registry, remove from the system and continue
+				continue;
+			}
+
 			RakNet::BitStream stream = RakNet::BitStream();
 
 			// write the packet type to the bitsream
@@ -319,6 +323,7 @@ namespace ConnectionSystem {
 				0,
 				pack->systemAddress,
 				false);
+			std::cout << "end of loop" << std::endl;
 		}
 
 	}
