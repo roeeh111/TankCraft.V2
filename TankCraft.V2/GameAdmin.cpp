@@ -13,16 +13,9 @@ namespace GameAdmin {
 
 	void MainScene::update()
 	{	
-		std::this_thread::sleep_for(std::chrono::milliseconds(16));
-		//Please help me fix this linker error, or uncomment lines below to get things to work
+		//std::this_thread::sleep_for(std::chrono::milliseconds(16));
 		for (PrimarySystem::PrimarySystem* system : data.primarySystemList)
-		{
 			system->update(data);
-		}
-		//connectionSystem.update(data);
-		//movementSystem.update(data);
-		//messagingSystem.update(data);
-		//ui.update(data);
 	}
 
 	MainScene::MainScene(bool isServer_, uint32_t maxClients)
@@ -37,6 +30,7 @@ namespace GameAdmin {
 		data.enttToNetidid = std::map<entt::entity, networkID>();	
 		// Add the freeList component to an entity to make freeListEntity
 		data.m_reg.emplace<FreeListComponent::freelist>(RegWrapper::createEntity(data.m_reg, false));
+
 
 		data.primarySystemList = std::list<PrimarySystem::PrimarySystem*>();
 		data.primarySystemList.push_back(&connectionSystem);
