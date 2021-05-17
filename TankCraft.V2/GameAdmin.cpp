@@ -15,7 +15,7 @@ namespace GameAdmin {
 	{	
 		std::this_thread::sleep_for(std::chrono::milliseconds(16));
 
-		for (PrimarySystem::PrimarySystem* system : data.primarySystemList)
+		for (PrimarySystem::PrimarySystem* system : data.primarySystemList) {
 			system->update(data);
 		}
 
