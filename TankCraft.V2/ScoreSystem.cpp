@@ -25,13 +25,11 @@ namespace ScoreSystem {
 						scr.setPoints(scr.points() + view.get<ComponentView::pointsGiven>(coinEntity).getPoints());
 						scr.unlock(data, entity);
 
-						// TODO: NOT ACTUALLY REMOVING THE ENTITY
 						NetworkUtilitySystem::removeEntity(data, nullptr, TranslationSystem::getNetId(data, coinEntity), false, false);
 						return;
 					}
 				}
 
-				//scr.setPoints(scr.points() + 1);
 				scr.unlock(data, entity);
 			}
 		}

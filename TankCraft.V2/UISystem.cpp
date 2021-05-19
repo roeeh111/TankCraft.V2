@@ -81,7 +81,6 @@ namespace UISystem {
 		auto view = data.m_reg.view<ComponentView::clientName, ComponentView::userInput>();
 		for (auto entity : view) {
 			// Compare clientname with our name
-		//	std::cout << "Username = " << *data.userName << " netid = " << TranslationSystem::getNetId(data, entity) << std::endl;
 			if (view.get<ComponentView::clientName>(entity).name() == *data.userName) {
 				//		std::cout << "Give me input for : " << view.get<ComponentView::clientName>(entity).name() << std::endl;
 						// Get the user input for our object, only if the name matches our name
@@ -196,9 +195,7 @@ namespace UISystem {
 		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
 		MovementSystem::moveMobs(data);
 
-		//std::cout << "Updating map positions: " << std::endl;
 		for (auto entity : view) {
-		//	std::cout << "updating entity " << (int) entity << " with netid = " << TranslationSystem::getNetId(data, entity) << std::endl;
 
 			auto& pos = view.get<ComponentView::position>(entity);
 			auto& disp = view.get<ComponentView::mapObject>(entity);
@@ -212,7 +209,6 @@ namespace UISystem {
 			//data.map[pos.cury()][pos.curx()] = disp.mapChar();
 		//	disp.setMapChar(data.map[pos.cury()][pos.curx()]);
 		}
-		//std::cout << std::endl;
 	}
 
 	bool UISystem::getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity)

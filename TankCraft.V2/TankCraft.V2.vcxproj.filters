@@ -58,6 +58,9 @@
     <Filter Include="Source Files\Systems\Secondary Systems">
       <UniqueIdentifier>{473d969b-ffb7-4aa4-b710-1a3d48bb58fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Examples">
+      <UniqueIdentifier>{d3eeded0-c3d0-40ac-8070-a0d400c3a265}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\RakNet\Source\_FindFirst.h">
@@ -609,8 +612,11 @@
     <ClInclude Include="CoinPolice.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="ConditionalSerializationExample.h">
+      <Filter>Examples</Filter>
+    </ClInclude>
     <ClInclude Include="MsgPackCondDeserialTest.h">
-      <Filter>Header Files</Filter>
+      <Filter>Tests</Filter>
     </ClInclude>
     <ClInclude Include="UISystem.h">
       <Filter>Header Files\Systems</Filter>
@@ -1025,8 +1031,8 @@
     <ClCompile Include="CoinPolice.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
-    <ClCompile Include="UISystem.cpp">
-      <Filter>Source Files\Systems</Filter>
+    <ClCompile Include="Add_RemoveComponentExample.h">
+      <Filter>Examples</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

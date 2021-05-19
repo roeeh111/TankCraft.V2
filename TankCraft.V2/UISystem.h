@@ -25,9 +25,6 @@ namespace UISystem {
 
 		void clientMessage(GameData::GameData& data, char* msg);
 
-		// Get input from the user, and set its position component
-		//void getUserInput(entt::registry& m_reg, entt::entity& clientEntity); // Might need this later, but has been refactored into other methods
-
 		// Getting keyboard input
 		bool getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity);
 

@@ -11,12 +11,10 @@ namespace  ReflectionSystem {
 	{
 		if (data.compUpdateMap.size() <= 0)
 			return;
-		//std::cout << "Flushing game update of size " << data.updateMap.size() << std::endl;
 
 
 		// Loop over all mappings in the map, and write their serialized packets to the stream
 		for (auto& it : data.compUpdateMap) {
-			//		std::cout << "flushing update for id " << it.first << std::endl;
 			RakNet::BitStream stream = RakNet::BitStream();
 
 			// write the packet type to the bitsream
@@ -31,15 +29,10 @@ namespace  ReflectionSystem {
 			// Write the game update to the stream, and broadast it to all connections
 			stream.Write(buf.data(), buf.size());
 
-			//	NetworkUtilitySystem::broadcast(data, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0);
+			// Broadcast the update to all users
+			NetworkUtilitySystem::broadcast(data, &stream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS);
 
-			data.rpi->Send(&stream,
-				HIGH_PRIORITY,
-				RELIABLE_ORDERED,
-				0,
-				RakNet::UNASSIGNED_SYSTEM_ADDRESS,
-				true);
-
+			// Update the change log
 			UpdateLog(data, it.second);
 
 
@@ -61,7 +54,10 @@ namespace  ReflectionSystem {
 		if (header.netid >= 0) {							// NEW, might not work
 			for (auto compid : header.ids) {
 				// Call serialize with netid, headerid
-				SerializeComponent(data, TranslationSystem::getEntity(data, header.netid), compid);
+				auto entity = TranslationSystem::getEntity(data, header.netid);
+				std::cout << (int)entity << std::endl;
+				if (entity != entt::null)
+					SerializeComponent(data, entity, compid);
 			}
 		}
 		return sbuf;
@@ -73,7 +69,6 @@ namespace  ReflectionSystem {
 
 	void ReflectionSystem::MakeGameUpdate(GameData::GameData& data, std::string& stream)
 	{
-	//	std::cout << "in reflection, making a game update, size of buffer =  " << stream.size() << std::endl;
 		// deserialize these objects using msgpack::unpacker.
 		msgpack::unpacker pac;
 

@@ -4,6 +4,11 @@
 #include "IDTranslationComponent.h"
 #include "ComponentID.h"
 
+
+/*
+* The header for an update packet. Contains the mapping of all components that are being updated for each netid
+* 
+*/
 namespace UpdatePacketHeader {
 	class UpdatePacketHeader {
 	public:

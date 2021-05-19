@@ -3,18 +3,6 @@
 #include "UISystem.h"
 
 
-/*
-	TODO: loop over all entities with a position element
-		1) if that entity has a user input element and that user input element is dirty, call move entity
-		2) if that entity has a position element (and not a user input) and that position is dirty, call some function
-
-		TODO: write function to move something based on position
-		TODO: figure out how were going to do postions dirty 
-
-		NOTE: The server is the one calling updatemovement, so take that into account when designing
-*/
-
-// Update movement should only be control based? 
 
 namespace MovementSystem {
 
@@ -27,19 +15,6 @@ namespace MovementSystem {
 	{
 		// Only handles movement in server
 		if (!data.isServer) { return; }
-		// For now, loop over all entities with position and user input
-		// and call moveEntity
-/*		auto view = data.m_reg.view<ComponentView::userInput, ComponentView::position>();
-		for (auto &entity : view) {
-			auto& uinput = data.m_reg.get<ComponentView::userInput>(entity);
-			std::cout << "updating movement for entity " << (int)entity << std::endl;
-
-			// We are guarenteed that any user input that needs to be updated will be set dirty=1
-			if (uinput.dirty()) {	
-				moveEntity(data, entity, data.m_reg.get<ComponentView::userInput>(entity));
-			}
-		}
-		*/
 	}
 
 	void MovementSystem::moveEntity(GameData::GameData& data, const entt::entity& entity, ComponentView::userInput& input) {
@@ -90,13 +65,10 @@ namespace MovementSystem {
 		}
 		points.unlock(data, entity);
 
-		//std::cout << "After move: " << "prevx = " << points.prevx() << " prevy = " << points.prevy() << " curx = " << points.curx() << " cury = " << points.cury() << std::endl;
-
 		// Clear the input 
-	//	input.lock();
 		input.setLeft(0); input.setRight(0); input.setUp(0); input.setRight(0);
 		input.dirty_ = false;
-//		input.unlock(data, entity);		// NOTE: NOT UNLOCKING THE USERINPUT COMPONENT BECAUSE WE DONT WANT TO SEND IT BACK
+		// NOTE: NOT UNLOCKING THE USERINPUT COMPONENT BECAUSE WE DONT WANT TO SEND IT BACK
 	}
 
 

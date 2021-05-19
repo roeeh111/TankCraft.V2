@@ -1,14 +1,24 @@
 #pragma once
 #include <msgpack.hpp>
+/*
+* 
+* Test and example of serializig/deserializing a component with conditional fields
+* Here, dirty/optional fields are marked with a bitfield within the component.
+* 
+* For a developer to change the way msgpack serializes/deserializes, all that is required is to override the convert and pack functions.
+* 
+* Link to examples: https://github.com/msgpack/msgpack-c/wiki/v2_0_cpp_adaptor#convert
+*					https://github.com/msgpack/msgpack-c/wiki/v2_0_cpp_unpacker
+* 
+*/
+
+
 
 namespace CondTest {
 	void condDeserialTest();
 
 	class player {
 	private:
-
-
-		// bool 
 
 	public:
 		std::string name;
@@ -119,39 +129,6 @@ namespace msgpack {
 					}
 					return o;
 				}
-
-
-
-				/*	// Working Convert with conditional field setter logic (still no bandwidth optimization)
-				msgpack::object const& operator()(msgpack::object const& o, CondTest::player& v) const {
-					if (o.type != msgpack::type::ARRAY) throw msgpack::type_error();
-					if (o.via.array.size != 5) throw msgpack::type_error();
-					// Always do this line, so we have access to the fields
-					o.via.array.ptr[0] >> v.fields;
-
-					if (v.fields[0])
-						o.via.array.ptr[1] >> v.name;
-					if (v.fields[1])
-						o.via.array.ptr[2] >> v.x;
-					if (v.fields[2])
-						o.via.array.ptr[3] >> v.y;
-					if (v.fields[3])
-						o.via.array.ptr[4] >> v.neighbors;
-					return o;
-				}
-				*/
-
-				/* // Working Simplest form of convert, just copy over the values
-				msgpack::object const& operator()(msgpack::object const& o, CondTest::player& v) const {
-					if (o.type != msgpack::type::ARRAY) throw msgpack::type_error();
-					if (o.via.array.size != 4) throw msgpack::type_error();
-					o.via.array.ptr[0] >> v.name;
-					o.via.array.ptr[1] >> v.x;
-					o.via.array.ptr[2] >> v.y;
-					o.via.array.ptr[3] >> v.neighbors;
-					return o;
-				}
-				*/
 			};
 		}
 	}

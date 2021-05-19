@@ -14,9 +14,12 @@ namespace GameAdmin {
 
 	void MainScene::update()
 	{	
-		//std::this_thread::sleep_for(std::chrono::milliseconds(16));
-		for (PrimarySystem::PrimarySystem* system : data.primarySystemList)
+		std::this_thread::sleep_for(std::chrono::milliseconds(16));
+
+		for (PrimarySystem::PrimarySystem* system : data.primarySystemList) {
 			system->update(data);
+		}
+
 	}
 
 	MainScene::MainScene(bool isServer_, uint32_t maxClients)
@@ -36,7 +39,6 @@ namespace GameAdmin {
 		data.primarySystemList = std::list<PrimarySystem::PrimarySystem*>();
 		data.primarySystemList.push_back(&connectionSystem);
 		data.primarySystemList.push_back(&movementSystem);
-		//data.primarySystemList.push_back(&messagingSystem);
 		data.primarySystemList.push_back(&reflectionSystem);
 
 		for (PrimarySystem::PrimarySystem* system : data.primarySystemList)
