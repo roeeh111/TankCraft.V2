@@ -2,6 +2,7 @@
 #include <iostream>
 #include <entt/entt.hpp>
 #include "GameData.h"
+
 #define WIDTH 20
 #define HEIGHT 20
 
@@ -11,15 +12,18 @@
 */
 
 namespace UISystem {
-	class UISystem : public PrimarySystem::PrimarySystem {
+	class UISystem {
 	public:
 
-		void init(GameData::GameData& data);
+		void initialize(GameData::GameData& data);
 
-		void update(GameData::GameData& data);
+		void updateClient(GameData::GameData& data, HDC hdcBackBuff, PAINTSTRUCT ps, HWND hwnd);
 
-		// print out the current game map to console
-		void printUI(GameData::GameData& data);
+		void updateServer(GameData::GameData& data, HDC hdcBackBuff, PAINTSTRUCT ps, HWND hwnd);
+
+		void serverMessage(GameData::GameData& data, const char* msg);
+
+		void clientMessage(GameData::GameData& data, char* msg);
 
 		// Get input from the user, and set its position component
 		//void getUserInput(entt::registry& m_reg, entt::entity& clientEntity); // Might need this later, but has been refactored into other methods

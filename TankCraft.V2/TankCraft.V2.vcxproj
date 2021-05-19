@@ -92,7 +92,7 @@
       <AdditionalIncludeDirectories>C:\RakNet\Source;C:\Users\roeeh\Desktop\Engine Capstone\TanksProtobuf;;C:\Users\roeeh\Desktop\protobuf-3.15.3\examples;C:\Users\roeeh\Desktop\Engine_Capstone\TanksProtobuf;C:\libnop;C:\libnop\include;C:\bitsery\include;C:\Users\RogerLiao\source\repos\bitsery\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -109,7 +109,7 @@
       <AdditionalIncludeDirectories>C:\RakNet\Source;;C:\Users\roeeh\Desktop\protobuf-3.15.3\examples;C:\Users\roeeh\Desktop\Engine_Capstone\TanksProtobuf;C:\libnop;C:\libnop\include;C:\bitsery\include;C:\Users\RogerLiao\source\repos\bitsery\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -126,7 +126,7 @@
       <AdditionalIncludeDirectories>C:\RakNet\Source;;C:\Users\RogerLiao\source\repos\bitsery\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -143,7 +143,7 @@
       <AdditionalIncludeDirectories>C:\RakNet\Source;;C:\Users\RogerLiao\source\repos\bitsery\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>

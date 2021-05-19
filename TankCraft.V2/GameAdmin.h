@@ -42,8 +42,6 @@ namespace GameAdmin {
 
 		//IDTranslationSystem::IDTranslationSystem translationSystem;
 
-		UISystem::UISystem ui;
-
 		MovementSystem::MovementSystem movementSystem;
 
 		MessagingSystem::MessagingSystem messagingSystem;

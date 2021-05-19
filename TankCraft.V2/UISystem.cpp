@@ -26,7 +26,7 @@ Server responds with a position component for the entity, client sets the new po
 
 namespace UISystem {
 
-	void UISystem::init(GameData::GameData& data)
+	void UISystem::initialize(GameData::GameData& data)
 	{
 		// Only display UI for client
 		if (data.isServer) return;
@@ -38,20 +38,20 @@ namespace UISystem {
 			{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1},
 			{1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
 			{1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1},
-			{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1},
-			{1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+			{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1},
+			{1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1},
 			{1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-			{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-			{1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-			{1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1},
+			{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
+			{1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1},
+			{1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1},
 			{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
 			{1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-			{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-			{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-			{1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-			{1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+			{1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+			{1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+			{1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+			{1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 		};
 		/*
@@ -65,30 +65,130 @@ namespace UISystem {
 		*/
 	}
 
-	void UISystem::update(GameData::GameData& data)
+	void UISystem::updateClient(GameData::GameData& data, HDC hdcBackBuff, PAINTSTRUCT ps, HWND hwnd)
 	{
-		// Only display UI for client
-		if (data.isServer) { return; }
-		bool input = false;
+		data.hdcBackBuff = hdcBackBuff;
+		data.ps = ps;
+		data.hwnd = hwnd;
+		HPEN RedPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
+		static HBRUSH WhiteBrush = CreateSolidBrush(RGB(255, 255, 255));
+		static HBRUSH BlackBrush = CreateSolidBrush(RGB(0, 0, 0));
+		static HBRUSH RedBrush = CreateSolidBrush(RGB(255, 0, 0));
+		static HBRUSH BlueBrush = CreateSolidBrush(RGB(0, 0, 255));
 
+		bool input = false;
 		// get all elements that take user input, and get all of the input from those entities
 		auto view = data.m_reg.view<ComponentView::clientName, ComponentView::userInput>();
-		for (auto entity : view) {	
+		for (auto entity : view) {
 			// Compare clientname with our name
 		//	std::cout << "Username = " << *data.userName << " netid = " << TranslationSystem::getNetId(data, entity) << std::endl;
 			if (view.get<ComponentView::clientName>(entity).name() == *data.userName) {
-		//		std::cout << "Give me input for : " << view.get<ComponentView::clientName>(entity).name() << std::endl;
-				// Get the user input for our object, only if the name matches our name
+				//		std::cout << "Give me input for : " << view.get<ComponentView::clientName>(entity).name() << std::endl;
+						// Get the user input for our object, only if the name matches our name
 				input = getKeyBoardInput(data, entity);
-			//	printUI(data);
 			}
 		}
 
-		// Do all movement updates
-		updateMapPositions(data);
-		// print the map
-		if (input)
-			printUI(data);
+
+		//draw GameMap
+		int i = 0, j = 0;
+		for (i = 0; i < WIDTH; i++)
+		{
+			for (j = 0; j < HEIGHT; j++)
+			{
+				if (data.map[j][i])
+					if (data.map[j][i] == 1)
+					{
+						SelectObject(hdcBackBuff, BlackBrush);
+						Rectangle(hdcBackBuff, i * 16, j * 16, (i * 16) + 15, (j * 16) + 15);
+					}
+					else
+					{
+						SelectObject(hdcBackBuff, WhiteBrush);
+						Rectangle(hdcBackBuff, i * 16, j * 16, (i * 16) + 15, (j * 16) + 15);
+					}
+
+			}
+		}
+		// Paint the player
+		//SelectObject(hdcBackBuff, RedBrush);
+		//Rectangle(hdcBackBuff, 15 * 16, 15 * 16, (15 * 16) + 15, (15 * 16) + 15);
+
+		//SelectObject(hdcBackBuff, BlueBrush);
+		//Rectangle(hdcBackBuff, 10 * 16, 17 * 16, (10 * 16) + 15, (17 * 16) + 15);
+
+
+		////////////////////////UPDATE MAP POSITIONS////////////////////////
+		auto pos_view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
+		MovementSystem::moveMobs(data);
+
+		//std::cout << "Updating map positions: " << std::endl;
+		for (auto entity : pos_view) {
+			//	std::cout << "updating entity " << (int) entity << " with netid = " << TranslationSystem::getNetId(data, entity) << std::endl;
+
+			auto& pos = pos_view.get<ComponentView::position>(entity);
+			auto& disp = pos_view.get<ComponentView::mapObject>(entity);
+
+			// Update any score interaction damage interaction, or mob movement
+			ScoreSystem::updateScore(data, entity, pos);
+			HealthAndDamageSystem::updateDamage(data, entity, pos);
+			// Set the previous location to a "." and move on
+		//	pos.print();
+			//data.map[pos.prevy()][pos.prevx()] = '.';
+			SelectObject(hdcBackBuff, RedBrush);
+			Rectangle(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15);
+			//data.map[pos.cury()][pos.curx()] = disp.mapChar();
+		//	disp.setMapChar(data.map[pos.cury()][pos.curx()]);
+		}
+		////////////////////////UPDATE MAP POSITIONS////////////////////////
+
+		char buf[256];
+		SetTextColor(hdcBackBuff, RGB(0, 0, 255));
+		sprintf(&buf[0], "Player: %s", "A");
+		TextOut(hdcBackBuff, 350, 24, buf, strlen(buf));
+		sprintf(&buf[0], "Health: %d", 10);
+		TextOut(hdcBackBuff, 350, 48, buf, strlen(buf));
+		sprintf(&buf[0], "Coins: %d", 0);
+		TextOut(hdcBackBuff, 350, 72, buf, strlen(buf));
+		sprintf(&buf[0], "Score: %d", 0);
+		TextOut(hdcBackBuff, 350, 96, buf, strlen(buf));
+		sprintf(&buf[0], "Console Message: %d", 999);
+		TextOut(hdcBackBuff, 350, 120, buf, strlen(buf));
+
+
+		BitBlt(ps.hdc, 0, 0, 640, 480, hdcBackBuff, 0, 0, SRCCOPY);
+
+		EndPaint(hwnd, &ps);
+	}
+
+	void UISystem::updateServer(GameData::GameData& data, HDC hdcBackBuff, PAINTSTRUCT ps, HWND hwnd) {
+		data.hdcBackBuff = hdcBackBuff;
+		data.ps = ps;
+		data.hwnd = hwnd;
+		char buf[256];
+		SetTextColor(hdcBackBuff, RGB(0, 0, 255));
+		sprintf(&buf[0], "Server started, UI not finished yet");
+		TextOut(hdcBackBuff, 125, 50, buf, strlen(buf));
+		BitBlt(ps.hdc, 0, 0, 640, 480, hdcBackBuff, 0, 0, SRCCOPY);
+		EndPaint(hwnd, &ps);
+	}
+
+	void serverMessage(GameData::GameData& data, const char* msg) {
+		char buf[256];
+		SetTextColor(data.hdcBackBuff, RGB(0, 0, 255));
+		sprintf(&buf[0], msg);
+		TextOut(data.hdcBackBuff, 125, 50, buf, strlen(buf));
+		BitBlt(data.ps.hdc, 0, 0, 640, 480, data.hdcBackBuff, 0, 0, SRCCOPY);
+		EndPaint(data.hwnd, &data.ps);
+	}
+
+	void clientMessage(GameData::GameData& data, const char* msg) {
+		char buf[256];
+		SetTextColor(data.hdcBackBuff, RGB(0, 0, 255));
+		sprintf(&buf[0], "Console Message: %s", msg);
+		TextOut(data.hdcBackBuff, 125, 50, buf, strlen(buf));
+		BitBlt(data.ps.hdc, 350, 120, 640, 480, data.hdcBackBuff, 0, 0, SRCCOPY);
+		EndPaint(data.hwnd, &data.ps);
 	}
 
 	void UISystem::updateMapPositions(GameData::GameData& data) {
@@ -108,32 +208,11 @@ namespace UISystem {
 			HealthAndDamageSystem::updateDamage(data, entity, pos);
 			// Set the previous location to a "." and move on
 		//	pos.print();
-			data.map[pos.prevy()][pos.prevx()] = '.';
-			data.map[pos.cury()][pos.curx()] = disp.mapChar();
+			//data.map[pos.prevy()][pos.prevx()] = '.';
+			//data.map[pos.cury()][pos.curx()] = disp.mapChar();
 		//	disp.setMapChar(data.map[pos.cury()][pos.curx()]);
 		}
 		//std::cout << std::endl;
-	}
-
-	void UISystem::printUI(GameData::GameData& data)
-	{
-		// Clear the current screen
-		
-		system("CLS");
-
-		// Print out whatever is in the map
-		std::cout << std::endl;
-		for (int i = 0; i < HEIGHT; i++) {
-			for (int j = 0; j < WIDTH; j++) {
-				std::cout << data.map[i][j] << " ";
-			}
-			std::cout << std::endl;
-		}
-
-		// Print out points and client names of any entities that have those
-		ScoreSystem::printScore(data);
-		HealthAndDamageSystem::printHealth(data);
-		
 	}
 
 	bool UISystem::getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity)
@@ -147,26 +226,6 @@ namespace UISystem {
 
 		usrInput.dirty_ = 1;
 
-	/*
-		char input;
-		std::cin >> input;
-		// set the user input values depending on what we got
-		if (input == 'a') {
-			usrInput.setLeft(true);
-		}
-		else if (input == 's') {
-			usrInput.setDown(true);
-		}
-		else if (input == 'd') {
-			usrInput.setRight(true);
-		}
-		else if (input == 'w') {
-			usrInput.setUp(true);
-		}
-		else {
-			usrInput.dirty_ = 0;
-		}*/
-		
 		// Commenting out for debug
 		if (GetAsyncKeyState(87)) {
 			usrInput.setUp(true);

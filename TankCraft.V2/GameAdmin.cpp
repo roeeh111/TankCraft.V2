@@ -7,6 +7,7 @@
 #include "FreeListComponent.h"
 #include "RegWrappers.h"
 #include "MessagingSystem.h"
+#include "UISystem.h"
 
 
 namespace GameAdmin {
@@ -36,13 +37,8 @@ namespace GameAdmin {
 		data.primarySystemList.push_back(&connectionSystem);
 		data.primarySystemList.push_back(&movementSystem);
 		//data.primarySystemList.push_back(&messagingSystem);
-		data.primarySystemList.push_back(&ui);
 		data.primarySystemList.push_back(&reflectionSystem);
 
-		//connectionSystem.init(data);
-		//movementSystem.init(data);
-		//messagingSystem.init(data);
-		//ui.init(data);
 		for (PrimarySystem::PrimarySystem* system : data.primarySystemList)
 		{
 			system->init(data);
@@ -60,10 +56,10 @@ namespace GameAdmin {
 
 	void MainScene::clientLogin()
 	{
-		data.userName = new std::string();
+		data.userName = new std::string("Player");
 		// Started up on socket, prompt the user to pass in a username
-		std::cout << "Please enter a username:" << std::endl;
-		std::cin >> *data.userName;
+		//std::cout << "Please enter a username:" << std::endl;
+		//std::cin >> *data.userName;
 		// create a new tank entity with that username, call network add entity and update entity (or put on update queue)
 		connectionSystem.sendLoginPacket(data, *data.userName);
 	}
