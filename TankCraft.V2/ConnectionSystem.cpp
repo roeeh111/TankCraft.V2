@@ -258,7 +258,7 @@ namespace ConnectionSystem {
 		if (data.first) {																		// TODO: make a map and dump that map
 			std::cout << "First player logging in, spawn a bunch of items" << std::endl;
 			Tank::addTank(data, pack, loginName);
-			Spikes::addSpikes(data, pack, 5, 7, 3);
+		/*	Spikes::addSpikes(data, pack, 5, 7, 3);
 			Spikes::addSpikes(data, pack, 5, 0, 0);
 			Spikes::addSpikes(data, pack, 5, 1, 1);
 
@@ -267,7 +267,7 @@ namespace ConnectionSystem {
 			Coins::addCoins(data, pack, 1, 12, 12);
 			Coins::addCoins(data, pack, 1, 13, 13);
 			Coins::addCoins(data, pack, 1, 14, 14);
-			Coins::addCoins(data, pack, 1, 15, 15);
+			Coins::addCoins(data, pack, 1, 15, 15);*/
 
 //			Zombie::addZombie(data, pack, 10, 5, 10, 10);
 			data.first = false;

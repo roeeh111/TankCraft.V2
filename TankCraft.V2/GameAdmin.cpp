@@ -14,8 +14,10 @@ namespace GameAdmin {
 
 	void MainScene::update()
 	{	
-		std::this_thread::sleep_for(std::chrono::milliseconds(16));
-
+		//std::this_thread::sleep_for(std::chrono::milliseconds(16));
+		//auto time = std::chrono::system_clock::now();
+		//std::time_t formatted_time = std::chrono::system_clock::to_time_t(time);
+		//std::cout << "Update systems at " << std::ctime(&formatted_time) << std::endl;
 		for (PrimarySystem::PrimarySystem* system : data.primarySystemList) {
 			system->update(data);
 		}
@@ -47,7 +49,7 @@ namespace GameAdmin {
 		}
 
 		if (!isServer_) {
-			std::cout << "Starting client" << std::endl;
+			
 			clientLogin();
 		}
 		else {

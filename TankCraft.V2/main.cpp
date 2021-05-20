@@ -108,26 +108,21 @@ int WINAPI WinMain(HINSTANCE hThisInst, HINSTANCE hPrevInst, LPSTR lpszArgs, int
 	UpdateWindow(hwnd);
 
 	//real-time message pump...
-	bool quitApplication = false;
 	//	CTimer timer(FRAMES_PER_SECOND);
-
 	//	timer.Start();
 
-	while (!quitApplication)
+	while (true)
 	{
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
-			if (msg.message == WM_QUIT)
-			{
-				quitApplication = true;
-			}
-			else
-			{
-				if (initialized) scene->update();
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
 		}
+		if (msg.message == WM_QUIT) break;
+
+		//std::this_thread::sleep_for(std::chrono::milliseconds(16));
+		if (initialized) scene->update();
+
 		InvalidateRect(hwnd, NULL, TRUE);
 		UpdateWindow(hwnd);
 	}
