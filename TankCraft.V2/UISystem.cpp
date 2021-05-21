@@ -54,15 +54,6 @@ namespace UISystem {
 			{1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 		};
-		/*
-		for (int i = 0; i < HEIGHT; i++) {
-			for (int j = 0; j < WIDTH; j++) {
-				data.map[i][j] = '.';
-			}
-			std::cout << std::endl;
-		}
-		printUI(data);
-		*/
 	}
 
 	void UISystem::updateClient(GameData::GameData& data, HDC hdcBackBuff, PAINTSTRUCT ps, HWND hwnd)
@@ -85,12 +76,12 @@ namespace UISystem {
 		auto view = data.m_reg.view<ComponentView::clientName, ComponentView::userInput>();
 		for (auto entity : view) {
 			// Compare clientname with our name
+			// Get the user input for our object, only if the name matches our name
 			if (view.get<ComponentView::clientName>(entity).name() == *data.userName) {
 				num++;
-				sprintf(&buf[0], "Message: Found %d user with name %s", num, data.userName->data());
+				sprintf(&buf[0], "Message: %d with name %s", num, data.userName->data());
 				TextOut(hdcBackBuff, 350, 120, buf, strlen(buf));
-				//		std::cout << "Give me input for : " << view.get<ComponentView::clientName>(entity).name() << std::endl;
-						// Get the user input for our object, only if the name matches our name
+				// std::cout << "Give me input for : " << view.get<ComponentView::clientName>(entity).name() << std::endl;
 				input = getKeyBoardInput(data, entity);
 			}
 		}

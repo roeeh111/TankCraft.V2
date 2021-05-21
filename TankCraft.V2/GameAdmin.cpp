@@ -60,7 +60,7 @@ namespace GameAdmin {
 
 	void MainScene::clientLogin()
 	{
-		data.userName = new std::string("Player" + rand() % 10000);
+		data.userName = new std::string("Player" + std::to_string(rand() % 10000));
 		// Started up on socket, prompt the user to pass in a username
 		//std::cout << "Please enter a username:" << std::endl;
 		//std::cin >> *data.userName;
