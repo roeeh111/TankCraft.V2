@@ -33,7 +33,7 @@ namespace UISystem {
 		data.map = std::vector<std::vector<int>>(HEIGHT, std::vector<int>(WIDTH));
 
 		data.map = {
-			{1, 1, 1, 1, 1, 1, 1, 1, 1, 8, 10, 4, 3, 2, 1, 1, 1, 1, 1, 1},
+			{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 			{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1},
 			{1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
@@ -107,11 +107,11 @@ namespace UISystem {
 						SelectObject(hdcBackBuff, BlackBrush);
 						Rectangle(hdcBackBuff, i * 16, j * 16, (i * 16) + 15, (j * 16) + 15);
 					}
-					else
-					{
-						SelectObject(hdcBackBuff, WhiteBrush);
-						Rectangle(hdcBackBuff, i * 16, j * 16, (i * 16) + 15, (j * 16) + 15);
-					}
+				//	else
+				//	{
+				//		SelectObject(hdcBackBuff, WhiteBrush);
+				//		Rectangle(hdcBackBuff, i * 16, j * 16, (i * 16) + 15, (j * 16) + 15);
+				//	}
 				}
 			}
 		}
@@ -139,19 +139,23 @@ namespace UISystem {
 			//data.map[pos.prevy()][pos.prevx()] = 0;
 			if (disp.mapChar() == 'X')
 			{
-				//data.map[pos.cury()][pos.curx()] = 'X';
+			//	data.map[pos.cury()][pos.curx()] = 'X';
 				SelectObject(hdcBackBuff, GreenBrush);
 				RoundRect(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15, 5, 5);
 			}
 			else if (disp.mapChar() == 'S') {
+				data.map[pos.cury()][pos.curx()] = 'S';
 				SelectObject(hdcBackBuff, RedBrush);
 				Rectangle(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15);
 			}
 			else if (disp.mapChar() == 'C') {
+				data.map[pos.cury()][pos.curx()] = 'C';
+				std::cout << "drawing coins!" << std::endl;
 				SelectObject(hdcBackBuff, YellowBrush);
 				Ellipse(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15);
 			}
 			else if (disp.mapChar() == 'Z') {
+				data.map[pos.cury()][pos.curx()] = 'Z';
 				SelectObject(hdcBackBuff, ZombieBrush);
 				RoundRect(hdcBackBuff, pos.cury() * 16, pos.curx() * 16, (pos.cury() * 16) + 15, (pos.curx() * 16) + 15, 5, 5);
 			}

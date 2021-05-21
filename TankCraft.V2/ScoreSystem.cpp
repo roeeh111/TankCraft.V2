@@ -22,6 +22,7 @@ namespace ScoreSystem {
 					// if were in the same place
 					if (pos.curx() == coinPos.curx() && pos.cury() == coinPos.cury()) {
 						// Decrement the players health by the damage caused by the spikes
+						std::cout << "Changing score!!!!" << std::endl;
 						scr.setPoints(scr.points() + view.get<ComponentView::pointsGiven>(coinEntity).getPoints());
 						scr.unlock(data, entity);
 
