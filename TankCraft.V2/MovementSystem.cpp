@@ -25,19 +25,16 @@ namespace MovementSystem {
 		points.lock(); // lock the component
 
 
-		//points.setPrevx(points.curx());
-		//points.setPrevy(points.cury());
-
+		points.setPrevx(points.curx());
+		points.setPrevy(points.cury());
 		if (input.left()) {
 			if (points.curx() <= 0) {
 				std::cout << "checking width - 1 " << std::endl;
 			//	if (!(data.map[points.cury()][WIDTH - 1] == 1))
 					points.setCurx(WIDTH - 1);
 			}
-			else {
-				std::cout << "checking x - 1 " << std::endl;
-			//	if (!(data.map[points.cury()][points.curx() - 1] == 1))
-					points.setCurx(points.curx() - 1);
+			else if (data.map[points.cury()][points.curx() - 1] != 1) {
+				points.setCurx(points.curx() - 1);
 			}
 		}
 		else if (input.down()) {
@@ -46,13 +43,9 @@ namespace MovementSystem {
 		//		if (!(data.map[0][points.curx()] == 1))
 					points.setCury(0);
 			}
-			else {
-				std::cout << "checking y + 1 " << std::endl;
-		//		if (!(data.map[points.cury() + 1][points.curx()] == 1)) {
-					std::cout << "inputting" << std::endl;
-					points.setCury(points.cury() + 1);
-					
-		//		}
+			else if (data.map[points.cury() + 1][points.curx()] != 1) {
+				points.setCury(points.cury() + 1);
+
 			}
 		}
 		else if (input.right()) {
@@ -61,10 +54,8 @@ namespace MovementSystem {
 	//			if (!(data.map[points.cury()][0] == 1))
 					points.setCurx(0);
 			}
-			else {
-				std::cout << "checking x + 1 " << std::endl;
-			//	if (!(data.map[points.cury()][points.curx() + 1] == 1))
-					points.setCurx(points.curx() + 1);
+			else if (data.map[points.cury()][points.curx() + 1] != 1) {
+				points.setCurx(points.curx() + 1);
 			}
 		}
 		else if (input.up()) {
@@ -74,10 +65,8 @@ namespace MovementSystem {
 					points.setCury(HEIGHT - 1);
 
 			}
-			else {
-				std::cout << "checking y - 1 " << std::endl;
-		//		if (!(data.map[points.cury() - 1][points.curx() + 1] == 1))
-					points.setCury(points.cury() - 1);
+			else if (data.map[points.cury() - 1][points.curx()] != 1) {
+				points.setCury(points.cury() - 1);
 
 			}
 		}

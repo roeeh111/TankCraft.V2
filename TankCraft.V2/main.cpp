@@ -161,6 +161,8 @@ LRESULT CALLBACK WindowFunc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
 			initialized = true;
 			isServer = true;
 			scene = new GameAdmin::MainScene(isServer, MAX_CLIENTS);
+			UI = new UISystem::UISystem();
+			UI->initialize(scene->data);
 			break;
 		case VK_F2:
 			initialized = true;
