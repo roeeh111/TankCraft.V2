@@ -73,15 +73,22 @@ namespace UISystem {
 		HPEN RedPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
 		static HBRUSH WhiteBrush = CreateSolidBrush(RGB(255, 255, 255));
 		static HBRUSH BlackBrush = CreateSolidBrush(RGB(0, 0, 0));
+		static HBRUSH YellowBrush = CreateSolidBrush(RGB(255, 255, 0));
+		static HBRUSH GreenBrush = CreateSolidBrush(RGB(173, 255, 47));
 		static HBRUSH RedBrush = CreateSolidBrush(RGB(255, 0, 0));
+		static HBRUSH ZombieBrush = CreateSolidBrush(RGB(0, 102, 0));
 		static HBRUSH BlueBrush = CreateSolidBrush(RGB(0, 0, 255));
-
+		char buf[256];
 		bool input = false;
+		int num = 0;
 		// get all elements that take user input, and get all of the input from those entities
 		auto view = data.m_reg.view<ComponentView::clientName, ComponentView::userInput>();
 		for (auto entity : view) {
 			// Compare clientname with our name
 			if (view.get<ComponentView::clientName>(entity).name() == *data.userName) {
+				num++;
+				sprintf(&buf[0], "Message: Found %d user with name %s", num, data.userName->data());
+				TextOut(hdcBackBuff, 350, 120, buf, strlen(buf));
 				//		std::cout << "Give me input for : " << view.get<ComponentView::clientName>(entity).name() << std::endl;
 						// Get the user input for our object, only if the name matches our name
 				input = getKeyBoardInput(data, entity);
@@ -121,29 +128,38 @@ namespace UISystem {
 		auto pos_view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
 		MovementSystem::moveMobs(data);
 
-		//std::cout << "Updating map positions: " << std::endl;
 		for (auto entity : pos_view) {
 			//	std::cout << "updating entity " << (int) entity << " with netid = " << TranslationSystem::getNetId(data, entity) << std::endl;
-
 			auto& pos = pos_view.get<ComponentView::position>(entity);
 			auto& disp = pos_view.get<ComponentView::mapObject>(entity);
 
 			// Update any score interaction damage interaction, or mob movement
 			ScoreSystem::updateScore(data, entity, pos);
 			HealthAndDamageSystem::updateDamage(data, entity, pos);
-			// Set the previous location to a "." and move on
-		//	pos.print();
-			//data.map[pos.prevy()][pos.prevx()] = '.';
-			SelectObject(hdcBackBuff, RedBrush);
-			Rectangle(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15);
-			//data.map[pos.cury()][pos.curx()] = disp.mapChar();
-		//	disp.setMapChar(data.map[pos.cury()][pos.curx()]);
+
+			if (disp.mapChar() == 'X')
+			{
+				SelectObject(hdcBackBuff, GreenBrush);
+				RoundRect(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15, 5, 5);
+			}
+			else if (disp.mapChar() == 'S') {
+				SelectObject(hdcBackBuff, RedBrush);
+				Rectangle(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15);
+			}
+			else if (disp.mapChar() == 'C') {
+				SelectObject(hdcBackBuff, YellowBrush);
+				Ellipse(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15);
+			}
+			else if (disp.mapChar() == 'Z') {
+				SelectObject(hdcBackBuff, ZombieBrush);
+				RoundRect(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15, 5, 5);
+			}
 		}
 		////////////////////////UPDATE MAP POSITIONS////////////////////////
 
-		char buf[256];
+		
 		SetTextColor(hdcBackBuff, RGB(0, 0, 255));
-		sprintf(&buf[0], "Player: %s", "A");
+		sprintf(&buf[0], "Player Name: %s", data.userName->data());
 		TextOut(hdcBackBuff, 350, 24, buf, strlen(buf));
 		sprintf(&buf[0], "Health: %d", 10);
 		TextOut(hdcBackBuff, 350, 48, buf, strlen(buf));
@@ -151,9 +167,7 @@ namespace UISystem {
 		TextOut(hdcBackBuff, 350, 72, buf, strlen(buf));
 		sprintf(&buf[0], "Score: %d", 0);
 		TextOut(hdcBackBuff, 350, 96, buf, strlen(buf));
-		sprintf(&buf[0], "Console Message: %d", 999);
-		TextOut(hdcBackBuff, 350, 120, buf, strlen(buf));
-
+		
 
 		BitBlt(ps.hdc, 0, 0, 640, 480, hdcBackBuff, 0, 0, SRCCOPY);
 

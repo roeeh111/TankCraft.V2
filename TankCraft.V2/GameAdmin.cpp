@@ -14,7 +14,7 @@ namespace GameAdmin {
 
 	void MainScene::update()
 	{	
-		//std::this_thread::sleep_for(std::chrono::milliseconds(16));
+		std::this_thread::sleep_for(std::chrono::milliseconds(33));
 		//auto time = std::chrono::system_clock::now();
 		//std::time_t formatted_time = std::chrono::system_clock::to_time_t(time);
 		//std::cout << "Update systems at " << std::ctime(&formatted_time) << std::endl;
@@ -60,7 +60,7 @@ namespace GameAdmin {
 
 	void MainScene::clientLogin()
 	{
-		data.userName = new std::string("Player");
+		data.userName = new std::string("Player" + rand() % 10000);
 		// Started up on socket, prompt the user to pass in a username
 		//std::cout << "Please enter a username:" << std::endl;
 		//std::cin >> *data.userName;
