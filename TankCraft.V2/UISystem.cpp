@@ -94,11 +94,6 @@ namespace UISystem {
 						SelectObject(hdcBackBuff, BlackBrush);
 						Rectangle(hdcBackBuff, i * 16, j * 16, (i * 16) + 15, (j * 16) + 15);
 					}
-					else
-					{
-						SelectObject(hdcBackBuff, WhiteBrush);
-						Rectangle(hdcBackBuff, i * 16, j * 16, (i * 16) + 15, (j * 16) + 15);
-					}
 				}
 			}
 		}
@@ -116,6 +111,7 @@ namespace UISystem {
 			ScoreSystem::updateScore(data, entity, pos);
 			HealthAndDamageSystem::updateDamage(data, entity, pos);
 
+			data.map[pos.prevy()][pos.prevx()] = 0;
 			if (disp.mapChar() == 'X')
 			{
 				SelectObject(hdcBackBuff, GreenBrush);
