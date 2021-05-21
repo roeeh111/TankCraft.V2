@@ -18,8 +18,8 @@ namespace MovementSystem {
 	}
 
 	void MovementSystem::moveEntity(GameData::GameData& data, const entt::entity& entity, ComponentView::userInput& input) {
-		//std::cout << "Moving entitiy: " << (int) entity << std::endl;
-		//std::cout << "left = " << input.left() << " right = " << input.right() << " up = " << input.up() << " down = " << input.down() << std::endl;
+		std::cout << "Moving entitiy: " << (int) entity << std::endl;
+		std::cout << "left = " << input.left() << " right = " << input.right() << " up = " << input.up() << " down = " << input.down() << std::endl;
 		std::cout << std::endl;
 		auto& points = data.m_reg.get<ComponentView::position>(entity);
 		points.lock(); // lock the component
@@ -29,7 +29,9 @@ namespace MovementSystem {
 		points.setPrevy(points.cury());
 		if (input.left()) {
 			if (points.curx() <= 0) {
-				points.setCurx(WIDTH - 1);
+				std::cout << "checking width - 1 " << std::endl;
+			//	if (!(data.map[points.cury()][WIDTH - 1] == 1))
+					points.setCurx(WIDTH - 1);
 			}
 			else if (data.map[points.cury()][points.curx() - 1] != 1) {
 				points.setCurx(points.curx() - 1);
@@ -37,7 +39,9 @@ namespace MovementSystem {
 		}
 		else if (input.down()) {
 			if (points.cury() >= HEIGHT - 1) {
-				points.setCury(0);
+				std::cout << "checking 0 y position " << std::endl;
+		//		if (!(data.map[0][points.curx()] == 1))
+					points.setCury(0);
 			}
 			else if (data.map[points.cury() + 1][points.curx()] != 1) {
 				points.setCury(points.cury() + 1);
@@ -46,7 +50,9 @@ namespace MovementSystem {
 		}
 		else if (input.right()) {
 			if (points.curx() >= WIDTH - 1) {
-				points.setCurx(0);
+				std::cout << "checking x = 0 " << std::endl;
+	//			if (!(data.map[points.cury()][0] == 1))
+					points.setCurx(0);
 			}
 			else if (data.map[points.cury()][points.curx() + 1] != 1) {
 				points.setCurx(points.curx() + 1);
@@ -54,7 +60,9 @@ namespace MovementSystem {
 		}
 		else if (input.up()) {
 			if (points.cury() <= 0) {
-				points.setCury(HEIGHT - 1);
+				std::cout << "checking height - 1 " << std::endl;
+		//		if (!(data.map[HEIGHT - 1][points.curx() + 1] == 1))
+					points.setCury(HEIGHT - 1);
 
 			}
 			else if (data.map[points.cury() - 1][points.curx()] != 1) {
@@ -63,7 +71,7 @@ namespace MovementSystem {
 			}
 		}
 		points.unlock(data, entity);
-
+		std::cout << "done " << std::endl;
 		// Clear the input 
 		input.setLeft(0); input.setRight(0); input.setUp(0); input.setRight(0);
 		input.dirty_ = false;
