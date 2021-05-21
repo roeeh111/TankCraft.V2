@@ -27,32 +27,14 @@ void simpleMsgPackUpdateTest();
 
 char szWinName[] = "Tank Craft";
 char szTitle[] = "Tank Craft v2.1";
+
+bool initialized = false;
+bool isServer = false;
 int xLoc = 15;
 int yLoc = 15;
 
-
-const int GameMap[MAP_HEIGHT][MAP_WIDTH] = {
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1,
-    1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-    1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1,
-    1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1,
-    1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-    1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1,
-    1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-    1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-    1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-};
+GameAdmin::MainScene* scene;
+UISystem::UISystem* UI;
 /*
 *   Tasks ordered by priority:
 * 
@@ -65,7 +47,10 @@ const int GameMap[MAP_HEIGHT][MAP_WIDTH] = {
 * 
 */
 
-GameAdmin::MainScene* scene;
+int main(HINSTANCE hThisInst, HINSTANCE hPrevInst, LPSTR lpszArgs, int nWinMode) {
+	WinMain(hThisInst, hPrevInst, lpszArgs, nWinMode);
+	return 0;
+}
 
 
 int WINAPI WinMain(HINSTANCE hThisInst, HINSTANCE hPrevInst, LPSTR lpszArgs, int nWinMode)
@@ -73,9 +58,8 @@ int WINAPI WinMain(HINSTANCE hThisInst, HINSTANCE hPrevInst, LPSTR lpszArgs, int
 	HWND hwnd;
 	MSG msg;
 	WNDCLASSEX wcl;
+	UI = new UISystem::UISystem();
 
-
-	scene = new GameAdmin::MainScene(false, MAX_CLIENTS);
 	//define the window....
 	wcl.cbSize = sizeof(WNDCLASSEX);
 
@@ -124,26 +108,21 @@ int WINAPI WinMain(HINSTANCE hThisInst, HINSTANCE hPrevInst, LPSTR lpszArgs, int
 	UpdateWindow(hwnd);
 
 	//real-time message pump...
-	bool quitApplication = false;
 	//	CTimer timer(FRAMES_PER_SECOND);
-
 	//	timer.Start();
 
-	while (!quitApplication)
+	while (true)
 	{
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
-			if (msg.message == WM_QUIT)
-			{
-				quitApplication = true;
-			}
-			else
-			{
-				scene->update();
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
 		}
+		if (msg.message == WM_QUIT) break;
+
+		//std::this_thread::sleep_for(std::chrono::milliseconds(16));
+		if (initialized) scene->update();
+
 		InvalidateRect(hwnd, NULL, TRUE);
 		UpdateWindow(hwnd);
 	}
@@ -159,13 +138,9 @@ LRESULT CALLBACK WindowFunc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
 	static HBITMAP hOldBitmap;
 	static HINSTANCE hInstance;
 
-	static HPEN RedPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
-	static HBRUSH WhiteBrush = CreateSolidBrush(RGB(255, 255, 255));
-	static HBRUSH BlackBrush = CreateSolidBrush(RGB(0, 0, 0));
-	static HBRUSH RedBrush = CreateSolidBrush(RGB(255, 0, 0));
-	static HBRUSH BlueBrush = CreateSolidBrush(RGB(0, 0, 255));
-
-
+	//ComponentView::userInput& usrInput = scene->data.m_reg.get<ComponentView::userInput>(clientEntity);
+	//usrInput.clear();
+	//usrInput.dirty_ = 1;
 
 	switch (message)
 	{
@@ -183,13 +158,18 @@ LRESULT CALLBACK WindowFunc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
 		switch (wParam)
 		{
 		case VK_F1:
+			initialized = true;
+			isServer = true;
+			scene = new GameAdmin::MainScene(isServer, MAX_CLIENTS);
 			break;
 		case VK_F2:
+			initialized = true;
+			isServer = false;
+			scene = new GameAdmin::MainScene(isServer, MAX_CLIENTS);
+			UI = new UISystem::UISystem();
+			UI->initialize(scene->data);
 			break;
 		case VK_ESCAPE:
-			PostQuitMessage(0);
-			break;
-		case VK_SPACE:
 			PostQuitMessage(0);
 			break;
 		case VK_RIGHT:
@@ -217,59 +197,20 @@ LRESULT CALLBACK WindowFunc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
 	{
 		PAINTSTRUCT ps;
 		BeginPaint(hwnd, &ps);
-
 		BitBlt(hdcBackBuff, 0, 0, 640, 480, NULL, NULL, NULL, WHITENESS);
 
-		HBRUSH OldBrush = (HBRUSH)SelectObject(hdcBackBuff, BlackBrush);
-
-		//draw GameMap
-		int i = 0, j = 0;
-		for (i = 0; i < MAP_WIDTH; i++)
-		{
-			for (j = 0; j < MAP_HEIGHT; j++)
-			{
-				if (GameMap[j][i])
-					if (GameMap[j][i] == 1)
-					{
-						SelectObject(hdcBackBuff, BlackBrush);
-						Rectangle(hdcBackBuff, i * 16, j * 16, (i * 16) + 15, (j * 16) + 15);
-					}
-					else
-					{
-						SelectObject(hdcBackBuff, WhiteBrush);
-						Rectangle(hdcBackBuff, i * 16, j * 16, (i * 16) + 15, (j * 16) + 15);
-					}
-
-			}
-		}
-		// Paint the player
-		SelectObject(hdcBackBuff, RedBrush);
-		Rectangle(hdcBackBuff, xLoc * 16, yLoc * 16, (xLoc * 16) + 15, (yLoc * 16) + 15);
-
-		SelectObject(hdcBackBuff, RedBrush);
-
-		if (true)
-		{
+		if (!initialized) {
 			char buf[256];
 			SetTextColor(hdcBackBuff, RGB(0, 0, 255));
-			sprintf(&buf[0], "DATA 1: %d", 999);
-			TextOut(hdcBackBuff, 350, 24, buf, strlen(buf));
-			sprintf(&buf[0], "DATA 2: %d", 999);
-			TextOut(hdcBackBuff, 350, 48, buf, strlen(buf));
-			sprintf(&buf[0], "DATA 3: %d", 999);
-			TextOut(hdcBackBuff, 350, 72, buf, strlen(buf));
-			sprintf(&buf[0], "DATA 4: %d", 999);
-			TextOut(hdcBackBuff, 350, 96, buf, strlen(buf));
-			sprintf(&buf[0], "Console Message: %d", 999);
-			TextOut(hdcBackBuff, 350, 120, buf, strlen(buf));
-
-			SelectObject(hdcBackBuff, OldBrush);
+			sprintf(&buf[0], "Press F1 to start the server, Press F2 to start the client.");
+			TextOut(hdcBackBuff, 125, 50, buf, strlen(buf));
+			BitBlt(ps.hdc, 0, 0, 640, 480, hdcBackBuff, 0, 0, SRCCOPY);
+			EndPaint(hwnd, &ps);
+		} else if (isServer) {
+			UI->updateServer(scene->data, hdcBackBuff, ps, hwnd);
+		} else {
+			UI->updateClient(scene->data, hdcBackBuff, ps, hwnd);
 		}
-
-
-		BitBlt(ps.hdc, 0, 0, 640, 480, hdcBackBuff, 0, 0, SRCCOPY);
-
-		EndPaint(hwnd, &ps);
 
 		break;
 	}
@@ -278,11 +219,6 @@ LRESULT CALLBACK WindowFunc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
 		SelectObject(hdcBackBuff, hOldBitmap);
 		DeleteDC(hdcBackBuff);
 		DeleteObject(hBitmap);
-		DeleteObject(RedPen);
-		DeleteObject(RedBrush);
-		DeleteObject(BlueBrush);
-		DeleteObject(BlackBrush);
-		DeleteObject(WhiteBrush);
 		PostQuitMessage(0);
 		break;
 	default:
