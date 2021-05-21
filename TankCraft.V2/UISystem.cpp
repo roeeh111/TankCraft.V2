@@ -38,17 +38,17 @@ namespace UISystem {
 			{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1},
 			{1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
 			{1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1},
-			{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1},
-			{1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1},
-			{1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+			{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1},
+			{1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1},
+			{1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
 			{1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1},
-			{1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1},
+			{1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1},
 			{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-			{1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-			{1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+			{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+			{1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
 			{1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 			{1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -82,7 +82,9 @@ namespace UISystem {
 				sprintf(&buf[0], "Message: %d with name %s", num, data.userName->data());
 				TextOut(hdcBackBuff, 350, 120, buf, strlen(buf));
 				// std::cout << "Give me input for : " << view.get<ComponentView::clientName>(entity).name() << std::endl;
-				input = getKeyBoardInput(data, entity);
+				if (GetForegroundWindow() == data.hwnd) {
+					input = getKeyBoardInput(data, entity);
+				}
 			}
 		}
 
@@ -93,7 +95,13 @@ namespace UISystem {
 		{
 			for (j = 0; j < HEIGHT; j++)
 			{
-				if (data.map[j][i])
+				if (data.map[j][i]) 
+				{
+					if (data.map[j][i] == 'X')
+					{
+						SelectObject(hdcBackBuff, BlueBrush);
+						Rectangle(hdcBackBuff, i * 16, j * 16, (i * 16) + 15, (j * 16) + 15);
+					}
 					if (data.map[j][i] == 1)
 					{
 						SelectObject(hdcBackBuff, BlackBrush);
@@ -104,7 +112,7 @@ namespace UISystem {
 						SelectObject(hdcBackBuff, WhiteBrush);
 						Rectangle(hdcBackBuff, i * 16, j * 16, (i * 16) + 15, (j * 16) + 15);
 					}
-
+				}
 			}
 		}
 		// Paint the player
@@ -128,8 +136,10 @@ namespace UISystem {
 			ScoreSystem::updateScore(data, entity, pos);
 			HealthAndDamageSystem::updateDamage(data, entity, pos);
 
+			//data.map[pos.prevy()][pos.prevx()] = 0;
 			if (disp.mapChar() == 'X')
 			{
+				//data.map[pos.cury()][pos.curx()] = 'X';
 				SelectObject(hdcBackBuff, GreenBrush);
 				RoundRect(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15, 5, 5);
 			}
@@ -143,7 +153,7 @@ namespace UISystem {
 			}
 			else if (disp.mapChar() == 'Z') {
 				SelectObject(hdcBackBuff, ZombieBrush);
-				RoundRect(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15, 5, 5);
+				RoundRect(hdcBackBuff, pos.cury() * 16, pos.curx() * 16, (pos.cury() * 16) + 15, (pos.curx() * 16) + 15, 5, 5);
 			}
 		}
 		////////////////////////UPDATE MAP POSITIONS////////////////////////
@@ -175,24 +185,6 @@ namespace UISystem {
 		TextOut(hdcBackBuff, 125, 50, buf, strlen(buf));
 		BitBlt(ps.hdc, 0, 0, 640, 480, hdcBackBuff, 0, 0, SRCCOPY);
 		EndPaint(hwnd, &ps);
-	}
-
-	void serverMessage(GameData::GameData& data, const char* msg) {
-		char buf[256];
-		SetTextColor(data.hdcBackBuff, RGB(0, 0, 255));
-		sprintf(&buf[0], msg);
-		TextOut(data.hdcBackBuff, 125, 50, buf, strlen(buf));
-		BitBlt(data.ps.hdc, 0, 0, 640, 480, data.hdcBackBuff, 0, 0, SRCCOPY);
-		EndPaint(data.hwnd, &data.ps);
-	}
-
-	void clientMessage(GameData::GameData& data, const char* msg) {
-		char buf[256];
-		SetTextColor(data.hdcBackBuff, RGB(0, 0, 255));
-		sprintf(&buf[0], "Console Message: %s", msg);
-		TextOut(data.hdcBackBuff, 125, 50, buf, strlen(buf));
-		BitBlt(data.ps.hdc, 350, 120, 640, 480, data.hdcBackBuff, 0, 0, SRCCOPY);
-		EndPaint(data.hwnd, &data.ps);
 	}
 
 	void UISystem::updateMapPositions(GameData::GameData& data) {

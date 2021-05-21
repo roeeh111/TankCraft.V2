@@ -21,10 +21,6 @@ namespace UISystem {
 
 		void updateServer(GameData::GameData& data, HDC hdcBackBuff, PAINTSTRUCT ps, HWND hwnd);
 
-		void serverMessage(GameData::GameData& data, const char* msg);
-
-		void clientMessage(GameData::GameData& data, char* msg);
-
 		// Getting keyboard input
 		bool getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity);
 
