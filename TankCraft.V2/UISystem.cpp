@@ -28,10 +28,7 @@ namespace UISystem {
 
 	void UISystem::initialize(GameData::GameData& data)
 	{
-		// Only display UI for client
-		if (data.isServer) return;
 		data.map = std::vector<std::vector<int>>(HEIGHT, std::vector<int>(WIDTH));
-
 		data.map = {
 			{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 			{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -71,23 +68,18 @@ namespace UISystem {
 		static HBRUSH BlueBrush = CreateSolidBrush(RGB(0, 0, 255));
 		char buf[256];
 		bool input = false;
-		int num = 0;
 		// get all elements that take user input, and get all of the input from those entities
 		auto view = data.m_reg.view<ComponentView::clientName, ComponentView::userInput>();
 		for (auto entity : view) {
 			// Compare clientname with our name
 			// Get the user input for our object, only if the name matches our name
 			if (view.get<ComponentView::clientName>(entity).name() == *data.userName) {
-				num++;
-				sprintf(&buf[0], "Message: %d with name %s", num, data.userName->data());
-				TextOut(hdcBackBuff, 350, 120, buf, strlen(buf));
 				// std::cout << "Give me input for : " << view.get<ComponentView::clientName>(entity).name() << std::endl;
 				if (GetForegroundWindow() == data.hwnd) {
 					input = getKeyBoardInput(data, entity);
 				}
 			}
 		}
-
 
 		//draw GameMap
 		int i = 0, j = 0;
@@ -97,31 +89,14 @@ namespace UISystem {
 			{
 				if (data.map[j][i]) 
 				{
-					if (data.map[j][i] == 'X')
-					{
-						SelectObject(hdcBackBuff, BlueBrush);
-						Rectangle(hdcBackBuff, i * 16, j * 16, (i * 16) + 15, (j * 16) + 15);
-					}
 					if (data.map[j][i] == 1)
 					{
 						SelectObject(hdcBackBuff, BlackBrush);
 						Rectangle(hdcBackBuff, i * 16, j * 16, (i * 16) + 15, (j * 16) + 15);
 					}
-					else
-					{
-						SelectObject(hdcBackBuff, WhiteBrush);
-						Rectangle(hdcBackBuff, i * 16, j * 16, (i * 16) + 15, (j * 16) + 15);
-					}
 				}
 			}
 		}
-		// Paint the player
-		//SelectObject(hdcBackBuff, RedBrush);
-		//Rectangle(hdcBackBuff, 15 * 16, 15 * 16, (15 * 16) + 15, (15 * 16) + 15);
-
-		//SelectObject(hdcBackBuff, BlueBrush);
-		//Rectangle(hdcBackBuff, 10 * 16, 17 * 16, (10 * 16) + 15, (17 * 16) + 15);
-
 
 		////////////////////////UPDATE MAP POSITIONS////////////////////////
 		auto pos_view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
@@ -136,10 +111,8 @@ namespace UISystem {
 			ScoreSystem::updateScore(data, entity, pos);
 			HealthAndDamageSystem::updateDamage(data, entity, pos);
 
-			//data.map[pos.prevy()][pos.prevx()] = 0;
 			if (disp.mapChar() == 'X')
 			{
-				//data.map[pos.cury()][pos.curx()] = 'X';
 				SelectObject(hdcBackBuff, GreenBrush);
 				RoundRect(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15, 5, 5);
 			}
@@ -153,7 +126,7 @@ namespace UISystem {
 			}
 			else if (disp.mapChar() == 'Z') {
 				SelectObject(hdcBackBuff, ZombieBrush);
-				RoundRect(hdcBackBuff, pos.cury() * 16, pos.curx() * 16, (pos.cury() * 16) + 15, (pos.curx() * 16) + 15, 5, 5);
+				RoundRect(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15, 5, 5);
 			}
 		}
 		////////////////////////UPDATE MAP POSITIONS////////////////////////
@@ -168,7 +141,10 @@ namespace UISystem {
 		TextOut(hdcBackBuff, 350, 72, buf, strlen(buf));
 		sprintf(&buf[0], "Score: %d", 0);
 		TextOut(hdcBackBuff, 350, 96, buf, strlen(buf));
-		
+
+
+		sprintf(&buf[0], "Message: X");
+		TextOut(hdcBackBuff, 350, 120, buf, strlen(buf));
 
 		BitBlt(ps.hdc, 0, 0, 640, 480, hdcBackBuff, 0, 0, SRCCOPY);
 

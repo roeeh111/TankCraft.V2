@@ -27,12 +27,11 @@ namespace MovementSystem {
 
 		points.setPrevx(points.curx());
 		points.setPrevy(points.cury());
-
 		if (input.left()) {
 			if (points.curx() <= 0) {
 				points.setCurx(WIDTH - 1);
 			}
-			else {
+			else if (data.map[points.cury()][points.curx() - 1] != 1) {
 				points.setCurx(points.curx() - 1);
 			}
 		}
@@ -40,7 +39,7 @@ namespace MovementSystem {
 			if (points.cury() >= HEIGHT - 1) {
 				points.setCury(0);
 			}
-			else {
+			else if (data.map[points.cury() + 1][points.curx()] != 1) {
 				points.setCury(points.cury() + 1);
 
 			}
@@ -49,7 +48,7 @@ namespace MovementSystem {
 			if (points.curx() >= WIDTH - 1) {
 				points.setCurx(0);
 			}
-			else {
+			else if (data.map[points.cury()][points.curx() + 1] != 1) {
 				points.setCurx(points.curx() + 1);
 			}
 		}
@@ -58,7 +57,7 @@ namespace MovementSystem {
 				points.setCury(HEIGHT - 1);
 
 			}
-			else {
+			else if (data.map[points.cury() - 1][points.curx()] != 1) {
 				points.setCury(points.cury() - 1);
 
 			}
