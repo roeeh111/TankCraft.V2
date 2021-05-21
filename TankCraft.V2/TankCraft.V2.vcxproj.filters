@@ -603,9 +603,6 @@
     <ClInclude Include="ConnectionSystem.h">
       <Filter>Header Files\Systems\Primary Systems</Filter>
     </ClInclude>
-    <ClInclude Include="UISystem.h">
-      <Filter>Header Files\Systems\Primary Systems</Filter>
-    </ClInclude>
     <ClInclude Include="HealthAndDamageSystem.h">
       <Filter>Header Files\Systems\Secondary Systems</Filter>
     </ClInclude>
@@ -620,6 +617,9 @@
     </ClInclude>
     <ClInclude Include="MsgPackCondDeserialTest.h">
       <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="UISystem.h">
+      <Filter>Header Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1015,9 +1015,6 @@
     </ClCompile>
     <ClCompile Include="NetworkUtilitySystem.cpp">
       <Filter>Source Files\Systems\Secondary Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="UISystem.cpp">
-      <Filter>Source Files\Systems\Primary Systems</Filter>
     </ClCompile>
     <ClCompile Include="ScoreSystem.cpp">
       <Filter>Source Files\Systems\Secondary Systems</Filter>

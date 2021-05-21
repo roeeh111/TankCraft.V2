@@ -81,6 +81,11 @@ namespace GameData {
 
 		std::list<PrimarySystem::PrimarySystem*> primarySystemList;
 
+		HDC hdcBackBuff;
+
+		PAINTSTRUCT ps;
+		
+		HWND hwnd;
 		// Whether this scene is the server or a client 
 		bool isServer;
 

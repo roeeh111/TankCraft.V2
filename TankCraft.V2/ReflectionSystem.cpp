@@ -55,7 +55,7 @@ namespace  ReflectionSystem {
 			for (auto compid : header.ids) {
 				// Call serialize with netid, headerid
 				auto entity = TranslationSystem::getEntity(data, header.netid);
-				std::cout << (int)entity << std::endl;
+				// std::cout << (int)entity << std::endl;
 				if (entity != entt::null)
 					SerializeComponent(data, entity, compid);
 			}
