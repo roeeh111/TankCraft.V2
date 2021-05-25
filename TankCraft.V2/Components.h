@@ -70,8 +70,8 @@ namespace ComponentView {
 		position_(bool spawn, bool net) {
 			// set position at random value
 			srand(time(NULL));
-			curx_ = rand() % WIDTH;
-			cury_ = rand() % HEIGHT;
+			curx_ = rand() % (WIDTH-1);
+			cury_ = rand() % (HEIGHT-1);
 		//	prevx_ = 0;
 		//	prevy_ = 0;
 			prevx_ = curx_;

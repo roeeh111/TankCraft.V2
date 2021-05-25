@@ -130,7 +130,7 @@ namespace UISystem {
 
 				if (data.m_reg.has<ComponentView::score>(entity)) {
 					auto& scr = data.m_reg.get<ComponentView::score>(entity);
-					sprintf(&buf[0], "Coins: %d", scr.points());
+					sprintf(&buf[0], "Score: %d", scr.points());
 					TextOut(hdcBackBuff, 350, 72, buf, strlen(buf));
 				}
 
@@ -161,8 +161,10 @@ namespace UISystem {
 		
 
 
-		sprintf(&buf[0], "Message: X");
-		TextOut(hdcBackBuff, 350, 120, buf, strlen(buf));
+		auto view1 = data.m_reg.view<ComponentView::mapObject, ComponentView::position, ComponentView::pointsGiven>();
+	
+		sprintf(&buf[0], "coins: %d", view1.size_hint());
+		TextOut(hdcBackBuff, 350, 72, buf, strlen(buf));
 
 		BitBlt(ps.hdc, 0, 0, 640, 480, hdcBackBuff, 0, 0, SRCCOPY);
 
