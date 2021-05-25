@@ -124,7 +124,6 @@ namespace UISystem {
 			}
 			else if (disp.mapChar() == 'C') {
 				data.map[pos.cury()][pos.curx()] = 'C';
-				std::cout << "drawing coins!" << std::endl;
 				SelectObject(hdcBackBuff, YellowBrush);
 				Ellipse(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15);
 			}
