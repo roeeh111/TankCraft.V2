@@ -1,6 +1,8 @@
 #include "Components.h"
 #include "MovementSystem.h"
 #include "UISystem.h"
+#include "ScoreSystem.h"
+#include "HealthAndDamageSystem.h"
 
 
 
@@ -62,6 +64,8 @@ namespace MovementSystem {
 		}
 
 		points.unlock(data, entity);
+
+
 		// Clear the input 
 		input.setLeft(0); input.setRight(0); input.setUp(0); input.setRight(0);
 		input.dirty_ = false;

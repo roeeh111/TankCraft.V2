@@ -205,7 +205,7 @@ namespace  ReflectionSystem {
 	{
 		switch (id) {
 		case ComponentID::Position:			// PRIOR TO THIS, WE KEEP CREATING A NEW NETID-ENTTTID PAIRING IN PLAYER 2
-		//	std::cout << "Updating position for netid " << TranslationSystem::getNetId(data, enttid)  << " With entt id = " << (int) enttid << std::endl;
+			std::cout << "Updating position for netid " << TranslationSystem::getNetId(data, enttid)  << " With entt id = " << (int) enttid << std::endl;
 			writeComponent<ComponentView::position>(data, obj, enttid);
 			break;
 
