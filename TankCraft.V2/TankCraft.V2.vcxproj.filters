@@ -619,7 +619,7 @@
       <Filter>Tests</Filter>
     </ClInclude>
     <ClInclude Include="UISystem.h">
-      <Filter>Header Files\Systems</Filter>
+      <Filter>Header Files\Systems\Primary Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1033,6 +1033,9 @@
     </ClCompile>
     <ClCompile Include="Add_RemoveComponentExample.h">
       <Filter>Examples</Filter>
+    </ClCompile>
+    <ClCompile Include="UISystem.cpp">
+      <Filter>Source Files\Systems\Primary Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

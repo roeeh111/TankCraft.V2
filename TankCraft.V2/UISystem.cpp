@@ -102,6 +102,7 @@ namespace UISystem {
 		auto pos_view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
 		MovementSystem::moveMobs(data);
 
+
 		for (auto entity : pos_view) {
 			//	std::cout << "updating entity " << (int) entity << " with netid = " << TranslationSystem::getNetId(data, entity) << std::endl;
 			auto& pos = pos_view.get<ComponentView::position>(entity);
@@ -116,6 +117,26 @@ namespace UISystem {
 			{
 				SelectObject(hdcBackBuff, GreenBrush);
 				RoundRect(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15, 5, 5);
+				SetTextColor(hdcBackBuff, RGB(0, 0, 255));
+				sprintf(&buf[0], "Player Name: %s", data.userName->data());
+				TextOut(hdcBackBuff, 350, 24, buf, strlen(buf));
+
+				// Get health, coins and score
+				if (data.m_reg.has<ComponentView::health>(entity)) {
+					auto& hlth = data.m_reg.get<ComponentView::health>(entity);
+					sprintf(&buf[0], "Health: %d", hlth.hp());
+					TextOut(hdcBackBuff, 350, 48, buf, strlen(buf));
+				}
+
+				if (data.m_reg.has<ComponentView::score>(entity)) {
+					auto& scr = data.m_reg.get<ComponentView::score>(entity);
+					sprintf(&buf[0], "Coins: %d", scr.points());
+					TextOut(hdcBackBuff, 350, 72, buf, strlen(buf));
+				}
+
+
+//				sprintf(&buf[0], "Score: %d", 0);
+	//			TextOut(hdcBackBuff, 350, 96, buf, strlen(buf));
 			}
 			else if (disp.mapChar() == 'S') {
 				data.map[pos.cury()][pos.curx()] = 'S';
@@ -126,6 +147,7 @@ namespace UISystem {
 				data.map[pos.cury()][pos.curx()] = 'C';
 				SelectObject(hdcBackBuff, YellowBrush);
 				Ellipse(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15);
+
 			}
 			else if (disp.mapChar() == 'Z') {
 				data.map[pos.cury()][pos.curx()] = 'Z';
@@ -136,15 +158,6 @@ namespace UISystem {
 		////////////////////////UPDATE MAP POSITIONS////////////////////////
 
 		
-		SetTextColor(hdcBackBuff, RGB(0, 0, 255));
-		sprintf(&buf[0], "Player Name: %s", data.userName->data());
-		TextOut(hdcBackBuff, 350, 24, buf, strlen(buf));
-		sprintf(&buf[0], "Health: %d", 10);
-		TextOut(hdcBackBuff, 350, 48, buf, strlen(buf));
-		sprintf(&buf[0], "Coins: %d", 0);
-		TextOut(hdcBackBuff, 350, 72, buf, strlen(buf));
-		sprintf(&buf[0], "Score: %d", 0);
-		TextOut(hdcBackBuff, 350, 96, buf, strlen(buf));
 
 
 		sprintf(&buf[0], "Message: X");
