@@ -102,7 +102,8 @@ namespace UISystem {
 		auto pos_view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
 		MovementSystem::moveMobs(data);
 
-
+		int offset = 0;
+		int playernum = 1;
 		for (auto entity : pos_view) {
 			//	std::cout << "updating entity " << (int) entity << " with netid = " << TranslationSystem::getNetId(data, entity) << std::endl;
 			auto& pos = pos_view.get<ComponentView::position>(entity);
@@ -118,22 +119,26 @@ namespace UISystem {
 				SelectObject(hdcBackBuff, GreenBrush);
 				RoundRect(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15, 5, 5);
 				SetTextColor(hdcBackBuff, RGB(0, 0, 255));
-				sprintf(&buf[0], "Player Name: %s", data.userName->data());
-				TextOut(hdcBackBuff, 350, 24, buf, strlen(buf));
+				if (data.m_reg.has<ComponentView::clientName>(entity)) {
+					auto usrname = data.m_reg.get<ComponentView::clientName>(entity).name();
+					sprintf(&buf[0], "Player Name: player %d", playernum);
+					TextOut(hdcBackBuff, 350, 24 + offset, buf, strlen(buf));
+				}
 
 				// Get health, coins and score
 				if (data.m_reg.has<ComponentView::health>(entity)) {
 					auto& hlth = data.m_reg.get<ComponentView::health>(entity);
 					sprintf(&buf[0], "Health: %d", hlth.hp());
-					TextOut(hdcBackBuff, 350, 48, buf, strlen(buf));
+					TextOut(hdcBackBuff, 350, 48 + offset, buf, strlen(buf));
 				}
 
 				if (data.m_reg.has<ComponentView::score>(entity)) {
 					auto& scr = data.m_reg.get<ComponentView::score>(entity);
-					sprintf(&buf[0], "Coins: %d", scr.points());
-					TextOut(hdcBackBuff, 350, 72, buf, strlen(buf));
+					sprintf(&buf[0], "Score: %d", scr.points());
+					TextOut(hdcBackBuff, 350, 72 + offset, buf, strlen(buf));
 				}
-
+				offset += 64;
+				playernum++;
 
 //				sprintf(&buf[0], "Score: %d", 0);
 	//			TextOut(hdcBackBuff, 350, 96, buf, strlen(buf));
@@ -160,8 +165,10 @@ namespace UISystem {
 		
 
 
-		sprintf(&buf[0], "Message: X");
-		TextOut(hdcBackBuff, 350, 120, buf, strlen(buf));
+		auto view1 = data.m_reg.view<ComponentView::mapObject, ComponentView::position, ComponentView::pointsGiven>();
+	
+		sprintf(&buf[0], "coins: %d", view1.size_hint());
+		TextOut(hdcBackBuff, 350, 72 + offset, buf, strlen(buf));
 
 		BitBlt(ps.hdc, 0, 0, 640, 480, hdcBackBuff, 0, 0, SRCCOPY);
 
