@@ -92,7 +92,14 @@ namespace MovementSystem {
 						pos.setCurx(0);
 					}
 					else {
-						pos.setCurx(pos.curx() + 1);
+						if (data.map[pos.cury()][pos.curx() + 1] != 1) {
+							pos.setCurx(pos.curx() + 1);		//
+						}
+						else {
+							vel.setDx(-1*vel.getDx());
+						//	pos.setCurx(pos.curx() - 1);		//
+						}
+
 					}
 				}
 				else {
@@ -100,7 +107,14 @@ namespace MovementSystem {
 						pos.setCurx(WIDTH - 1);
 					}
 					else {
-						pos.setCurx(pos.curx() - 1);
+						if (data.map[pos.cury()][pos.curx() - 1] != 1) {
+							pos.setCurx(pos.curx() - 1);				//
+						}
+						else {
+							vel.setDx(-1 * vel.getDx());
+						//	pos.setCurx(pos.curx() + 1);				//
+						}
+
 					}
 				}
 				vel.setxCount(0);
@@ -115,7 +129,13 @@ namespace MovementSystem {
 						pos.setCury(0);
 					}
 					else {
-						pos.setCury(pos.cury() + 1);
+						if (data.map[pos.cury() + 1][pos.curx()] != 1) {
+							pos.setCury(pos.cury() + 1);			//
+						}
+						else {
+						//	pos.setCury(pos.cury() - 1);			//
+							vel.setDy(-1 * vel.getDy());
+						}
 					}
 				}
 				else {
@@ -123,7 +143,14 @@ namespace MovementSystem {
 						pos.setCury(HEIGHT - 1);
 					}
 					else {
-						pos.setCury(pos.cury() - 1);
+						if (data.map[pos.cury() - 1][pos.curx()] != 1) {
+							pos.setCury(pos.cury() - 1);		//
+						}
+						else {
+						//	pos.setCury(pos.cury() + 1);		//
+							vel.setDy(-1 * vel.getDy());
+						}
+
 					}
 				}
 				vel.setyCount(0);

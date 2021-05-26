@@ -269,7 +269,11 @@ namespace ConnectionSystem {
 			Coins::addCoins(data, pack, 1, 11, 11);
 			Coins::addCoins(data, pack, 1, 12, 12);
 			
-			//Zombie::addZombie(data, pack, 10, 5, 10, 6);
+			Zombie::addZombie(data, pack, 10, 5, 10, 6, 1, 1);
+			Zombie::addZombie(data, pack, 10, 5, 10, -6, 5, 8);
+			Zombie::addZombie(data, pack, 10, 5, 14, 6, 6, 9);
+
+
 			data.first = false;
 		}
 		else {
