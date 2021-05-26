@@ -25,7 +25,7 @@ namespace  ReflectionSystem {
 			UpdatePacket gameUpdate(it.second);
 			msgpack::sbuffer& buf = gameUpdate.Serialize(data);	
 
-
+			data.streamSize = buf.size(); // Update buffer size
 			// Write the game update to the stream, and broadast it to all connections
 			stream.Write(buf.data(), buf.size());
 
@@ -72,6 +72,7 @@ namespace  ReflectionSystem {
 		// deserialize these objects using msgpack::unpacker.
 		msgpack::unpacker pac;
 
+		
 		// feed the buffer.
 		pac.reserve_buffer(stream.size());
 		memcpy(pac.buffer(), stream.data(), stream.size());

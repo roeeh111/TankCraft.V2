@@ -91,6 +91,8 @@ namespace GameData {
 
 		int maxClients;
 
+		int streamSize;
+
 		// Whether the first client has logged in or not
 		bool first;
 

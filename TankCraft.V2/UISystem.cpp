@@ -118,6 +118,8 @@ namespace UISystem {
 			{
 				SelectObject(hdcBackBuff, GreenBrush);
 				RoundRect(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15, 5, 5);
+				sprintf(&buf[0], "%d", playernum);
+				TextOut(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, buf, strlen(buf));
 				SetTextColor(hdcBackBuff, RGB(0, 0, 255));
 				if (data.m_reg.has<ComponentView::clientName>(entity)) {
 					auto usrname = data.m_reg.get<ComponentView::clientName>(entity).name();
@@ -137,11 +139,8 @@ namespace UISystem {
 					sprintf(&buf[0], "Score: %d", scr.points());
 					TextOut(hdcBackBuff, 350, 72 + offset, buf, strlen(buf));
 				}
-				offset += 64;
+				offset += 84;
 				playernum++;
-
-//				sprintf(&buf[0], "Score: %d", 0);
-	//			TextOut(hdcBackBuff, 350, 96, buf, strlen(buf));
 			}
 			else if (disp.mapChar() == 'S') {
 				data.map[pos.cury()][pos.curx()] = 'S';
@@ -150,7 +149,6 @@ namespace UISystem {
 			}
 			else if (disp.mapChar() == 'C') {
 				data.map[pos.cury()][pos.curx()] = 'C';
-			//	std::cout << "drawing coins!" << std::endl;
 				SelectObject(hdcBackBuff, YellowBrush);
 				Ellipse(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15);
 
@@ -162,8 +160,6 @@ namespace UISystem {
 			}
 		}
 		////////////////////////UPDATE MAP POSITIONS////////////////////////
-
-		
 
 
 		auto view1 = data.m_reg.view<ComponentView::mapObject, ComponentView::position, ComponentView::pointsGiven>();
@@ -181,37 +177,44 @@ namespace UISystem {
 		data.ps = ps;
 		data.hwnd = hwnd;
 		char buf[256];
+		int offset = 50;
+		int offsetIncr = 17;
 		SetTextColor(hdcBackBuff, RGB(0, 0, 255));
-		sprintf(&buf[0], "Server started, UI not finished yet");
-		TextOut(hdcBackBuff, 125, 50, buf, strlen(buf));
+		sprintf(&buf[0], "Server started");
+		TextOut(hdcBackBuff, 50, offset, buf, strlen(buf));
+		offset += offsetIncr;
+		sprintf(&buf[0], "Current Stream Size: %d", data.streamSize);
+		TextOut(hdcBackBuff, 50, offset, buf, strlen(buf));
+		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
+		for (auto entity : view) {
+			offset += offsetIncr;
+			auto& pos = view.get<ComponentView::position>(entity);
+			auto& disp = view.get<ComponentView::mapObject>(entity);
+			if (disp.mapChar() == 'X')
+			{
+				sprintf(&buf[0], "Player entity at (%d, %d)", pos.curx(), pos.cury());
+				TextOut(hdcBackBuff, 50, offset, buf, strlen(buf));
+			}
+			else if (disp.mapChar() == 'S') {
+				sprintf(&buf[0], "Spike entity at (%d, %d)", pos.curx(), pos.cury());
+				TextOut(hdcBackBuff, 50, offset, buf, strlen(buf));
+			}
+			else if (disp.mapChar() == 'C') {
+				sprintf(&buf[0], "Coin entity at (%d, %d)", pos.curx(), pos.cury());
+				TextOut(hdcBackBuff, 50, offset, buf, strlen(buf));
+			}
+			else if (disp.mapChar() == 'Z') {
+				sprintf(&buf[0], "Zombie entity at (%d, %d)", pos.curx(), pos.cury());
+				TextOut(hdcBackBuff, 50, offset, buf, strlen(buf));
+			}
+		}
+
 		BitBlt(ps.hdc, 0, 0, 640, 480, hdcBackBuff, 0, 0, SRCCOPY);
 		EndPaint(hwnd, &ps);
 	}
 
-	void UISystem::updateMapPositions(GameData::GameData& data) {
-		// get all elements that have a mapObject and position, and then do the updates
-		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
-		MovementSystem::moveMobs(data);
-
-		for (auto entity : view) {
-
-			auto& pos = view.get<ComponentView::position>(entity);
-			auto& disp = view.get<ComponentView::mapObject>(entity);
-
-			// Update any score interaction damage interaction, or mob movement
-			ScoreSystem::updateScore(data, entity, pos);
-			HealthAndDamageSystem::updateDamage(data, entity, pos);
-			// Set the previous location to a "." and move on
-		//	pos.print();
-			//data.map[pos.prevy()][pos.prevx()] = '.';
-			//data.map[pos.cury()][pos.curx()] = disp.mapChar();
-		//	disp.setMapChar(data.map[pos.cury()][pos.curx()]);
-		}
-	}
-
 	bool UISystem::getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity)
 	{
-
 		// Get the userInput component for this entity
 		ComponentView::userInput& usrInput = data.m_reg.get<ComponentView::userInput>(clientEntity);
 		
@@ -237,11 +240,6 @@ namespace UISystem {
 			usrInput.dirty_ = 0;
 		}
 		
-		//std::cout << "left = " << usrInput.left() << " right = " << usrInput.right() << " up = " << usrInput.up() << " down = " << usrInput.down() << std::endl;
-
-
-		//usrInput.unlock(data, clientEntity);			// TODO: do i really need this???
-
 		// Only send input if dirty
 		if (usrInput.dirty_) {
 			std::cout << "Sending control for netid = " << TranslationSystem::getNetId(data, clientEntity) << std::endl;
