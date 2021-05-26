@@ -261,12 +261,14 @@ namespace ConnectionSystem {
 			Spikes::addSpikes(data, pack, 5, 7, 5);
 			Spikes::addSpikes(data, pack, 5, 4, 4);
 			Spikes::addSpikes(data, pack, 5, 4, 5);
+			Spikes::addSpikes(data, pack, 5, 18, 18);
 
-			Coins::addCoins(data, pack, 1, 7, 7);
-			Coins::addCoins(data, pack, 1, 8, 8);
-			Coins::addCoins(data, pack, 1, 9, 9);
-			Coins::addCoins(data, pack, 1, 10, 10);
+			Coins::addCoins(data, pack, 1, 5, 7);
+			Coins::addCoins(data, pack, 1, 8, 11);
+			Coins::addCoins(data, pack, 1, 9, 11);
+			Coins::addCoins(data, pack, 1, 10, 11);
 			Coins::addCoins(data, pack, 1, 11, 11);
+			Coins::addCoins(data, pack, 1, 11, 18);
 			Coins::addCoins(data, pack, 1, 12, 12);
 			
 			//Zombie::addZombie(data, pack, 10, 5, 10, 6);

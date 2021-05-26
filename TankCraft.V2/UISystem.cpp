@@ -118,6 +118,8 @@ namespace UISystem {
 			{
 				SelectObject(hdcBackBuff, GreenBrush);
 				RoundRect(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, (pos.curx() * 16) + 15, (pos.cury() * 16) + 15, 5, 5);
+				sprintf(&buf[0], "%d", playernum);
+				TextOut(hdcBackBuff, pos.curx() * 16, pos.cury() * 16, buf, strlen(buf));
 				SetTextColor(hdcBackBuff, RGB(0, 0, 255));
 				if (data.m_reg.has<ComponentView::clientName>(entity)) {
 					auto usrname = data.m_reg.get<ComponentView::clientName>(entity).name();
@@ -137,7 +139,7 @@ namespace UISystem {
 					sprintf(&buf[0], "Score: %d", scr.points());
 					TextOut(hdcBackBuff, 350, 72 + offset, buf, strlen(buf));
 				}
-				offset += 64;
+				offset += 84;
 				playernum++;
 
 //				sprintf(&buf[0], "Score: %d", 0);
