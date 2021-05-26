@@ -3,6 +3,7 @@
 #include "UISystem.h"
 #include "ScoreSystem.h"
 #include "HealthAndDamageSystem.h"
+//#include "Tran"
 
 
 
@@ -78,6 +79,7 @@ namespace MovementSystem {
 	{
 		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position, ComponentView::velocity>();
 		for (auto entity : view) {
+		//	std::cout << "moving mob " << 
 			// Get the entities velocity
 			auto& vel = view.get<ComponentView::velocity>(entity);
 			auto& pos = view.get<ComponentView::position>(entity);

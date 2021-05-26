@@ -100,7 +100,7 @@ namespace UISystem {
 
 		////////////////////////UPDATE MAP POSITIONS////////////////////////
 		auto pos_view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
-		MovementSystem::moveMobs(data);
+	//	MovementSystem::moveMobs(data);
 
 		int offset = 0;
 		int playernum = 1;
@@ -211,6 +211,8 @@ namespace UISystem {
 
 		BitBlt(ps.hdc, 0, 0, 640, 480, hdcBackBuff, 0, 0, SRCCOPY);
 		EndPaint(hwnd, &ps);
+		MovementSystem::moveMobs(data);
+
 	}
 
 	bool UISystem::getKeyBoardInput(GameData::GameData& data, entt::entity& clientEntity)
