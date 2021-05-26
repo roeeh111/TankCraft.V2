@@ -173,9 +173,38 @@ namespace UISystem {
 		data.ps = ps;
 		data.hwnd = hwnd;
 		char buf[256];
+		int spacer = 50;
+		int spaceIncr = 17;
 		SetTextColor(hdcBackBuff, RGB(0, 0, 255));
-		sprintf(&buf[0], "Server started, UI not finished yet");
-		TextOut(hdcBackBuff, 125, 50, buf, strlen(buf));
+		sprintf(&buf[0], "Server started");
+		TextOut(hdcBackBuff, 50, spacer, buf, strlen(buf));
+		spacer += spaceIncr;
+		sprintf(&buf[0], "Current Stream Size: %d", data.streamSize);
+		TextOut(hdcBackBuff, 50, spacer, buf, strlen(buf));
+		auto view = data.m_reg.view<ComponentView::mapObject, ComponentView::position>();
+		for (auto entity : view) {
+			spacer += spaceIncr;
+			auto& pos = view.get<ComponentView::position>(entity);
+			auto& disp = view.get<ComponentView::mapObject>(entity);
+			if (disp.mapChar() == 'X')
+			{
+				sprintf(&buf[0], "Player entity at (%d, %d)", pos.curx(), pos.cury());
+				TextOut(hdcBackBuff, 50, spacer, buf, strlen(buf));
+			}
+			else if (disp.mapChar() == 'S') {
+				sprintf(&buf[0], "Spike entity at (%d, %d)", pos.curx(), pos.cury());
+				TextOut(hdcBackBuff, 50, spacer, buf, strlen(buf));
+			}
+			else if (disp.mapChar() == 'C') {
+				sprintf(&buf[0], "Coin entity at (%d, %d)", pos.curx(), pos.cury());
+				TextOut(hdcBackBuff, 50, spacer, buf, strlen(buf));
+			}
+			else if (disp.mapChar() == 'Z') {
+				sprintf(&buf[0], "Zombie entity at (%d, %d)", pos.curx(), pos.cury());
+				TextOut(hdcBackBuff, 50, spacer, buf, strlen(buf));
+			}
+		}
+
 		BitBlt(ps.hdc, 0, 0, 640, 480, hdcBackBuff, 0, 0, SRCCOPY);
 		EndPaint(hwnd, &ps);
 	}

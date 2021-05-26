@@ -31,6 +31,7 @@ namespace GameAdmin {
 		data.first = true;
 		data.isServer = isServer_;
 		data.maxClients = maxClients;
+		data.streamSize = 0;
 		// Initialize our translation system, 2 way id mapping
 		data.netToEnttid = std::map<networkID, entt::entity>();
 		data.enttToNetidid = std::map<entt::entity, networkID>();	
